@@ -8,8 +8,8 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-	public class Player : StatefulItem {
-
+	public class Player : StatefulItem 
+	{
 		int frameCounter = 0;
 		bool flipYCoordinate = false;
 
