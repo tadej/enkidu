@@ -138,7 +138,6 @@ namespace Motiviti.Enkidu
 
             uiElements = new ArrayList();
             AddUIElements(transform);
-            //SetVisible (true);
             yOffset = canvas.scaleFactor * horizontalItemOffset;
             UpdateItemPosition_Scroll();
 
@@ -198,7 +197,6 @@ namespace Motiviti.Enkidu
             itemDropZoneAnimator.SetInteger("state", 0);
             if (heldItem != null)
             {
-                //string text = heldItem.itemDescription;
                 string id = null;//Global.GetItemsData().GetID(heldItem.name);
                 if (id.Length == 0)
                     id = "Hm.";
@@ -250,9 +248,9 @@ namespace Motiviti.Enkidu
         {
             animator.SetBool("enabled", e);
         }
+     
         public void SetVisible(bool b)
         {
-            //parentObject.localPosition = originalPosition - Vector3.up *(!b ? hiddenYDelta : 0);
             if (animator)
             {
                 animator.SetInteger("state", b ? 1 : 0);
@@ -274,13 +272,7 @@ namespace Motiviti.Enkidu
                 heldItem = null;
             }
 
-
-
             UpdateItemPosition_Scroll();
-        }
-
-        void Update()
-        {
         }
 
         public bool IsVisible()
@@ -296,7 +288,7 @@ namespace Motiviti.Enkidu
         void AdjustItemPosition(InventoryItem item)
         {
             Vector3 pos = new Vector3((item.inventoryIndex + 1 - scrollPos) * yOffset - 30, 8.5f, 0.0f);
-            item.transform.localPosition = Vector3.zero;//new Vector3((item.inventoryIndex+1+scrollIndex)*yOffset -30, 8.5f, 0.0f);
+            item.transform.localPosition = Vector3.zero;
             item.rectTransform.localPosition = pos;
         }
 
@@ -350,12 +342,6 @@ namespace Motiviti.Enkidu
                     }
                 }
             }
-            /*
-			int lastIndex = 0;
-			for (int i = 0; i < items.Count; i++) {
-				InventoryItem item = (InventoryItem)items [i];
-				item.inventoryIndex = lastIndex++;
-			}*/
         }
 
         public void ReturnItem(InventoryItem item)
@@ -422,11 +408,8 @@ namespace Motiviti.Enkidu
 
             scrollLeftButton.SetEnabled(leftOn);
             scrollRightButton.SetEnabled(rightOn);
-
-            //SaveState();
         }
 
-        // Use this for initialization
         void Awake()
         {
             gameObject.name = "Inventory";
@@ -445,7 +428,6 @@ namespace Motiviti.Enkidu
 
         void SetScrollPosition(int newPos)
         {
-            //		Debug.Log(Time.time + " setScrollPosition " + newPos);
             scrollPos = newPos;
         }
 
@@ -626,16 +608,10 @@ namespace Motiviti.Enkidu
         {
             visibleElements = transform.GetComponentsInChildren<SpriteRenderer>();
             fading = Fade.FadeOut;
-            /*foreach(SpriteRenderer visible in visibleElements){
-				visible.color = new Color(1,1,1,0);
-			}*/
         }
 
         public void FadeIn()
         {
-            //foreach(SpriteRenderer visible in visibleElements){
-            //	visible.color = new Color(1,1,1,1);
-            //}
             if (visibleElements == null)
                 visibleElements = transform.GetComponentsInChildren<SpriteRenderer>();
             fading = Fade.FadeIn;
@@ -655,7 +631,6 @@ namespace Motiviti.Enkidu
             return false;
         }
 
-        // Update is called once per frame
         void LateUpdate()
         {
 
