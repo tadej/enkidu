@@ -95,17 +95,6 @@ namespace Motiviti.Enkidu
 				
 		}
 
-		void OnDestroy()
-		{
-		
-		}
-
-		public static void FlurryLog(string log, string par1="", string par2="", string par3="")
-		{
-			//Debug.Log ("FLURRY: " + log + " " + par1 + " " + par2 + " " + par3);
-			//FlurryAnalytics.Instance ().LogEvent(log, new string[]{par1, par2}, false);
-		}
-
 		void OnGUI()
 		{
 			if (devStatus_show && !takingVideo) {
@@ -382,8 +371,6 @@ namespace Motiviti.Enkidu
 
 		public static void StartNewGame(int slot)
 		{
-			Global.FlurryLog ("StartNewGame", slot.ToString());
-
 			audioManager.Fadeout ();
 			Global g=GameObject.Find("Global").GetComponent<Global>();
 
@@ -401,8 +388,6 @@ namespace Motiviti.Enkidu
 
 		public static void ContinueFromSavedGame(int slot)
 		{
-			Global.FlurryLog ("ContinueFromSavedGame", slot.ToString());
-
 			audioManager.Fadeout ();
 
 			Global.SetState("Global Savegame", slot, true);
@@ -886,28 +871,6 @@ namespace Motiviti.Enkidu
 			path = path.Substring(0, path.LastIndexOf('/'));  
 			return path + "/Documents"; 
 		}
-		
-		
-		//Tomi
-		/* 
-		public static ItemCombStorage GetItemsData()
-		{
-			if (itemsData == null)
-			{
-				itemsData = Resources.Load<ItemCombStorage>("Editor/ItemCombination Storage");
-			}
-
-			return itemsData;
-		}
-
-		public static string ItemCombinationComment(string n1, string n2)
-		{
-			string id = Global.GetItemsData().GetID(n1, n2);
-			return id;
-		}
-		*/
-
-
 	}
 
 	[AttributeUsage(AttributeTargets.All)]

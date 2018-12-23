@@ -31,17 +31,7 @@ namespace Motiviti.Enkidu
 		{
 			if (enabled && NavMesh2D.GetNavMeshObject()) 
 			{
-				Debug.Log("Setting target to " + t);
-
 				pathingTarget = NearestPoint(t, NavMesh2D.GetNavMeshObject().NavMesh);
-				/*
-				if(!NavMesh2D.IsThereNodeMovement(transform.position, pathingTarget))
-				{
-					Debug.Log ("stop");
-					Stop ();
-					return false;
-				}*/
-
 				path = NavMesh2D.GetSmoothedPath (transform.position, pathingTarget);
 
 				if (path.Count <= 0)
@@ -52,20 +42,14 @@ namespace Motiviti.Enkidu
 
 					pathingTarget = (Vector3)cn;
 
-					Debug.Log ("pathingTarget: " + pathingTarget);
 					path = NavMesh2D.GetSmoothedPath (transform.position, pathingTarget);
 				}
 
 				Vector2 vk = Vector2.zero;
 				for(int i=0; i<path.Count; i++)  vk = path[i];
-
-				
+	
 				if(path != null && path.Count > 0) velocity = lastVelBeforeZero;
 
-			}
-			else
-			{
-				Debug.Log ("!enabled");
 			}
 
 			return true;
@@ -78,8 +62,7 @@ namespace Motiviti.Enkidu
 
 			var node = navmeshObject.ActualClosestNodeTo (new Vector2 (point.x, point.y), false);
 
-			if (node == null)
-							return null;
+			if (node == null) return null;
 
 			Vector3 n = node.position;	
 			
@@ -136,8 +119,6 @@ namespace Motiviti.Enkidu
 			walkableMask = LayerMask.GetMask (new string[] {"Walkarea"} );
 			lastPosition = transform.position;
 			velocity = Vector3.zero;
-
-			
 		}
 
 		void OnEnable()
@@ -150,11 +131,6 @@ namespace Motiviti.Enkidu
 			return velocity;
 		}
 		
-		void FixedUpdate()
-		{
-
-		}
-
 		IEnumerator VelocityTimer()
 		{
 			while(true)
@@ -190,9 +166,6 @@ namespace Motiviti.Enkidu
 			{
 				lastVelBeforeZero = Vector3.zero;
 			}
-
-
-
 		}
 	}
 }

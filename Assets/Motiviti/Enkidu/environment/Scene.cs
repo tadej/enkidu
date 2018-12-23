@@ -326,7 +326,7 @@ namespace Motiviti.Enkidu
 			player.transform.parent = transform;
 
 			Global.player = player.GetComponent<Player> ();
-			Global.player.elroyStaticButOperational = startWithStaticCharacter;
+			Global.player.staticCharacter = startWithStaticCharacter;
 			
 
 			var inventory = GameObject.Find ("UI-Inventory") ? GameObject.Find ("UI-Inventory").GetComponent<Inventory>() : null;

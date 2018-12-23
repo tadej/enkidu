@@ -39,8 +39,6 @@ namespace Motiviti.Enkidu
 
 			public void showPuzzle ()
 			{
-					Global.FlurryLog ("InteractiveItemPuzzle", gameObject.name, "Show", "in-inventory");
-
 					if (!usedFlag) {
 							usedFlag = true;
 							Global.player.SetInCutScene (true, CutsceneTools.Type.Puzzle);
@@ -56,7 +54,6 @@ namespace Motiviti.Enkidu
 
 			public void PuzzleClosed ()
 			{
-					Global.FlurryLog ("InteractiveItemPuzzle", gameObject.name, "Closed", "in-inventory");
 					Debug.Log ("puzzle closed");
 					puzzle.ToggleShow (false);
 
@@ -68,7 +65,6 @@ namespace Motiviti.Enkidu
 
 			public void PuzzleFinished ()
 			{
-					Global.FlurryLog ("InteractiveItemPuzzle", gameObject.name, "Finished", "in-inventory");
 
 					puzzle.ToggleShow (false);
 					Global.player.SetInCutScene (false, CutsceneTools.Type.None);

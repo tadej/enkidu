@@ -9,7 +9,6 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
     public class NPCBrain : CharacterBrain
     {
         public enum State
@@ -21,11 +20,9 @@ namespace Motiviti.Enkidu
             FacePlayer = 3,
             Give = 4,
             Take = 5,
-
             CustomAction1 = 6,
             CustomAction2 = 7,
             CustomAction3 = 8,
-
         }
     
         public State state;
@@ -40,9 +37,12 @@ namespace Motiviti.Enkidu
                 ChangeState(s);
             }
             catch
-            {}
+            {
+                Debug.LogWarning("Unsupported state integer " + newState.ToString() );
+            }
         }
 
+        // Adventure Creator State support. Static NPC's can't move (hence commented out code below). Movable NPC's use PlayerBrain
         public override void PlayStandardAnimation(string clip, string dir)
         {
             if(!isPlayingCustomAnimation)
@@ -115,6 +115,7 @@ namespace Motiviti.Enkidu
             isPlayingCustomAnimation = true;
             return true;
         }
+
         public void ChangeState(State newState)
         {
             if(newState == state) return;
@@ -125,7 +126,6 @@ namespace Motiviti.Enkidu
             {	
                 animator.SetInteger("idleMode", 0);//.RoundToInt(6 * UnityEngine.Random.value));
                 animator.SetInteger( "state", (int)newState );
-
                 animator.SetBool( "disable", true );
 
                 isAnimationPlaying = true;
@@ -235,9 +235,7 @@ namespace Motiviti.Enkidu
     
         void ChangeGestureEyes(EyeGestures eg)
         {
-            //Debug.LogWarning("TODO: Eye gestures not implemented yet");
             currentEyeGesture = eg;
-            //animator.SetInteger("arms", (int)ag);
             SetEyeGesture(eg);
         }
 
@@ -329,7 +327,7 @@ namespace Motiviti.Enkidu
             base.Start();
         }
 
-    public override void RunLipSync(string charName, AudioSource src, AudioClip audioClip, int lineID, string message)
+        public override void RunLipSync(string charName, AudioSource src, AudioClip audioClip, int lineID, string message)
         {
             ChangeState(State.Talk);
 
@@ -343,7 +341,6 @@ namespace Motiviti.Enkidu
 
         public override void AnimationEventEndCutScene()
         {
-            
         }
 
         public override void AnimationActionPoint(string animationName)

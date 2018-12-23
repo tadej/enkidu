@@ -517,7 +517,7 @@ namespace Motiviti.Enkidu
 
             if (actor == "Elroy")
             {
-                if (elroy && !elroy.elroyStaticButOperational)
+                if (elroy && !elroy.staticCharacter)
                 {
                     if (phoneConversation)
                         yield return StartCoroutine(elroy.SpeakProcedure(text, Player.TalkMode.OnPhone, true));

@@ -748,12 +748,12 @@ namespace Motiviti.Enkidu
                 if (leftEdge)
                 {
                     pos.x = cameraObject.transform.position.x - cameraWidth - camDelta;
-                    if (pos.x > Global.player.transform.position.x) Global.player.TeleportElroyToPosition(pos);
+                    if (pos.x > Global.player.transform.position.x) Global.player.TeleportToPosition(pos);
                 }
                 else
                 {
                     pos.x = cameraObject.transform.position.x + cameraWidth + camDelta;
-                    if (pos.x < Global.player.transform.position.x) Global.player.TeleportElroyToPosition(pos);
+                    if (pos.x < Global.player.transform.position.x) Global.player.TeleportToPosition(pos);
                 }
 
                 Vector3 newPos = leftEdge ? (pos + Vector3.right * cameraWidth * 0.5f) + Vector3.right * InventoryMovementAddition() : (pos - Vector3.right * cameraWidth * 0.5f);

@@ -149,10 +149,6 @@ namespace Motiviti.Enkidu
 		}
 
 		public void showPuzzle(){
-			Global.FlurryLog ("InteractiveItemPuzzle", gameObject.name, "Show", "not-in-inventory");
-
-		//   Debug.Log("showing puzzle");
-		//	gameMenu.setPauseButtonVisible(false);
 			Global.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
 			Global.player.ChangeState(actionAnimation);
 			Global.player.SetDestination(Global.player.transform.position);
@@ -180,10 +176,6 @@ namespace Motiviti.Enkidu
 		}
 
 		public void PuzzleClosed(){
-			Global.FlurryLog ("InteractiveItemPuzzle", gameObject.name, "Closed", "not-in-inventory");
-
-
-			Debug.Log("puzzle closed");
 			puzzle.ToggleShow(false);
 			if(!advCam)
 				advCam = Global.advCamera;
@@ -192,7 +184,6 @@ namespace Motiviti.Enkidu
 			if(disableOnClose)
 				puzzle.gameObject.SetActive(false);
 			Global.player.SetInCutScene(false);
-		//	gameMenu.setPauseButtonVisible(true);
 			StartCoroutine(close());
 
 			Global.player.StopTalking ();
@@ -200,20 +191,12 @@ namespace Motiviti.Enkidu
 
 		public void PuzzleFinished(){
 
-			Global.FlurryLog ("InteractiveItemPuzzle", gameObject.name, "Finished", "not-in-inventory");
-
-		//	Debug.Log("puzzle Finished");
-			//gameObject.SendMessage ("Unlock", SendMessageOptions.DontRequireReceiver);
 			if (!advCam)
 				advCam = Global.advCamera;
-
-
-			Debug.Log(transform.name + "1111ADVCAMERA advCamCanMove" + advCamCanMove);
 			advCam.CanCamMove(advCamCanMove);
 			puzzle.ToggleShow(false);
 			if(disableOnFinish)
 				puzzle.gameObject.SetActive(false);
-		//	gameMenu.setPauseButtonVisible(true);
 			if(disableCollider){
 				transform.GetComponent<Collider2D>().enabled=false;
 				colliderDisabled = true;
@@ -225,20 +208,17 @@ namespace Motiviti.Enkidu
 			if(removeInventoryItemOnFinish && itemToRemove!=null){
 				itemToRemove.Remove();
 			}
-			//gameObject.SetActive(false);
-
+	
 			gameObject.SendMessage("PuzzleCompleted", SendMessageOptions.DontRequireReceiver);
 		}
 
 		public override void AnimationActionPoint(string animationName)
 		{
-			Debug.Log("animation action point");
 			progressCounter = 1;
 		}
 		
 		public override void AnimationFinished(string animationName)
 		{
-			Debug.Log("animation finish point");
 			progressCounter = 2;
 		}
 

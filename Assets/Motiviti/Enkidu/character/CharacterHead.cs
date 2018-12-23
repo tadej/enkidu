@@ -34,15 +34,12 @@ namespace Motiviti.Enkidu
 		{
 		}
 
-		// Use this for initialization
-		public virtual void Start () {
+		public virtual void Start () 
+		{
 			
 			Initialise ();
-
 			if(isEnabled)SetMood(0);
-
 		}
-
 
 		public IEnumerator Talk(string name, bool playAudioSource = true)
 		{
@@ -52,8 +49,6 @@ namespace Motiviti.Enkidu
 
 		public virtual void StopTalking()
 		{
-	//        Debug.Log("StopTalking " + currentClip);
-		
 		}
 
 		public virtual void ChangeMood(CharacterHead.Moods mood)
@@ -81,8 +76,5 @@ namespace Motiviti.Enkidu
 		{
 			Debug.Log ("NOT IMPLEMENTED: public virtual void SetMood(int moodIndex)");
 		}
-		
-
-
 	}
 }

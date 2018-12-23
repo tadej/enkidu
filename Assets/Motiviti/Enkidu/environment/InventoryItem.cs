@@ -300,8 +300,6 @@ namespace Motiviti.Enkidu
 
 		public void ChangeState( State newState )
 		{
-			Global.FlurryLog ("InventoryItemState", gameObject.name, newState.ToString());
-
 			var oldState = state;
 
 			switch(newState)

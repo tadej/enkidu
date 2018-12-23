@@ -176,7 +176,7 @@ namespace Motiviti.Enkidu
 
 					Global.player.transform.localPosition = Vector3.zero;
 
-					Global.player.elroyStaticButOperational = true;
+					Global.player.staticCharacter = true;
 				}
 			}
 			yield return new WaitForSeconds(pauseAfterGoingThrough);

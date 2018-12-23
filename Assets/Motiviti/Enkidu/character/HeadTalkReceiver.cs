@@ -17,23 +17,6 @@ namespace Motiviti.Enkidu
         public int[] possibleSpritesId = new int[50];
         public int possibleSpritesIdint = 0;
 
-        public void ShowPhoneme(int id)
-        {
-            //Debug.Log("showing phoneme: " + id);
-            /*int pos = Array.IndexOf(possibleSpritesId, id);
-            if (pos > -1)
-            {
-                // the array contains the string and the pos variable
-                // will have its position in the array
-            }
-            else
-            {
-                possibleSpritesId[possibleSpritesIdint] = id;
-                possibleSpritesIdint++;
-            }*/
-            //head.mouths[id].enabled = true;
-        }
-
         public void ShowPhoneme(string phoneme)
         {
             switch (phoneme)

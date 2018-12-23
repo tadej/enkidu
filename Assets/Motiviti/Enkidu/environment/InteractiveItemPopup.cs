@@ -92,7 +92,7 @@ namespace Motiviti.Enkidu
 			}
 			else
 			{
-				Global.player.elroyStaticButOperational = true;
+				Global.player.staticCharacter = true;
 			}
 			
 			to_show.SetActive(true);
@@ -125,7 +125,7 @@ namespace Motiviti.Enkidu
 			}
 			else
 			{
-				Global.player.elroyStaticButOperational = false;
+				Global.player.staticCharacter = false;
 			}
 
 			SaveState();

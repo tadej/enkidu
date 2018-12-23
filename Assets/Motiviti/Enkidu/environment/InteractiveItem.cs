@@ -120,9 +120,6 @@ namespace Motiviti.Enkidu
 			if (GetComponent<DoorBetweenLevels> () != null)
 				isExit = true;
 
-			if (GetComponent<DoorBetweenCaves> () != null)
-				isExit = true;
-
 			if (GetComponent<PersonNPC> () != null)
 				isPerson = true;
 		}
@@ -138,12 +135,6 @@ namespace Motiviti.Enkidu
 			}
 
 			return false;
-		}
-
-		// Update is called once per frame
-		void Update () {
-		
-			
 		}
 
 		public void Highlight(bool b)
@@ -281,7 +272,7 @@ namespace Motiviti.Enkidu
 				}
 				StartCoroutine (ProcessArrivedAt ());
 
-				Global.player.PublicReturnItemToInventory();
+				Global.player.ReturnItemToInventory();
 
 			} else
 				return true; // otherwise Elroy says "that won't work" 
@@ -405,8 +396,6 @@ namespace Motiviti.Enkidu
 				{
 					if (actionChain[i] is InteractiveItemCombine || actionChain[i] is InteractiveItemComment || actionChain[i] is InteractiveItemControlCamera || actionChain[i] is InteractiveItemChangeCamera)
 					{
-						Global.FlurryLog ("ArrivedAt", gameObject.name, actionChain[i].GetType().ToString(), heldItem.gameObject.ToString());
-
 						yield return StartCoroutine(actionChain[i].ProcessArrivedAt());
 					
 						hasSomethingMeaningfulOccurred = true;
@@ -416,20 +405,15 @@ namespace Motiviti.Enkidu
 				{
 					if(!(actionChain[i] is InteractiveItemCombine))
 					{
-						Global.FlurryLog ("ArrivedAt", gameObject.name, actionChain[i].GetType().ToString());
 						yield return StartCoroutine(actionChain[i].ProcessArrivedAt());
 					}
 				}
 			}
-	//		Debug.Log("pride do konca");
 			if(doCloseup)advCamera.CloseUpEnd();
 
 			if(!realyStayInCutscene){
-	//			Debug.Log("realyStayInCutscene");
 				if (!stayInCutscene || !hasSomethingMeaningfulOccurred) {
-	//				Debug.Log("stayInCutscene");
 					if (!allowInterruptions && !wasInCutScene){
-	//					Debug.Log("allowInterruptions");
 						Global.player.SetInCutScene (false);
 					}
 				}

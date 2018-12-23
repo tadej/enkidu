@@ -5,50 +5,37 @@ using System.Linq;
 using System.Collections.Generic;
 using RogoDigital.Lipsync;
 using System;
-
 using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
     public class CharacterBrain : CharacterHead
     {
         public float talkAngle = 180;
         public bool isPlayingCustomAnimation = false;
-
         public CharacterHead conversationPartner = null;
-        
         public EyeGestures eyeGesture = EyeGestures.idle;
-
         public CharacterHead.Moods mood;
+        public PlayerHead[] heads;
+        public bool interruptFlag = false;
+        public bool isAnimationPlaying = false;
+        public AnimationWaitingMethod animationWaitingMethod = AnimationWaitingMethod.UntilAnimationFinish;
+        public bool alwaysTurnToFacePlayer = false;
 
+        protected Transform mainTransform = null;
         protected string currentMode = "";
         protected ArmGestures currentArmGesture;
         protected HeadGestures currentHeadGesture;
         protected EyeGestures currentEyeGesture;
         protected NeckGestures currentNeckGesture;
         protected BodyGestures currentBodyGesture;
-
-        public Transform mainTransform = null;
-        
         [SerializeField]
         protected Animator animator;
         protected bool isTalking = false;
         protected bool lastFrameIsTalking = false;
-        public PlayerHead[] heads;
-
         protected bool holdingRemote = false;
 
-        public bool interruptFlag = false;
-
-        //Dictionary<State, bool> animationStatuses = new Dictionary<State, bool>();
-        public bool isAnimationPlaying = false;
-
-        public AnimationWaitingMethod animationWaitingMethod = AnimationWaitingMethod.UntilAnimationFinish;
-
         string [] phonemes = {"AI", "E", "U", "O", "CDGKNRSThYZ", "FV", "L", "MBP", "WQ", "Rest"};
-
-        public bool alwaysTurnToFacePlayer = false;
 
         public enum AnimationWaitingMethod
         {
@@ -263,6 +250,7 @@ namespace Motiviti.Enkidu
             side=7,
             follow=8
         }
+
         public enum ArmGestures
         {
             idle = 0,
@@ -293,14 +281,15 @@ namespace Motiviti.Enkidu
             armsUp=40,
             holdingRemote=50
         }
+
         public virtual void ChangeState(int newState)
         {
-            Debug.LogWarning("ChangeState not implemented.");
+            Debug.LogWarning("TODO: ChangeState not implemented.");
         }
 
         public virtual void ChangeTalkMode(string mode)
         {
-            
+            Debug.LogWarning("TODO: Implement ChangeTalkMode.");   
         }
 
         public bool IsTalking
@@ -489,6 +478,7 @@ namespace Motiviti.Enkidu
         protected virtual void SwitchToIdleIfNotAlready()
         {
             // TODO
+            Debug.LogWarning("TODO: Implement SwitchToIdleIfNotAlready");
         }
             
         public void SetTalkMode(bool tm)
@@ -501,6 +491,10 @@ namespace Motiviti.Enkidu
             ResetArmAnimationStatus();
         }
 
+        protected virtual void ResetToIdle()
+        {
+        }
+        
         protected virtual IEnumerator RunLipSyncProc(string charName, AudioSource src, AudioClip audioClip, int lineID, string message)
         {
             this.interruptFlag = false;
@@ -515,7 +509,8 @@ namespace Motiviti.Enkidu
                 float startTime = Time.time;
 
                 fakeClipLength = message.Length * 0.1f;
-
+                
+                // Simulate a talk cycle
                 string [] talkCycle = {"AI","AI","O","AI","E", "AI", "O", "U"};
                 int i = 0;
                 while(Time.time - startTime < fakeClipLength && !interruptFlag)
@@ -578,7 +573,6 @@ namespace Motiviti.Enkidu
                     }
                 }
             }
-                
 
             ChangeTalkMode("idle");
 
@@ -591,8 +585,7 @@ namespace Motiviti.Enkidu
             animator.SetBool("talking", false);
 
             ResetArmAnimationStatus();
-            //ResetToIdle();
-
+           
             yield return null;
         }
 
@@ -605,19 +598,13 @@ namespace Motiviti.Enkidu
         {
             Debug.LogWarning("not implemented");
         }
-
-        protected virtual void ResetToIdle()
-        {
-            
-        }
-
+        
         protected PhonemePositions GetPhonemesFromLipSyncData( LipSyncData data, float audioClipLength )
         {
             PhonemePositions pos = new PhonemePositions();
             
             foreach(var phonemeMarker in data.phonemeData)
             {
-                
                 pos.Add( new PhonemePosition( phonemeMarker.time * audioClipLength, phonemes[phonemeMarker.phonemeNumber] ));
             }
 
@@ -637,12 +624,12 @@ namespace Motiviti.Enkidu
 
         public virtual void AnimationEventEndCutScene()
         {
-            
+            Debug.LogWarning("TODO: Implement AnimationEventEndCutScene");
         }
 
         public virtual void AnimationActionPoint(string animationName)
         {
-            
+            Debug.LogWarning("TODO: Implement AnimationActionPoint");
         }
 
         public virtual void AnimationFinished(string animationName)
@@ -650,7 +637,5 @@ namespace Motiviti.Enkidu
             Debug.Log("AnimationFinished " + animationName);
             isAnimationPlaying = false;
         }
-
     }
-
 }
