@@ -9,3 +9,7 @@ todo: refactoring, add a sample scene
 Player: [PlayerBrain](Assets/Motiviti/Enkidu/character/Player.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead.cs), [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs)
 
 Environment: [InteractiveItem](Assets/Motiviti/Enkidu/environment/InteractiveItem.cs), [InteractiveItem*](Assets/Motiviti/Enkidu/environment)
+
+GUI: [Inventory](Assets/Motiviti/Enkidu/gui/Inventory.cs)
+
+System: [StatefulItem](Assets/Motiviti/Enkidu/system/StatefulItem.cs)
