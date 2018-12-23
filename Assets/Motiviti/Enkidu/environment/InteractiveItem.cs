@@ -1,16 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
-
-using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-
     public class InteractiveItem : MonoBehaviour
     {
-
         InteractiveItemAction[] actionChain;
 
         public bool noClickBackground = false;
