@@ -440,7 +440,6 @@ namespace Motiviti.Enkidu
 
         public void ScrollRight()
         {
-            Debug.Log("arrow right");
             if (scrollPos < (items.Count - itemsVisible))
                 SetScrollPosition(scrollPos + 1);
             UpdateItemPosition_Scroll();
