@@ -5,33 +5,34 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class LoadNextLevelOnTrigger : MonoBehaviour {
+
+    public class LoadNextLevelOnTrigger : MonoBehaviour
+    {
 
         bool loadingAlready = false;
 
         Player elroy;
 
-        // Use this for initialization
-        void Start () {
+        void Start()
+        {
             elroy = Global.player;
         }
 
         public void Trigger()
         {
-            if(!loadingAlready)
-            StartCoroutine(NextLevel());
+            if (!loadingAlready)
+                StartCoroutine(NextLevel());
 
             loadingAlready = true;
         }
-         IEnumerator NextLevel()
+        IEnumerator NextLevel()
         {
             if (elroy)
                 StartCoroutine(elroy.NextLevel());
             else
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             yield return null;
-            
+
         }
     }
 }

@@ -7,54 +7,50 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class DialogTextLine : MonoBehaviour {
 
-		public TextMeshProUGUI[] textAndShadows;
-		bool canBeSelected = false;
-		UnityEngine.UI.Image bgImage;
+    public class DialogTextLine : MonoBehaviour
+    {
 
-		Color invisible = new Color(0,0,0,0);
+        public TextMeshProUGUI[] textAndShadows;
+        bool canBeSelected = false;
+        UnityEngine.UI.Image bgImage;
 
-		public bool CanBeSelected()
-		{
-			return canBeSelected;
-		}
+        Color invisible = new Color(0, 0, 0, 0);
 
-		public void SetColor(Color c, Color shadowColor, Color? bgColor)
-		{
-			if(textAndShadows.Length > 0) textAndShadows[0].color = c;
-			for(int i=1; i<textAndShadows.Length; i++) textAndShadows[i].color = shadowColor;
+        public bool CanBeSelected()
+        {
+            return canBeSelected;
+        }
 
-			if(bgColor != null)
-			{
-				bgImage.color = (Color)bgColor;
-			}
-		}
+        public void SetColor(Color c, Color shadowColor, Color? bgColor)
+        {
+            if (textAndShadows.Length > 0) textAndShadows[0].color = c;
+            for (int i = 1; i < textAndShadows.Length; i++) textAndShadows[i].color = shadowColor;
 
-		// Use this for initialization
-		void Awake () {
-			bgImage = GetComponent<UnityEngine.UI.Image>();
-		}
+            if (bgColor != null)
+            {
+                bgImage.color = (Color)bgColor;
+            }
+        }
 
-		public void SetText(string text)
-		{
-			foreach(var t in textAndShadows) t.text = text;
+        void Awake()
+        {
+            bgImage = GetComponent<UnityEngine.UI.Image>();
+        }
 
-			if(string.IsNullOrEmpty(text))
-			{
-				canBeSelected = false;
-				SetColor(invisible, invisible, invisible);
-			}
-			else
-			{
-				canBeSelected = true;
-			}
-		}
-		
-		// Update is called once per frame
-		void Update () {
-			
-		}
-	}
+        public void SetText(string text)
+        {
+            foreach (var t in textAndShadows) t.text = text;
+
+            if (string.IsNullOrEmpty(text))
+            {
+                canBeSelected = false;
+                SetColor(invisible, invisible, invisible);
+            }
+            else
+            {
+                canBeSelected = true;
+            }
+        }
+    }
 }

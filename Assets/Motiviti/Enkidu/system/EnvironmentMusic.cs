@@ -5,21 +5,12 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class EnvironmentMusic : MonoBehaviour {
 
-		public bool playOnAwake = false;
+    public class EnvironmentMusic : MonoBehaviour
+    {
 
-		public AudioSource[] playAudiosOnAwake;
+        public bool playOnAwake = false;
 
-		// Use this for initialization
-		void Start () {
-		
-		}
-		
-		// Update is called once per frame
-		void Update () {
-		
-		}
-	}
+        public AudioSource[] playAudiosOnAwake;
+    }
 }

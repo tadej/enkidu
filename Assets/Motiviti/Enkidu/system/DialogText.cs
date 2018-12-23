@@ -5,98 +5,98 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-	public class DialogText : MonoBehaviour 
-	{
-		public string fontName;
-		public float fontScale = 0.63f;
+    public class DialogText : MonoBehaviour
+    {
+        public string fontName;
+        public float fontScale = 0.63f;
 
-		Vector3 minPos;
-		Vector3 maxPos;
-			
-		UIText fnt;
-		UITextInstance text;
+        Vector3 minPos;
+        Vector3 maxPos;
 
-		public bool repositionTextWithCamera = false;
-		Bounds textBounds ;
-		bool isShowing = false;
-		
-		public bool isStatic = false;
+        UIText fnt;
+        UITextInstance text;
 
-		public float heightOffset = 0.8f;
+        public bool repositionTextWithCamera = false;
+        Bounds textBounds;
+        bool isShowing = false;
 
-		UIToolkit uiToolkit;
+        public bool isStatic = false;
 
-		public bool subtitlePosition = true;
+        public float heightOffset = 0.8f;
 
-		// Use this for initialization
-		void Start () 
-		{
-			uiToolkit = GetComponent<UIToolkit>();
+        UIToolkit uiToolkit;
 
-			fnt = new UIText(uiToolkit, fontName, fontName + ".png");
-			text = fnt.addTextInstance("", 0, 0, fontScale, 3);
-			text.alignMode = UITextAlignMode.Center;
-			text.verticalAlignMode = UITextVerticalAlignMode.Bottom;
-			Hide ();
-		}
-		
-		public void ShowText(string line1, string line2)
-		{
-			text.xPos = 5000;
-			text.yPos = 5000;
+        public bool subtitlePosition = true;
+
+        // Use this for initialization
+        void Start()
+        {
+            uiToolkit = GetComponent<UIToolkit>();
+
+            fnt = new UIText(uiToolkit, fontName, fontName + ".png");
+            text = fnt.addTextInstance("", 0, 0, fontScale, 3);
+            text.alignMode = UITextAlignMode.Center;
+            text.verticalAlignMode = UITextVerticalAlignMode.Bottom;
+            Hide();
+        }
+
+        public void ShowText(string line1, string line2)
+        {
+            text.xPos = 5000;
+            text.yPos = 5000;
 
 
-			text.text = line1 + "\r\n" + line2;
+            text.text = line1 + "\r\n" + line2;
 
-			if(string.IsNullOrEmpty(line2)) text.text = "\r\n" + line1;
+            if (string.IsNullOrEmpty(line2)) text.text = "\r\n" + line1;
 
-			isShowing = true;
+            isShowing = true;
 
-			GetComponent<Renderer>().enabled = false;
+            GetComponent<Renderer>().enabled = false;
 
-			fnt.updateText (text);
+            fnt.updateText(text);
 
-			Reposition();
+            Reposition();
 
-			GetComponent<Renderer>().enabled = true;
-		}
-		
-		void Reposition()
-		{
-			if(!isShowing) return;
+            GetComponent<Renderer>().enabled = true;
+        }
 
-			Vector3 pos1 = Vector3.zero;
+        void Reposition()
+        {
+            if (!isShowing) return;
 
-			if(subtitlePosition)
-			{
-				Vector3 poss = Camera.main.ScreenToWorldPoint( new Vector3(Screen.width / 2, 20, 0.02f) );
+            Vector3 pos1 = Vector3.zero;
 
-				pos1 = Camera.main.WorldToScreenPoint(poss);
-			
-			}
-			else
-			{
-				//pos1 = Camera.main.WorldToScreenPoint (target.GetPosition());
-			}
+            if (subtitlePosition)
+            {
+                Vector3 poss = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, 20, 0.02f));
 
-			if(isShowing)
-			{
-				GetComponent<Renderer>().enabled = true;
-			}
-		}
-		
-		public void Hide()
-		{
-			GetComponent<Renderer>().enabled = false;
-			//ShowText("","");
-			isShowing = false;
-		}
-		
-		void LateUpdate () 
-		{
-				
-			if(repositionTextWithCamera)Reposition();
-			
-		}
-	}
+                pos1 = Camera.main.WorldToScreenPoint(poss);
+
+            }
+            else
+            {
+                //pos1 = Camera.main.WorldToScreenPoint (target.GetPosition());
+            }
+
+            if (isShowing)
+            {
+                GetComponent<Renderer>().enabled = true;
+            }
+        }
+
+        public void Hide()
+        {
+            GetComponent<Renderer>().enabled = false;
+            //ShowText("","");
+            isShowing = false;
+        }
+
+        void LateUpdate()
+        {
+
+            if (repositionTextWithCamera) Reposition();
+
+        }
+    }
 }

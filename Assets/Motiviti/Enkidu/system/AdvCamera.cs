@@ -33,6 +33,8 @@ namespace Motiviti.Enkidu
         float maxx = -999999999;
         float miny = 999999999;
         float maxy = -999999999;
+        int paralax_counter = 20;
+
 
         float aspectRatio = 4 / 3;
         public float cameraWidth = 1, cameraHeight = 1;
@@ -131,7 +133,6 @@ namespace Motiviti.Enkidu
 
         new Camera camera;
 
-        // Use this for initialization
         void Awake()
         {
             if (autoParallaxInitialisationParent != null)
@@ -144,7 +145,6 @@ namespace Motiviti.Enkidu
                 cameraSize = smallCameraSize;
             }
 
-            // end awake
             cameraObject = new GameObject().transform;
             cameraObject.transform.parent = transform.parent;
             cameraObject.transform.position = transform.position;
@@ -323,7 +323,6 @@ namespace Motiviti.Enkidu
             {
                 if (Global.isSmallScreen)
                 {
-                    Debug.Log("small screen");
                     return true;
                 }
             }
@@ -397,7 +396,6 @@ namespace Motiviti.Enkidu
             }
         }
 
-
         IEnumerator CloseUpEndCoroutine()
         {
             defaultMinZoomAmount = minZoomAmount;
@@ -463,6 +461,7 @@ namespace Motiviti.Enkidu
 
         }
 
+        // TODO: remove Elroy-specific magic strings like "Characters", "DynamicItems", etc.
         void GetTransformBounds(Transform tr, ref float minx, ref float maxx, ref float miny, ref float maxy)
         {
             if (tr.gameObject.name == "Characters" || tr.gameObject.name == "DynamicItems" || tr.gameObject.name == "Clouds")
@@ -561,7 +560,6 @@ namespace Motiviti.Enkidu
             float m = floor ? Mathf.Floor(cameraPos.x / dnx) : Mathf.Ceil(cameraPos.x / dnx);
 
             cameraPos.x = dnx * m + dnx * 0.5f;
-            //if(Global.elroy.transform.position.x < cameraPos.x) cameraPos.x = Global.elroy.tra
             cameraPos = EnforceCameraBoundaries(cameraPos);
 
             return cameraPos;
@@ -574,13 +572,10 @@ namespace Motiviti.Enkidu
 
             if (cameraPos.x < minx + cameraWidth)
                 cameraPos.x = minx + cameraWidth;
-            //if(Global.elroy.transform.position.x > cameraPos.x) cameraPos.x += Time.deltaTime;
             if (cameraPos.x > maxx - cameraWidth)
                 cameraPos.x = maxx - cameraWidth;
-            //if(Global.elroy.transform.position.y < cameraPos.y) cameraPos.y -= Time.deltaTime;
             if (cameraPos.y < miny + cameraHeight)
                 cameraPos.y = miny + cameraHeight;
-            //if(Global.elroy.transform.position.y > cameraPos.y) cameraPos.y += Time.deltaTime;
             if (cameraPos.y > maxy - cameraHeight)
                 cameraPos.y = maxy - cameraHeight;
 
@@ -592,13 +587,10 @@ namespace Motiviti.Enkidu
         {
             if (cameraPos.x < minx + cameraWidth)
                 cameraPos.x = minx + cameraWidth;
-            //if(Global.elroy.transform.position.x > cameraPos.x) cameraPos.x += Time.deltaTime;
             if (cameraPos.x > maxx - cameraWidth)
                 cameraPos.x = maxx - cameraWidth;
-            //if(Global.elroy.transform.position.y < cameraPos.y) cameraPos.y -= Time.deltaTime;
             if (cameraPos.y < miny + cameraHeight)
                 cameraPos.y = miny + cameraHeight;
-            //if(Global.elroy.transform.position.y > cameraPos.y) cameraPos.y += Time.deltaTime;
             if (cameraPos.y > maxy - cameraHeight)
                 cameraPos.y = maxy - cameraHeight;
 
@@ -644,9 +636,7 @@ namespace Motiviti.Enkidu
                 else
                 if (elroyAdv != null && (Time.time < 0.5f || Global.player.TimeSinceSetDestination() > 0.5f))
                 {
-
                     {
-
                         var cameraPos = GetCameraPosFromElroy( /*Global.elroy.direction < 0 */);
 
                         float step = Time.deltaTime * 0.1f;
@@ -680,7 +670,6 @@ namespace Motiviti.Enkidu
                     }
 
                     ForceCameraIntoBoundaries(cameraObject.transform.position);
-                    //                Debug.Log ("miny: " + (miny + cameraHeight/2) + " y: " + camera.transform.position.y);
                 }
                 else
                 {
@@ -696,8 +685,6 @@ namespace Motiviti.Enkidu
                     var cameraPos = GetCameraPosFromElroy();
                     cameraPos.x = cameraObject.transform.position.x;
                     cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraPos, Time.deltaTime * 0.04f);
-
-                    //Debug.Log ("miny: " + (miny + cameraHeight/2) + " y: " + camera.transform.position.y);
                 }
                 else
                 {
@@ -709,14 +696,9 @@ namespace Motiviti.Enkidu
 
         void MoveElroyToScreenEdge(bool leftEdge)
         {
-            Debug.Log("MoveElroyToScreenEdge");
-
             if (Time.time - moveElroyToScreenEdgeTimeStamp > /* 1 MR  2.6. */0.1f && Global.player.IsIdleOrWalking())
             {
-                //	Debug.Log ("MoveElroyToScreenEdge 1");
                 Vector3 pos = Global.player.transform.position;
-
-                //	Debug.Log ("MoveElroyToScreenEdge " + leftEdge);
 
                 float camDelta = 0.2f * cameraSize;
 
@@ -734,7 +716,6 @@ namespace Motiviti.Enkidu
                 Vector3 newPos = leftEdge ? (pos + Vector3.right * cameraWidth * 0.5f) + Vector3.right * InventoryMovementAddition() : (pos - Vector3.right * cameraWidth * 0.5f);
 
                 StartCoroutine(SetDestinationDelayed(newPos, 0.5f));
-                //StartCoroutine (DisableAndReenableFollow (3));
 
                 moveElroyToScreenEdgeTimeStamp = Time.time;
             }
@@ -743,11 +724,9 @@ namespace Motiviti.Enkidu
         IEnumerator SetDestinationDelayed(Vector3 dest, float delay)
         {
             Global.player.justReleasedAfterPeekPanning = true;
-            //Global.elroy.inCutScene = true;
 
             yield return new WaitForSeconds(delay);
 
-            //Global.elroy.inCutScene = false;
             StartCoroutine(Global.player.SetDestinationInterim(dest));
 
             yield return null;
@@ -755,8 +734,6 @@ namespace Motiviti.Enkidu
 
         public void SetPeekPanning(bool b)
         {
-            //		Debug.Log ("SetPeekPanning " + b);
-
             if (inCloseUp && b)
                 b = false;
 
@@ -774,22 +751,14 @@ namespace Motiviti.Enkidu
             {
                 if (inventory) inventory.EnableItemUsage(true);
                 followElroy = false;
-                //camera.transform.position = EnforceCameraBoundaries(peekPanningStartPosition);
-
                 if (IsElroyBeyondLeftScreenEdge())
                 {
                     MoveElroyToScreenEdge(true);
-                    //Global.elroy.SetDestination( pos );
                 }
                 else
-                    if (IsElroyBeyondRightScreenEdge())
+                if (IsElroyBeyondRightScreenEdge())
                 {
                     MoveElroyToScreenEdge(false);
-                    //Global.elroy.SetDestination( pos );
-                }
-                else
-                {
-                    //StartCoroutine( DisableAndReenableFollow(4, true) );
                 }
 
                 lastChangeTime = Time.time;
@@ -814,7 +783,6 @@ namespace Motiviti.Enkidu
 
         public void SetFollowObjectMode(bool b, Transform following, float speed = 1)
         {
-            Debug.Log("set folow object mode: " + b);
             followCameraObject = b;
             followingGameObject = following;
             followElroy = !b;
@@ -870,7 +838,6 @@ namespace Motiviti.Enkidu
             return isPeekPanning;// && ((Time.time - peekPanningStartTime) > 0.05f);
         }
 
-        // Update is called once per frame
         void Update()
         {
 
@@ -882,7 +849,7 @@ namespace Motiviti.Enkidu
                 }
             }
         }
-        int paralax_counter = 20;
+
         void ApplyParallax()
         {
             if (paralax_counter < 20)
@@ -902,9 +869,7 @@ namespace Motiviti.Enkidu
 
                 if (tr && tr.gameObject)
                 {
-
                     Vector3 originalPosition = (Vector3)originalParallaxPositions[tr.gameObject.GetInstanceID()];
-
                     tr.localPosition = originalPosition - dv * parallaxFactorBackground;
                 }
             }
@@ -915,9 +880,7 @@ namespace Motiviti.Enkidu
 
                 if (tr && tr.gameObject)
                 {
-
                     Vector3 originalPosition = (Vector3)originalParallaxPositions[tr.gameObject.GetInstanceID()];
-
                     tr.localPosition = originalPosition - dv * parallaxFactorBackground1;
                 }
             }
@@ -928,9 +891,7 @@ namespace Motiviti.Enkidu
 
                 if (tr && tr.gameObject)
                 {
-
                     Vector3 originalPosition = (Vector3)originalParallaxPositions[tr.gameObject.GetInstanceID()];
-
                     tr.localPosition = originalPosition - dv * parallaxFactorBackground2;
                 }
             }
@@ -941,9 +902,7 @@ namespace Motiviti.Enkidu
 
                 if (tr && tr.gameObject)
                 {
-
                     Vector3 originalPosition = (Vector3)originalParallaxPositions[tr.gameObject.GetInstanceID()];
-
                     tr.localPosition = originalPosition - dv * parallaxFactorBackground3;
                 }
             }
@@ -954,9 +913,7 @@ namespace Motiviti.Enkidu
 
                 if (tr && tr.gameObject)
                 {
-
                     Vector3 originalPosition = (Vector3)originalParallaxPositions[tr.gameObject.GetInstanceID()];
-
                     tr.localPosition = originalPosition - dv * parallaxFactorForeground;
                 }
             }
@@ -987,14 +944,10 @@ namespace Motiviti.Enkidu
 
             ApplyParallax();
 
-
-
             if (canZoom || idealZoomAmount == 0)
                 ZoomAmount = Mathf.Lerp(ZoomAmount, IdealZoomAmount, Time.deltaTime * SmoothSpeed);
 
-
             cameraSize = this.camera.orthographicSize;
-            //Camera.main.orthographicSize;
 
             if (Mathf.Abs(camera.orthographicSize - originalCameraSize) > 0.0001f && idealZoomAmount == 0)
             {
@@ -1012,17 +965,12 @@ namespace Motiviti.Enkidu
             }
 
             if (inventory) inventory.recalculateHiddenOffset();
-
-
         }
 
         public void SetNewCameraSize(float size)
         {
-
-            //Debug.Log("setting camera size from " + camera.orthographicSize + " to " + size);
             cameraSize = size;
             camera.orthographicSize = size;
-            //Camera.main.orthographicSize = size;
             cameraHeight = size;
             cameraWidth = size * aspectRatio;
             UpdateCameraSize(size);
@@ -1030,9 +978,6 @@ namespace Motiviti.Enkidu
             DefaultFov = size;
             DefaultOrthoSize = size;
         }
-
-
-
 
         public float DefaultFov
         {
@@ -1061,7 +1006,6 @@ namespace Motiviti.Enkidu
 
                 if (camera.orthographic && canZoom)
                 {
-                    //    Debug.Log("zoom amount " + camera.orthographicSize + " to " + zoomAmount);
                     camera.orthographicSize = Mathf.Max(defaultOrthoSize - zoomAmount, 0.1f);
                 }
                 else
@@ -1088,7 +1032,6 @@ namespace Motiviti.Enkidu
             DefaultOrthoSize = camera.orthographicSize;
         }
 
-        // Handle the pinch event
         public void setCutscene(bool b)
         {
             //Debug.Log("camera cutscene: " + b);
@@ -1101,29 +1044,17 @@ namespace Motiviti.Enkidu
             }
         }
 
-        // void OnPinch(PinchGesture gesture)
-        // {
-        //     if (canZoom)
-        //     {
-        //         lastChangeTime = Time.time;
-        //         IdealZoomAmount += zoomSpeed * gesture.Delta.Centimeters();
-        //         StartCoroutine(ZoomBackToDefault());
-        //     }
-        // }
-
         IEnumerator ZoomBackToDefault()
         {
             yield return new WaitForSeconds(3.3f);
             if (Time.time - lastChangeTime > 3.3f)
             {
-                //			Debug.Log("setting IdealZoomAmount zoom to: " + 0);
                 IdealZoomAmount = 0;
             }
         }
 
         public void CanCamMove(bool can)
         {
-            Debug.LogWarning("Can camera move: " + can);
             canMove = can;
         }
 

@@ -4,13 +4,10 @@ using System.Linq;
 using System;
 using System.Reflection;
 
-using Motiviti.Enkidu;
-
 namespace Motiviti.Enkidu
 {
-        
-    public class StatefulItem : MonoBehaviour {
-
+    public class StatefulItem : MonoBehaviour
+    {
         public bool allowSaving = true;
 
         const string levelObjectDelimiter = "$";
@@ -20,7 +17,7 @@ namespace Motiviti.Enkidu
         protected virtual void Initialise()
         {
             Global.AddStatefulItem(this);
-            
+
             LoadState();
         }
 
@@ -33,17 +30,13 @@ namespace Motiviti.Enkidu
 
         protected string GetObjectIdentifier(string sceneName = null)
         {
-            if(sceneName == null) sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            if (sceneName == null) sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             return sceneName + levelObjectDelimiter + gameObject.name + "[" + this.GetType().Name + "] ";
         }
-        /*
-        protected string GetObjectIdentifierForScene(){
-            return levelObjectDelimiter + gameObject.name + "[" + this.GetType().Name + "] ";
-        }*/
 
         public void LoadState()
         {
-            if(!allowSaving) return;
+            if (!allowSaving) return;
 
             var fields = this.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(field => field.IsDefined(typeof(SaveStateAttribute), true));
 
@@ -70,8 +63,8 @@ namespace Motiviti.Enkidu
                         field.SetValue(this, val == 1 ? true : false);
                     }
                 }
-                else 
-                if(Global.IsStringType(field))
+                else
+                if (Global.IsStringType(field))
                 {
                     var val = Global.GetStateStr(GetObjectIdentifier(sceneName) + field.Name);
                     GetObjectIdentifier(sceneName);
@@ -82,7 +75,7 @@ namespace Motiviti.Enkidu
 
         public void SaveState(bool saveFile = false)
         {
-            if(!allowSaving) return;
+            if (!allowSaving) return;
 
             var fields = this.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(field => field.IsDefined(typeof(SaveStateAttribute), true));
 
@@ -104,7 +97,7 @@ namespace Motiviti.Enkidu
                     GetObjectIdentifier(sceneName);
                     Global.SetState(GetObjectIdentifier(sceneName) + field.Name, val, saveFile);
                 }
-                else if(Global.IsStringType(field))
+                else if (Global.IsStringType(field))
                 {
                     var val = field.GetValue(this);
                     GetObjectIdentifier(sceneName);
@@ -118,16 +111,6 @@ namespace Motiviti.Enkidu
                     }
                 }
             }
-        }
-
-        // Use this for initialization
-        void Start () {
-        
-        }
-        
-        // Update is called once per frame
-        void Update () {
-        
         }
     }
 }

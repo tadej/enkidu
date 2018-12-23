@@ -2,22 +2,20 @@
 using System.Collections;
 using TMPro;
 
-using Motiviti.Enkidu;
-
 namespace Motiviti.Enkidu
 {
-	
-    public class DialogControl : MonoBehaviour 
+
+    public class DialogControl : MonoBehaviour
     {
-        public TextMeshPro [] textLines;
+        public TextMeshPro[] textLines;
 
-        public TextMeshPro [] textLinesShadows;
+        public TextMeshPro[] textLinesShadows;
 
-        public TextMeshPro [] textLinesShadows1;
+        public TextMeshPro[] textLinesShadows1;
 
-        public TextMeshPro [] textLinesShadows2;
+        public TextMeshPro[] textLinesShadows2;
 
-        string [] textStrings;
+        string[] textStrings;
 
         public SpriteRenderer background, backgroundLine;
 
@@ -66,7 +64,7 @@ namespace Motiviti.Enkidu
         public bool isEnabled = false;
 
         // Use this for initialization
-        void Start () 
+        void Start()
         {
             advCamera = Global.advCamera;
             float cameraSize = 4;
@@ -76,16 +74,16 @@ namespace Motiviti.Enkidu
                 cameraSize = Global.activeCamera.fieldOfView;
 
             textStrings = new string[5];
-            colorSelected = new Color32(255,168,48,255);
-            colorIdle = new Color32(255,243,197,255);
-            colorShadowSelected = new Color32(32,53,63,255);
-            colorShadowIdle = new Color32(13,63,81,255);
+            colorSelected = new Color32(255, 168, 48, 255);
+            colorIdle = new Color32(255, 243, 197, 255);
+            colorShadowSelected = new Color32(32, 53, 63, 255);
+            colorShadowIdle = new Color32(13, 63, 81, 255);
             bg = background.transform.parent.transform;
             defBgPos = bg.transform.localPosition;
             if (calcFunctions)
             {
-                if(Global.IsSmallScreen())
-                    defBgPos.y = (-cameraSize  + defCamSizeForCalc) * multiplierSmall;
+                if (Global.IsSmallScreen())
+                    defBgPos.y = (-cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-cameraSize + defCamSizeForCalc) * multiplierLarge;
                 offsetBackground = (cameraSize - defCamSizeForCalc) * secondMultiplier + addedOffest;
@@ -118,15 +116,15 @@ namespace Motiviti.Enkidu
 
             SetEnabled(true);
 
-            SetLines (line1, line2, line3, line4, line5);
+            SetLines(line1, line2, line3, line4, line5);
             lineSelected = -1;
 
-            while(lineSelected == -1)
+            while (lineSelected == -1)
             {
                 yield return new WaitForSeconds(0.5f);
             }
 
-            SetEnabled (false);
+            SetEnabled(false);
         }
 
         void tryLines()
@@ -188,7 +186,7 @@ namespace Motiviti.Enkidu
             textStrings[2] = line3;
             textStrings[3] = line4;
             textStrings[4] = line5;
-        
+
             textLines[0].text = (line1);
             textLines[1].text = (line2);
             textLines[2].text = (line3);
@@ -213,10 +211,11 @@ namespace Motiviti.Enkidu
             textLinesShadows2[3].text = line4;
             textLinesShadows2[4].text = line4;
 
-            for(int i = 0; i<5; i++){
+            for (int i = 0; i < 5; i++)
+            {
                 textLines[i].color = colorIdle;
-                if(advCamera)textLines[i].fontSize = advCamera.cameraSize * 0.9f;
-                if(advCamera)textLinesShadows[i].fontSize = advCamera.cameraSize * 0.9f;
+                if (advCamera) textLines[i].fontSize = advCamera.cameraSize * 0.9f;
+                if (advCamera) textLinesShadows[i].fontSize = advCamera.cameraSize * 0.9f;
                 textLinesShadows[i].color = colorShadowIdle;
                 textLinesShadows[i].outlineColor = colorShadowIdle;
                 if (advCamera) textLinesShadows1[i].fontSize = advCamera.cameraSize * 0.9f;
@@ -229,7 +228,7 @@ namespace Motiviti.Enkidu
 
             bg.transform.localPosition = defBgPos;
 
-            numberOfOptions = 5; 
+            numberOfOptions = 5;
             if (string.IsNullOrEmpty(line5))
             {
                 textLines[4].GetComponent<Renderer>().enabled = false;
@@ -239,7 +238,8 @@ namespace Motiviti.Enkidu
                 numberOfOptions = 4;
                 bg.transform.localPosition += Vector3.down * offsetBackground;
             }
-            if(string.IsNullOrEmpty(line4)){
+            if (string.IsNullOrEmpty(line4))
+            {
                 textLines[3].GetComponent<Renderer>().enabled = false;
                 textLinesShadows[3].GetComponent<Renderer>().enabled = false;
                 textLinesShadows1[3].GetComponent<Renderer>().enabled = false;
@@ -247,7 +247,8 @@ namespace Motiviti.Enkidu
                 numberOfOptions = 3;
                 bg.transform.localPosition += Vector3.down * offsetBackground;
             }
-            if(string.IsNullOrEmpty(line3)){
+            if (string.IsNullOrEmpty(line3))
+            {
                 textLines[2].GetComponent<Renderer>().enabled = false;
                 textLinesShadows[2].GetComponent<Renderer>().enabled = false;
                 textLinesShadows1[2].GetComponent<Renderer>().enabled = false;
@@ -265,30 +266,32 @@ namespace Motiviti.Enkidu
 
             backgroundLine.enabled = b;
 
-            foreach(var g in textLines) g.GetComponent<Renderer>().enabled = b;
+            foreach (var g in textLines) g.GetComponent<Renderer>().enabled = b;
 
-            foreach(var g in textLinesShadows) g.GetComponent<Renderer>().enabled = b;
+            foreach (var g in textLinesShadows) g.GetComponent<Renderer>().enabled = b;
 
-            foreach(var g in textLinesShadows1) g.GetComponent<Renderer>().enabled = b;
+            foreach (var g in textLinesShadows1) g.GetComponent<Renderer>().enabled = b;
 
-            foreach(var g in textLinesShadows2) g.GetComponent<Renderer>().enabled = b;
+            foreach (var g in textLinesShadows2) g.GetComponent<Renderer>().enabled = b;
         }
 
-        void Position3DLines(){
-            for(int i = 0; i < numberOfOptions; i++){
-                Vector3 poss = Global.activeCamera.ScreenToWorldPoint( new Vector3(20, textPosPlus + textPosKrat * (numberOfOptions - 1 - i), 0.02f) );
+        void Position3DLines()
+        {
+            for (int i = 0; i < numberOfOptions; i++)
+            {
+                Vector3 poss = Global.activeCamera.ScreenToWorldPoint(new Vector3(20, textPosPlus + textPosKrat * (numberOfOptions - 1 - i), 0.02f));
                 Vector3 defPos = poss;
                 textLines[i].transform.position = poss;
 
-                poss = defPos + new Vector3(shadowOffsetLeft, shadowOffsetDown, 0); 
+                poss = defPos + new Vector3(shadowOffsetLeft, shadowOffsetDown, 0);
 
                 textLinesShadows[i].transform.position = poss;
 
-                poss = defPos + new Vector3(shadowOffsetLeft1, shadowOffsetDown1, 0); 
+                poss = defPos + new Vector3(shadowOffsetLeft1, shadowOffsetDown1, 0);
 
                 textLinesShadows1[i].transform.position = poss;
 
-                poss = defPos + new Vector3(shadowOffsetLeft2, shadowOffsetDown2, 0); 
+                poss = defPos + new Vector3(shadowOffsetLeft2, shadowOffsetDown2, 0);
 
                 textLinesShadows2[i].transform.position = poss;
             }
@@ -296,15 +299,15 @@ namespace Motiviti.Enkidu
 
         void SelectLine(int i)
         {
-            if(!string.IsNullOrEmpty( textLines[i].text ))
+            if (!string.IsNullOrEmpty(textLines[i].text))
             {
-                lineSelectedText = textLines[i].text ;
+                lineSelectedText = textLines[i].text;
                 lineSelected = i;
             }
         }
-        
+
         // Update is called once per frame
-        void Update () 
+        void Update()
         {
             if (isEnabled)
             {
@@ -387,17 +390,17 @@ namespace Motiviti.Enkidu
             }
         }
 
-        void ProcessInput (ref bool isHit, ref bool holding, ref Vector3 holdPosition, ref Vector3 worldPosition)
+        void ProcessInput(ref bool isHit, ref bool holding, ref Vector3 holdPosition, ref Vector3 worldPosition)
         {
-            foreach (Touch touch in Input.touches) 
-            {			
+            foreach (Touch touch in Input.touches)
+            {
                 holding = true;
-                if(touch.phase == TouchPhase.Began)
+                if (touch.phase == TouchPhase.Began)
                 {
                     holdPosition = touch.position;
                 }
-                
-                if(touch.phase == TouchPhase.Ended)
+
+                if (touch.phase == TouchPhase.Ended)
                 {
                     holding = true;
                     holdPosition = touch.position;
@@ -406,21 +409,21 @@ namespace Motiviti.Enkidu
             }
 
             holdPosition = Input.mousePosition;
-            if(Input.GetButtonUp ("Fire1"))
+            if (Input.GetButtonUp("Fire1"))
             {
                 holding = true;
                 holdPosition = Input.mousePosition;
                 isHit = true;
             }
-            
-            if(Input.GetButton ("Fire1"))
+
+            if (Input.GetButton("Fire1"))
             {
                 holding = true;
                 holdPosition = Input.mousePosition;
             }
-            
+
             worldPosition = Global.activeCamera.ScreenToWorldPoint(holdPosition);
-        
+
         }
     }
 }
