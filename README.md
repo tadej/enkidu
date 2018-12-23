@@ -1,10 +1,12 @@
 # enkidu: simple adventure game framework for unity
 
+used in: 
+
 todo: refactoring, add a sample scene
 
-# main classes
+## main classes
 
-Player: PlayerBrain, PlayerHead, PlayerMouth
+Player: [PlayerBrain](Assets/Motiviti/Enkidu/character/Player.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead).cs, [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs)
 
 Environment: InteractiveItem, InteractiveItemXXX
 
