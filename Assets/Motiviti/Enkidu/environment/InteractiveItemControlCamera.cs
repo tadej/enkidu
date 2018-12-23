@@ -5,7 +5,7 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-	
+
     public class InteractiveItemControlCamera : InteractiveItemAction
     {
 
@@ -25,18 +25,16 @@ namespace Motiviti.Enkidu
         [SaveState]
         int used = 0;
 
-
-        // Use this for initialization
-        void Start () {
+        void Start()
+        {
             base.Initialise();
             advCamera = Global.advCamera;
             elroy = Global.player;
             interactiveItemMain = gameObject.GetComponent<InteractiveItem>();
             if (animator == null)
-                            animator = gameObject.GetComponent<Animator> ();
+                animator = gameObject.GetComponent<Animator>();
         }
-        
-        // Update is called once per frame
+
         new void Update()
         {
             base.Update();
@@ -44,7 +42,6 @@ namespace Motiviti.Enkidu
 
         public override IEnumerator ProcessArrivedAt()
         {
-            Debug.Log("control camera arrived at");
             if (doFollow && (useHowManyTimes == 0 || used < useHowManyTimes) && ((useOnCombineWith != null && useOnCombineWith == interactiveItemMain.heldItem) || useOnCombineWith == null))
             {
                 stayInCutsceneBefore = interactiveItemMain.stayInCutscene;
@@ -63,7 +60,6 @@ namespace Motiviti.Enkidu
 
         public void AnimatingCameraFinished()
         {
-            Debug.Log("animating camera finished");
             interactiveItemMain.stayInCutscene = stayInCutsceneBefore;
             interactiveItemMain.realyStayInCutscene = realyStayInCutsceneBefore;
             animator.enabled = false;

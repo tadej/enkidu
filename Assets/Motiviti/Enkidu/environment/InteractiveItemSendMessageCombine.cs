@@ -5,9 +5,8 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class InteractiveItemSendMessageCombine : InteractiveItemCombine {
-
+    public class InteractiveItemSendMessageCombine : InteractiveItemCombine
+    {
         public GameObject actionReceiver;
         public bool isCancelable = true;
 
@@ -35,7 +34,7 @@ namespace Motiviti.Enkidu
             Global.player.TurnTowards(interactiveItem);
 
             Combine();
-                
+
             yield return null;
         }
 
@@ -56,11 +55,11 @@ namespace Motiviti.Enkidu
             string action = "Combine" + item.gameObject.name;
             string actionParameter = null;
 
-            if(sw != null && allowOnlyForSwitchState != InteractiveItemSwitch.State.ANY)
+            if (sw != null && allowOnlyForSwitchState != InteractiveItemSwitch.State.ANY)
             {
-                if(sw.state != allowOnlyForSwitchState) 
+                if (sw.state != allowOnlyForSwitchState)
                 {
-                    StartCoroutine (Global.player.SpeakProcedure(commentIfNotAllowed));
+                    StartCoroutine(Global.player.SpeakProcedure(commentIfNotAllowed));
                     return;
                 }
             }
@@ -68,13 +67,13 @@ namespace Motiviti.Enkidu
             if (!actionReceiver)
                 actionReceiver = gameObject;
 
-            if(actionParameter != null && actionParameter.Length > 0)
+            if (actionParameter != null && actionParameter.Length > 0)
                 actionReceiver.SendMessage(action, actionParameter, SendMessageOptions.RequireReceiver);
             else
                 actionReceiver.SendMessage(action, SendMessageOptions.RequireReceiver);
 
             if (removeInventoryItemAfterUse) item.Remove();
-        
+
         }
     }
 }

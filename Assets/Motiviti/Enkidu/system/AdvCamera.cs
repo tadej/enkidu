@@ -5,7 +5,7 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
+
     public class AdvCamera : MonoBehaviour
     {
 
@@ -20,7 +20,7 @@ namespace Motiviti.Enkidu
         public string[] autoParallaxInitialisationFG1;
         public string[] autoParallaxInitialisationFG2;
 
-        Vector3  XYCentralizationDiff = new Vector3(-0.5f,-0.5f,0);
+        Vector3 XYCentralizationDiff = new Vector3(-0.5f, -0.5f, 0);
 
         public float screenShakeMagnitude = 0.05f;
 
@@ -162,7 +162,7 @@ namespace Motiviti.Enkidu
             Global.activeCamera = this.camera;
             aspectRatio = camera.aspect;
             originalCameraSize = cameraSize;
-            GetTransformBounds(scene, ref  minx, ref  maxx, ref  miny, ref  maxy);
+            GetTransformBounds(scene, ref minx, ref maxx, ref miny, ref maxy);
 
             UpdateCameraSize(cameraSize);
 
@@ -238,7 +238,7 @@ namespace Motiviti.Enkidu
 
         public void Move(Vector3 newPos, bool onlyIfFollowElroy = true)
         {
-            if(followElroy || !onlyIfFollowElroy)
+            if (followElroy || !onlyIfFollowElroy)
             {
                 transform.position = newPos;
             }
@@ -337,14 +337,14 @@ namespace Motiviti.Enkidu
             dnx = (maxx - minx) / cameraSegments;
         }
 
-        public void setNewForcedCameraBoundaries(float newMinx, float newMaxX, float? newMinY=null, float? newMaxY=null, bool useOldForParallax = false)
+        public void setNewForcedCameraBoundaries(float newMinx, float newMaxX, float? newMinY = null, float? newMaxY = null, bool useOldForParallax = false)
         {
             if (useOldForParallax)
             {
                 minx = minCameraX = newMinx;
                 maxx = maxCameraX = newMaxX;
 
-                if(newMinY != null)
+                if (newMinY != null)
                 {
                     miny = minCameraY = (float)newMinY;
                     maxy = maxCameraY = (float)newMaxY;
@@ -354,8 +354,8 @@ namespace Motiviti.Enkidu
             {
                 parallaxMinx = minx = minCameraX = newMinx;
                 parallaxMaxx = maxx = maxCameraX = newMaxX;
-                            
-                if(newMinY != null)
+
+                if (newMinY != null)
                 {
                     miny = minCameraY = (float)newMinY;
                     maxy = maxCameraY = (float)newMaxY;
@@ -367,7 +367,6 @@ namespace Motiviti.Enkidu
 
         public void SetForcedCameraBoundariesInCurrentPos()
         {
-            Debug.Log("set forced camera boundaries in current pos");
             Vector3 curPos = transform.position;
             parallaxMinx = minx = minCameraX = curPos.x - cameraWidth;
             parallaxMaxx = maxx = maxCameraX = curPos.x + cameraWidth;
@@ -378,13 +377,10 @@ namespace Motiviti.Enkidu
         public void CloseUpBegin(float size, Vector3 pos, float speed = 1)
         {
             cameraCloseUpSpeed = speed;
-            Debug.Log("beginning closeup " + size);
             targetSmoothCloseUpSize = size;
             targetSmoothCloseUpPosition = pos;
-            //	camera.transform.position = pos;
             isPeekPanning = false;
             inCloseUp = true;
-
             canZoom = false;
             IdealZoomAmount = 0;
         }
@@ -393,9 +389,6 @@ namespace Motiviti.Enkidu
         {
             if (inCloseUp)
             {
-                Debug.Log("ending closeup " + originalCameraSize);
-                //	UpdateCameraSize(originalCameraSize);
-
                 targetSmoothCloseUpSize = originalCameraSize;
 
                 inCloseUp = false;
@@ -458,30 +451,16 @@ namespace Motiviti.Enkidu
 
         void UpdateCameraSize(float newSize)
         {
-    //        Debug.Log("updating camera size from " + camera.orthographicSize + " to " + newSize);
             cameraSize = newSize;
             camera.orthographicSize = newSize;
-
-
             cameraHeight = newSize;
             cameraWidth = newSize * aspectRatio;
-            //	DefaultFov = newSize;
-            //	DefaultOrthoSize = newSize;
-    
-            
+
             if (inventory != null)
             {
-                /*
-                Vector3 pos = inventory.transform.localPosition;
-
-                pos.x = -cameraWidth;
-                pos.y = cameraHeight + 0.05f;
-
-                inventory.transform.localPosition = pos + inventory.positionOffset;
-                */
                 inventory.recalculateHiddenOffset();
             }
-            
+
         }
 
         void GetTransformBounds(Transform tr, ref float minx, ref float maxx, ref float miny, ref float maxy)
@@ -503,14 +482,14 @@ namespace Motiviti.Enkidu
             }
             else
                 if (!tr.GetComponent<Renderer>() && (tr.gameObject.name == "limiterLeft" || tr.gameObject.name == "limiterRight"))
-                {
-                    if (tr.position.x < minx) minx = tr.position.x;
-                    if (tr.position.x > maxx) { maxx = tr.position.x; }
+            {
+                if (tr.position.x < minx) minx = tr.position.x;
+                if (tr.position.x > maxx) { maxx = tr.position.x; }
 
-                    if (tr.position.y < miny) miny = tr.position.y;
-                    if (tr.position.y > maxy) maxy = tr.position.y;
+                if (tr.position.y < miny) miny = tr.position.y;
+                if (tr.position.y > maxy) maxy = tr.position.y;
 
-                }
+            }
 
             if (tr)
             {
@@ -525,11 +504,12 @@ namespace Motiviti.Enkidu
         {
             transform.position = GetCameraPosFromElroy();
         }
+
         public Vector3 GetCameraPosFromElroy(bool floor = true)
         {
-            if(closeFollow)
+            if (closeFollow)
             {
-                return new Vector3(Global.player.transform.position.x, closeFollowXOnly ? originalPosition.y : Global.player.transform.position.y, -5) + closeFollowOffset;	
+                return new Vector3(Global.player.transform.position.x, closeFollowXOnly ? originalPosition.y : Global.player.transform.position.y, -5) + closeFollowOffset;
             }
 
             if (elroyAdv)
@@ -554,9 +534,9 @@ namespace Motiviti.Enkidu
 
                 cameraPos = EnforceCameraBoundaries(cameraPos);
 
-                if( (Global.player.direction > 0 && cameraPos.x < cameraObject.transform.position.x) || (Global.player.direction < 0 && cameraPos.x > cameraObject.transform.position.x))
+                if ((Global.player.direction > 0 && cameraPos.x < cameraObject.transform.position.x) || (Global.player.direction < 0 && cameraPos.x > cameraObject.transform.position.x))
                 {
-                    if(true)
+                    if (true)
                     {
                         cameraPos = cameraObject.transform.position;
                     }
@@ -591,7 +571,7 @@ namespace Motiviti.Enkidu
         {
             if (followCameraObject)
                 return cameraPos;
-            
+
             if (cameraPos.x < minx + cameraWidth)
                 cameraPos.x = minx + cameraWidth;
             //if(Global.elroy.transform.position.x > cameraPos.x) cameraPos.x += Time.deltaTime;
@@ -639,11 +619,6 @@ namespace Motiviti.Enkidu
 
                     cameraPos.y = followingGameObject.transform.position.y + yFollowOffset;
 
-                    //			float m = floor ? Mathf.Floor (cameraPos.x / dnx) : Mathf.Ceil (cameraPos.x / dnx);
-
-                    //			cameraPos.x = dnx * m + dnx * 0.5f;
-                    //if(Global.elroy.transform.position.x < cameraPos.x) cameraPos.x = Global.elroy.tra
-
                     cameraPos = EnforceCameraBoundaries(cameraPos);
 
                     if (followObjectSpeed > 99)
@@ -660,11 +635,11 @@ namespace Motiviti.Enkidu
             }
             else if (followElroy)
             {
-                if(closeFollow)
+                if (closeFollow)
                 {
-                    cameraObject.transform.position = Vector3.Lerp (GetComponent<Camera>().transform.position, GetCameraPosFromElroy(), Time.deltaTime);
-                    
-                    
+                    cameraObject.transform.position = Vector3.Lerp(GetComponent<Camera>().transform.position, GetCameraPosFromElroy(), Time.deltaTime);
+
+
                 }
                 else
                 if (elroyAdv != null && (Time.time < 0.5f || Global.player.TimeSinceSetDestination() > 0.5f))
@@ -705,7 +680,7 @@ namespace Motiviti.Enkidu
                     }
 
                     ForceCameraIntoBoundaries(cameraObject.transform.position);
-    //                Debug.Log ("miny: " + (miny + cameraHeight/2) + " y: " + camera.transform.position.y);
+                    //                Debug.Log ("miny: " + (miny + cameraHeight/2) + " y: " + camera.transform.position.y);
                 }
                 else
                 {
@@ -717,11 +692,11 @@ namespace Motiviti.Enkidu
 
                 if (elroyAdv != null)
                 {
-                    
+
                     var cameraPos = GetCameraPosFromElroy();
                     cameraPos.x = cameraObject.transform.position.x;
                     cameraObject.transform.position = Vector3.Lerp(cameraObject.transform.position, cameraPos, Time.deltaTime * 0.04f);
-                    
+
                     //Debug.Log ("miny: " + (miny + cameraHeight/2) + " y: " + camera.transform.position.y);
                 }
                 else
@@ -780,7 +755,7 @@ namespace Motiviti.Enkidu
 
         public void SetPeekPanning(bool b)
         {
-    //		Debug.Log ("SetPeekPanning " + b);
+            //		Debug.Log ("SetPeekPanning " + b);
 
             if (inCloseUp && b)
                 b = false;
@@ -791,13 +766,13 @@ namespace Motiviti.Enkidu
             {
                 StopCoroutine("ZoomBackToDefault");
                 peekPanningStartTime = Time.time;
-                if(inventory)inventory.EnableItemUsage(false);
+                if (inventory) inventory.EnableItemUsage(false);
                 peekPanningStartPosition = cameraObject.transform.position;
                 peekPanningTargetPosition = cameraObject.transform.position;
             }
             else
             {
-                if(inventory)inventory.EnableItemUsage(true);
+                if (inventory) inventory.EnableItemUsage(true);
                 followElroy = false;
                 //camera.transform.position = EnforceCameraBoundaries(peekPanningStartPosition);
 
@@ -808,14 +783,14 @@ namespace Motiviti.Enkidu
                 }
                 else
                     if (IsElroyBeyondRightScreenEdge())
-                    {
-                        MoveElroyToScreenEdge(false);
-                        //Global.elroy.SetDestination( pos );
-                    }
-                    else
-                    {
-                        //StartCoroutine( DisableAndReenableFollow(4, true) );
-                    }
+                {
+                    MoveElroyToScreenEdge(false);
+                    //Global.elroy.SetDestination( pos );
+                }
+                else
+                {
+                    //StartCoroutine( DisableAndReenableFollow(4, true) );
+                }
 
                 lastChangeTime = Time.time;
                 StartCoroutine(ZoomBackToDefault());
@@ -839,7 +814,7 @@ namespace Motiviti.Enkidu
 
         public void SetFollowObjectMode(bool b, Transform following, float speed = 1)
         {
-            Debug.Log ("set folow object mode: " + b);
+            Debug.Log("set folow object mode: " + b);
             followCameraObject = b;
             followingGameObject = following;
             followElroy = !b;
@@ -872,7 +847,8 @@ namespace Motiviti.Enkidu
         {
             followElroy = false;
             yield return new WaitForSeconds(sec);
-            if (reenable) {
+            if (reenable)
+            {
                 followElroy = true;
                 elroyFollowShouldBeTrue = true;
             }
@@ -897,7 +873,7 @@ namespace Motiviti.Enkidu
         // Update is called once per frame
         void Update()
         {
-            
+
             if (canMove && !inCloseUp)
             {
                 if (Mathf.Abs(camera.orthographicSize - originalCameraSize) > 0.0001f && idealZoomAmount == 0)
@@ -912,14 +888,14 @@ namespace Motiviti.Enkidu
             if (paralax_counter < 20)
             {
                 paralax_counter++;
-                if(paralax_counter != 1)
+                if (paralax_counter != 1)
                     return;
             }
             float cameraDX = cameraObject.transform.position.x - (parallaxMinx + (parallaxMaxx - parallaxMinx) * 0.5f);
             float cameraDY = cameraObject.transform.position.y - (miny + (maxy - miny) * 0.5f);
 
             Vector3 dv = new Vector3(cameraDX, cameraDY, 0);
-            
+
             foreach (Transform tr in parallaxBackground)
             {
                 if (tr == null) continue;
@@ -1011,8 +987,8 @@ namespace Motiviti.Enkidu
 
             ApplyParallax();
 
-            
-            
+
+
             if (canZoom || idealZoomAmount == 0)
                 ZoomAmount = Mathf.Lerp(ZoomAmount, IdealZoomAmount, Time.deltaTime * SmoothSpeed);
 
@@ -1030,19 +1006,19 @@ namespace Motiviti.Enkidu
 
             camera.transform.position = cameraObject.transform.position;
 
-            if(screenShake) 
+            if (screenShake)
             {
-                camera.transform.position += (new Vector3(Random.value , Random.value , 0) + XYCentralizationDiff) * screenShakeMagnitude;
+                camera.transform.position += (new Vector3(Random.value, Random.value, 0) + XYCentralizationDiff) * screenShakeMagnitude;
             }
 
-            if(inventory)inventory.recalculateHiddenOffset();
+            if (inventory) inventory.recalculateHiddenOffset();
 
-            
+
         }
 
         public void SetNewCameraSize(float size)
         {
-            
+
             //Debug.Log("setting camera size from " + camera.orthographicSize + " to " + size);
             cameraSize = size;
             camera.orthographicSize = size;
@@ -1055,7 +1031,7 @@ namespace Motiviti.Enkidu
             DefaultOrthoSize = size;
         }
 
-    
+
 
 
         public float DefaultFov
@@ -1085,7 +1061,7 @@ namespace Motiviti.Enkidu
 
                 if (camera.orthographic && canZoom)
                 {
-                //    Debug.Log("zoom amount " + camera.orthographicSize + " to " + zoomAmount);
+                    //    Debug.Log("zoom amount " + camera.orthographicSize + " to " + zoomAmount);
                     camera.orthographicSize = Mathf.Max(defaultOrthoSize - zoomAmount, 0.1f);
                 }
                 else

@@ -5,10 +5,8 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class CameraAnimator_eventReceiverCam : MonoBehaviour {
-
-        // Use this for initialization
+    public class CameraAnimator_EventReceiverCam : MonoBehaviour
+    { 
         InteractiveItemChangeCamera changeCam;
         AdvCamera advCamera;
 
@@ -28,29 +26,30 @@ namespace Motiviti.Enkidu
 
         float advCamStartSize = 4;
 
-        void Start () {
+        void Start()
+        {
             advCamera = Global.advCamera;
-            if(!cam)
+            if (!cam)
                 cam = GetComponentInChildren<Camera>();
             elroy = Global.player;
 
             animator = GetComponent<Animator>();
-            if(disableAnimatorOnStart)
+            if (disableAnimatorOnStart)
                 animator.enabled = false;
             cam.enabled = false;
 
         }
-        
-        // Update is called once per frame
-        void Update () {
+
+        // TODO: optimize. Do not call GetComponent in Update
+        void Update()
+        {
             if (animating && animateAdvCam)
             {
                 advCamera.transform.position = cam.transform.position;
-                if(cam)
+                if (cam)
                     advCamera.SetNewCameraSize(cam.orthographicSize);
                 if (elroy && elroy.IsWalking())
                 {
-                    Debug.Log("elroy walking");
                     animating = false;
                     Global.activeCamera = advCamera.GetComponent<Camera>();
                     advCamera.transform.position = cam.transform.position;
@@ -63,7 +62,7 @@ namespace Motiviti.Enkidu
                     cam.enabled = false;
                 }
             }
-        
+
         }
 
         public void setChangeCam(InteractiveItemChangeCamera change)
@@ -76,11 +75,8 @@ namespace Motiviti.Enkidu
             AnimationFinished();
         }
 
-
-
         public void AnimationFinished()
         {
-            Debug.Log (advCamera.GetComponent<Camera>());
             if (animating)
             {
                 if (advCamera)
@@ -98,8 +94,8 @@ namespace Motiviti.Enkidu
                 cam.enabled = false;
             }
             if (changeCam)
-                changeCam.AnimatingCameraFinished ();
-            else if(disableAnimatorOnFinish)
+                changeCam.AnimatingCameraFinished();
+            else if (disableAnimatorOnFinish)
                 animator.enabled = false;
             animating = false;
         }

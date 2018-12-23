@@ -1,35 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TMPro;
-
 using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        public class CustomCursor : MonoBehaviour {
-
-        Transform myTransform;
-
-        Transform pointer;
-
-        Animator animator;
-
-        TextMeshPro[] lines;
-
-        ArrayList puzzles = new ArrayList();
-
-        Vector3 rot, pos, sca;
-
-        Player elroy;
-
-        public Texture2D idleCursor, activeCursor, doorCursor, puzzleHand, puzzleHandGrab, puzzleExit;
-
-        public float cursorRotation = 0;
-
-        bool puzzleHasBackground = false;
-
-        public bool isHidden = false;
-
+    public class CustomCursor : MonoBehaviour
+    {
         public enum CursorState
         {
             IDLE = 0,
@@ -41,18 +18,30 @@ namespace Motiviti.Enkidu
             INVISIBLE = 6,
         }
 
-        public CursorState cursorState = CursorState.IDLE;
-
+        Transform myTransform;
+        Transform pointer;
+        Animator animator;
+        TextMeshPro[] lines;
+        ArrayList puzzles = new ArrayList();
+        Vector3 rot, pos, sca;
+        Player player;
+        bool puzzleHasBackground = false;
         bool inPuzzle = false;
 
+        public Texture2D idleCursor, activeCursor, doorCursor, puzzleHand, puzzleHandGrab, puzzleExit;
+        public float cursorRotation = 0;
+        public bool isHidden = false;
+        public CursorState cursorState = CursorState.IDLE;
         public GameObject linesObject;
+        public int cursorSize = 100;
+        public int activeCursorSize = 100;
 
-        // Use this for initialization
-        void Start () {
-            if(!Application.isEditor)
+        void Start()
+        {
+            if (!Application.isEditor)
                 Cursor.visible = false;
-            
-            elroy = Global.player;
+
+            player = Global.player;
             myTransform = transform;
             animator = GetComponentInChildren<Animator>();
             linesObject.SetActive(true);
@@ -63,13 +52,12 @@ namespace Motiviti.Enkidu
             {
                 line.text = "";
                 line.isOverlay = true;
-                
+
             }
             if (isHidden)
                 cursorState = CursorState.INVISIBLE;
         }
-        public int cursorSize = 100;
-        public int activeCursorSize = 100;
+
         void OnGUI()
         {
             Rect rect = new Rect(Event.current.mousePosition.x - cursorSize / 2, Event.current.mousePosition.y - cursorSize / 2, cursorSize, cursorSize);
@@ -83,7 +71,8 @@ namespace Motiviti.Enkidu
 
             GUIUtility.RotateAroundPivot(cursorRotation, pivot);
 
-            switch (cursorState) {
+            switch (cursorState)
+            {
                 case CursorState.IDLE:
                     GUI.DrawTexture(rect, idleCursor); break;
                 case CursorState.ACTIVE:
@@ -101,21 +90,21 @@ namespace Motiviti.Enkidu
             GUI.matrix = matrixBackup;
         }
 
-        // Update is called once per frame
-        void LateUpdate () {
+        void LateUpdate()
+        {
             if (isHidden)
                 return;
-            
+
             string text = "";
             cursorRotation = 0;
             CursorState newState = CursorState.IDLE;
             Camera cam = Global.activeCamera ? Global.activeCamera : Camera.main;
             int lastLayer = -10000;
-            if (!cam || (elroy && elroy.inCutScene && !inPuzzle && !elroy.inConversation))
+            if (!cam || (player && player.inCutScene && !inPuzzle && !player.inConversation))
             {
                 newState = CursorState.INVISIBLE;
             }
-            else if(elroy && elroy.inConversation)
+            else if (player && player.inConversation)
             {
                 newState = CursorState.IDLE;
             }
@@ -132,7 +121,7 @@ namespace Motiviti.Enkidu
                 myTransform.localScale = sca;
 
                 Collider2D[] col = Physics2D.OverlapPointAll(transform.position);       //get all colliders
-                                            //default state is idle
+                                                                                        //default state is idle
                 if (inPuzzle)
                 {
                     newState = CursorState.PUZZLE_EXIT;                                 //default state in puzzle is exit
@@ -147,27 +136,24 @@ namespace Motiviti.Enkidu
 
                 int lastColliderLayer = int.MinValue;
 
-                
 
                 foreach (Collider2D c in col)
                 {
-    //                Debug.Log(Time.time + " " + c.gameObject.name + " " + LayerMask.LayerToName(c.gameObject.layer));
-
                     var ii = c.gameObject.GetComponent<InteractiveItem>();
 
-                    if(ii && ii.itemLayer < lastColliderLayer)
+                    if (ii && ii.itemLayer < lastColliderLayer)
                     {
                         continue;
                     }
                     else
                     {
-                        if(ii) lastColliderLayer = ii.itemLayer;
+                        if (ii) lastColliderLayer = ii.itemLayer;
                     }
 
-                    if(ii && ii.noClickBackground)
+                    if (ii && ii.noClickBackground)
                     {
                         newState = CursorState.IDLE;
-                        
+
                         cursorRotation = 0;
                         text = "";
                         continue;
@@ -175,7 +161,6 @@ namespace Motiviti.Enkidu
 
                     if (inPuzzle)                                                       //if in puzzle 
                     {
-                        //Debug.Log("in puzzle layer name" + c.gameObject.name + " layer " + c.gameObject.layer);
                         if (c.gameObject.layer == 13)                                   //if in puzzle and active object
                         {
                             newState = CursorState.PUZZLE_OVER_ITEM;
@@ -201,7 +186,7 @@ namespace Motiviti.Enkidu
                             newState = CursorState.IDLE;
                             cursorRotation = 0;
                             text = "";
-                        
+
                         }
 
                         if (c.gameObject.layer == 10)
@@ -253,16 +238,14 @@ namespace Motiviti.Enkidu
                             text = "";
                             //break;
                         }
-
-                    
                     }
                 }
             }
 
-            if(/*string.IsNullOrEmpty(text) && */Global.inventory != null)
+            if (Global.inventory != null)
             {
                 var invItem = Global.inventory.ItemHoveringOver();
-                if(invItem != null)
+                if (invItem != null)
                 {
                     newState = CursorState.PUZZLE_OVER_ITEM;
                     text = invItem.interactiveItem.GetObjectName();

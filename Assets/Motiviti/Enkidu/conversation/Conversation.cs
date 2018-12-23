@@ -11,13 +11,14 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
+
     public class Conversation : MonoBehaviour
     {
+        public string noConversationString = "Nothing to talk about.";
 
-        Player elroy;
+        Player player;
 
-        public PlayerHead elroyCustomHead;
+        public PlayerHead playerCustomHead;
 
         public int conversationLoaded;
 
@@ -35,119 +36,21 @@ namespace Motiviti.Enkidu
 
         int maxStringLength = 60;
 
+        XElement con;
+
         public string[] actorNames;
         public PlayerHead[] actorHeads;
-
-        /* 
-            void OnEnable()
-            {
-                DialogueTree.OnDialogueStarted += OnDialogueStarted;
-                DialogueTree.OnDialoguePaused += OnDialoguePaused;
-                DialogueTree.OnDialogueFinished += OnDialogueFinished;
-                DialogueTree.OnSubtitlesRequest += OnSubtitlesRequest;
-                DialogueTree.OnMultipleChoiceRequest += OnMultipleChoiceRequest;
-            }
-
-            void OnDisable()
-            {
-                DialogueTree.OnDialogueStarted -= OnDialogueStarted;
-                DialogueTree.OnDialoguePaused -= OnDialoguePaused;
-                DialogueTree.OnDialogueFinished -= OnDialogueFinished;
-                DialogueTree.OnSubtitlesRequest -= OnSubtitlesRequest;
-                DialogueTree.OnMultipleChoiceRequest -= OnMultipleChoiceRequest;
-            }*/
-
-        //    MotivitiDialogueTree dialogTree;
 
         void Awake()
         {
             heads = GameObject.FindObjectsOfType<PlayerHead>();
         }
 
-        //void OnDialogueStarted(DialogueTree dlg)
-        //{
-        //    //nothing special...
-        //    //   dialogTree = (MotivitiDialogueTree)dlg;
-        //    Global.player.StopWalking();
-        //    Global.player.ChangeState(ElroyAdv.State.TalkDiagonal);
-        //}
-
-        //void OnDialoguePaused(DialogueTree dlg)
-        //{
-
-        //}
-
-        //void OnDialogueFinished(DialogueTree dlg)
-        //{
-        //    //dialogTree = null;
-        //    if (sendMessage) sendMessage.SendMessage(customFinishMessage, SendMessageOptions.DontRequireReceiver);
-        //    Global.player.ChangeState(ElroyAdv.State.IdleDiagonalFront);
-        //}
-
-
-        //void OnSubtitlesRequest(SubtitlesRequestInfo info)
-        //{
-        //    StartCoroutine(SubtitleRequestProc(info));
-        //}
-
-        //IEnumerator SubtitleRequestProc(SubtitlesRequestInfo info)
-        //{
-
-        //    yield return StartCoroutine(Talk(info.statement.text, info.actor.name, 0));
-        //    info.Continue();
-        //}
-
-        //private int[] multipleChoiceKeys = new int[100];
-        //void OnMultipleChoiceRequest(MultipleChoiceRequestInfo info)
-        //{
-        //    int i = 0;
-        //    string[] lines = new string[100];//info.options.Count];
-        //    foreach (KeyValuePair<IStatement, int> pair in info.options)
-        //    {
-        //        lines[i] = pair.Key.text;
-        //        multipleChoiceKeys[i] = pair.Value;
-        //        i++;
-        //    }
-
-        //    StartCoroutine(MultipleChoiceProc(lines, info));
-        //}
-
-        //IEnumerator MultipleChoiceProc(string[] lines, MultipleChoiceRequestInfo info)
-        //{
-        //    Vector3 data = new Vector3(0, 0, 0);
-
-        //    if (sendMessage) sendMessage.SendMessage("ActorIsTalking", data, SendMessageOptions.DontRequireReceiver);
-        //    yield return null;
-        //    yield return StartCoroutine(DialogControlUI.instance.ShowDialogProc(lines[0], lines[1], lines[2], lines[3], lines[4]));
-        //    Debug.Log("finished dialog control");
-        //    int selectedLine = DialogControlUI.instance.selectedLine;
-
-        //    // Will come through RequestSubtitles anyway -- string text = info.options.ElementAt( multipleChoiceKeys[selectedLine] ).Key.text;
-
-        //    //yield return StartCoroutine(Talk(text, info.actor.name, 0));
-        //    info.SelectOption(multipleChoiceKeys[selectedLine]);
-        //}
-
-
-        XElement con;
-        // Use this for initialization
-
-        IEnumerator Start()
+        void Start()
         {
-            elroy = Global.player;
+            player = Global.player;
 
-            HandleXml();
-
-            yield return new WaitForSeconds(2);
-
-            // DebugExpression("<ifhas>Wundershake</ifhas>");
-            // DebugExpression("<ifhas>Tracker</ifhas>");
-            // DebugExpression("<ifhas>Wundershake</ifhas><ifhas>Tracker</ifhas>");
-
-            // DebugExpression("<ifis>ElroyLabSmokeState=0</ifis>");
-            // DebugExpression("<ifis>ElroyLabSmokeState>0</ifis>");
-            // DebugExpression("<ifis>ElroyLabSmokeState<0</ifis>");
-            // DebugExpression("<ifis>ElroyLabSmokeState=0</ifis><ifhas>Tracker</ifhas>");
+            HandleChatmapperXML();
         }
 
         void DebugExpression(string ex)
@@ -155,18 +58,9 @@ namespace Motiviti.Enkidu
             Debug.Log("Expression " + ex + " evaluated as " + AreWorldConditionsMet(ex));
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        void HandleXml()
-        {
-
-            TextAsset xml = (TextAsset)Resources.Load("elroy-dialogs");
-
-            //	XDocument doc = XDocument.Load("Assets/Resources/"+filename);
+        void HandleChatmapperXML()
+        {   
+            TextAsset xml = (TextAsset)Resources.Load("game-dialogs");
 
             XDocument doc = XDocument.Parse(xml.text);
 
@@ -205,9 +99,8 @@ namespace Motiviti.Enkidu
             {
                 if ((int)element.Attribute("ID") == conversationLoaded)
                     con = element;
-            }   //dobi pravi conversation
+            }
             loaded = true;
-            //	StartConversation();  //testing
         }
 
         public void StartConversation()
@@ -222,22 +115,21 @@ namespace Motiviti.Enkidu
 
             yield return null;
 
-            //	var GlobalDialogEntries = con.Descendants("DialogEntries").Elements();   //dobi dialog entries
             Debug.Log("Starting entry id: " + startingEntry);
-            XElement entrie = GetElementWithId(startingEntry);						// na katerem mestu se začne
+            XElement entrie = GetElementWithId(startingEntry);						
             Debug.Log("Starting entry: " + entrie);
             if (entrie != null)
                 StartCoroutine(HandleDialogEntry(entrie, startingEntry));
             else
             {
-                yield return StartCoroutine(elroy.SpeakProcedure("Nothing to talk about."));
+                yield return StartCoroutine(player.SpeakProcedure(noConversationString));
                 if (sendMessage) sendMessage.SendMessage(customFinishMessage, SendMessageOptions.DontRequireReceiver);
             }
         }
 
         public XElement GetElementWithId(int id)
         {
-            var GlobalDialogEntries = con.Descendants("DialogEntries").Elements();   //dobi dialog entries
+            var GlobalDialogEntries = con.Descendants("DialogEntries").Elements();
             foreach (XElement element in GlobalDialogEntries)
             {
                 if ((int)element.Attribute("ID") == id)
@@ -272,7 +164,6 @@ namespace Motiviti.Enkidu
                         delayf = float.Parse(delay);
                     }
                     catch { }
-                    //Debug.Log("waiting for: "+ delayf);
                     return delayf;
                 }
             }
@@ -338,7 +229,8 @@ namespace Motiviti.Enkidu
 
             return false;
         }
-        bool AreWorldConditionsMet(string actionValue)
+       
+         bool AreWorldConditionsMet(string actionValue)
         {
             string[] ifhas = ExtractContentsOfHTMLTag(actionValue, "ifhas");
 
@@ -362,7 +254,6 @@ namespace Motiviti.Enkidu
         IEnumerator HandleDialogEntry(XElement dialogEntrie, int dialogEntryId)
         {
             yield return new WaitForSeconds(0.2f);
-            //	elroy.SetInCutScene(true);
             var OutgoingLinks = dialogEntrie.Descendants("OutgoingLinks").Elements();    //dobim outgoinglinks za dialog entry
 
             int outgoingLinksCount = OutgoingLinks.Count();     //ševilo možnosti
@@ -390,11 +281,6 @@ namespace Motiviti.Enkidu
 
                     bool x = AreWorldConditionsMet(action.Value);
 
-                    /* 
-                                    if(talkedText.Length > maxStringLength){
-                                        talkedText = FixToLongText(talkedText);
-                                    }
-                    */
                     if (x)
                     {
                         lines[j] = talkedText;
@@ -405,8 +291,7 @@ namespace Motiviti.Enkidu
                 }
 
                 if (outgoingLinksCount == 1)
-                {  //če je samo ena možnost
-                //	yield return StartCoroutine(talk(lines[0], "2")); //actor value 2 = Elroy
+                {  
                     StartCoroutine(HandleDialogEntry(GetElementWithId(ids[0]), 0));
                 }
                 else
@@ -507,27 +392,24 @@ namespace Motiviti.Enkidu
         IEnumerator Talk(string text, string actor, int entryId)
         {
             text = text.Replace("–", "-");
-            Debug.Log("Actor : " + actor + " talking text: " + text);
-
+     
             Vector3 data = new Vector3(0, 0, 0);
 
             if (sendMessage) sendMessage.SendMessage("ActorIsTalking", data, SendMessageOptions.DontRequireReceiver);
             text = StripText(text);
 
-
-            if (actor == "Elroy")
+            if (actor == "Player")
             {
-                if (elroy && !elroy.staticCharacter)
+                if (player && !player.staticCharacter)
                 {
                     if (phoneConversation)
-                        yield return StartCoroutine(elroy.SpeakProcedure(text, Player.TalkMode.OnPhone, true));
+                        yield return StartCoroutine(player.SpeakProcedure(text, Player.TalkMode.OnPhone, true));
                     else
-                        yield return StartCoroutine(elroy.SpeakProcedure(text));
+                        yield return StartCoroutine(player.SpeakProcedure(text));
                 }
-                else if (elroyCustomHead)
+                else if (playerCustomHead)
                 {
-                    Debug.Log("using Elroy custom head");
-                    yield return StartCoroutine(elroyCustomHead.Talk(text));
+                    yield return StartCoroutine(playerCustomHead.Talk(text));
                 }
 
             }

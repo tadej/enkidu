@@ -5,10 +5,10 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class InteractiveItemSendMessage : InteractiveItemAction {
 
-        public GameObject reciever;
+    public class InteractiveItemSendMessage : InteractiveItemAction
+    {
+        public GameObject receiver;
         public string message;
 
         public bool actOnSwitchOn = false;
@@ -20,23 +20,24 @@ namespace Motiviti.Enkidu
         [SaveState]
         int progressCounter = 0;
 
-        // Use this for initialization
-        void Start () {
+        void Start()
+        {
             base.Initialise();
         }
-        
-        // Update is called once per frame
-        new void Update () {
+
+        new void Update()
+        {
             base.Update();
         }
 
-        public void sendMessagetoReciver(){
-            if(reciever)reciever.SendMessage(message);
+        public void sendMessagetoReciver()
+        {
+            if (receiver) receiver.SendMessage(message);
         }
 
         public void SwitchedOn()
         {
-            if(actOnSwitchOn == true)
+            if (actOnSwitchOn == true)
                 sendMessagetoReciver();
         }
 
@@ -45,16 +46,15 @@ namespace Motiviti.Enkidu
             progressCounter = 1;
             SaveState();
         }
-        
+
         public override void AnimationFinished(string animationName)
         {
             progressCounter = 2;
             SaveState();
         }
-        
+
         public override IEnumerator ProcessArrivedAt()
         {
-            Debug.Log("arrived at send message");
             if (!canBeUsed)
             {
 
@@ -102,8 +102,6 @@ namespace Motiviti.Enkidu
                             break;
                         }
                     }
-
-                    //yield return new WaitForSeconds(0.4f);
 
                     Global.player.ChangeState(endState);
 

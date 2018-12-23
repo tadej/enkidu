@@ -5,8 +5,9 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class WalkBehind : MonoBehaviour {
+
+    public class WalkBehind : MonoBehaviour
+    {
 
         public float walkBehindY = 0;
 
@@ -16,7 +17,7 @@ namespace Motiviti.Enkidu
         public int sortingIndexInFrontOfElroy = 0;
 
         SpriteRenderer sprite;
-        
+
         int originalSortingIndex = 0;
 
         string originalSortingLayerName = "";
@@ -27,8 +28,8 @@ namespace Motiviti.Enkidu
         {
         }
 
-        // Use this for initialization
-        IEnumerator Start  () {
+        IEnumerator Start()
+        {
             yield return null;
             flipYCoordinate = Global.scene.flipYCoordinate;
             sprite = GetComponent<SpriteRenderer>();
@@ -37,20 +38,18 @@ namespace Motiviti.Enkidu
             originalSortingIndex = sprite.sortingOrder;
             if (sortingLayerNameInFrontOfElroy == "")
                 sortingLayerNameInFrontOfElroy = WalkBehind.GetSortingLayerNameById(sortingLayerInFrontOfElroy);
-
-            //Debug.Log (sprite.sortingLayerID + " " + sprite.sortingLayerName + " " + sprite.sortingOrder);
         }
-        
-        // Update is called once per frame
-        void FixedUpdate () {
-            
-            
-            if(Global.player && ((!flipYCoordinate && Global.player.transform.position.y > walkBehindY)
+
+        void FixedUpdate()
+        {
+
+
+            if (Global.player && ((!flipYCoordinate && Global.player.transform.position.y > walkBehindY)
                                 || (flipYCoordinate && Global.player.transform.position.y < walkBehindY)))
 
 
             {
-                if(sprite)
+                if (sprite)
                 {
                     sprite.sortingLayerName = sortingLayerNameInFrontOfElroy;
                     sprite.sortingOrder = sortingIndexInFrontOfElroy;
@@ -58,7 +57,7 @@ namespace Motiviti.Enkidu
             }
             else
             {
-                if (sprite) 
+                if (sprite)
                 {
                     sprite.sortingLayerName = originalSortingLayerName;
                     sprite.sortingOrder = originalSortingIndex;

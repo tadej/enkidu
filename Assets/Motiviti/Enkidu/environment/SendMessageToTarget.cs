@@ -14,14 +14,5 @@ namespace Motiviti.Enkidu
 			if(target) target.SendMessage (message, SendMessageOptions.DontRequireReceiver);
 		}
 
-		// Use this for initialization
-		void Start () {
-		
-		}
-		
-		// Update is called once per frame
-		void Update () {
-		
-		}
 	}
 }

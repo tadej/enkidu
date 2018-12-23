@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-
 using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-	
-        public class InteractiveItemGive : InteractiveItemCombine {
+
+    public class InteractiveItemGive : InteractiveItemCombine
+    {
 
         public string action = "JumpToConversationEntry";
         public string actionParameter = "0";
@@ -28,23 +28,23 @@ namespace Motiviti.Enkidu
 
         protected override void CombineWithItem(InventoryItem item)
         {
-            if(sw != null && allowOnlyForSwitchState != InteractiveItemSwitch.State.ANY)
+            if (sw != null && allowOnlyForSwitchState != InteractiveItemSwitch.State.ANY)
             {
-                if(sw.state != allowOnlyForSwitchState) 
+                if (sw.state != allowOnlyForSwitchState)
                 {
-                    StartCoroutine (Global.player.SpeakProcedure(commentIfNotAllowed));
+                    StartCoroutine(Global.player.SpeakProcedure(commentIfNotAllowed));
                     return;
                 }
             }
 
-            if(item == inventoryItem)
+            if (item == inventoryItem)
             {
                 if (!actionReceiver)
                     actionReceiver = gameObject;
 
                 //Debug.Log("Sending message " + action + " with parameter " + actionParameter + " to " + actionReceiver.name);
 
-                if(actionParameter.Length > 0)
+                if (actionParameter.Length > 0)
                     actionReceiver.SendMessage(action, actionParameter, SendMessageOptions.RequireReceiver);
                 else
                     actionReceiver.SendMessage(action, SendMessageOptions.RequireReceiver);
@@ -97,7 +97,7 @@ namespace Motiviti.Enkidu
                 {
                     if (Global.player && Global.player.gameObject.activeInHierarchy)
                         Global.player.ChangeState(endState);
-                
+
                     yield return new WaitForSeconds(0.4f);
                 }
             }

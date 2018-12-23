@@ -5,20 +5,21 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class FullscreenPuzzle : MonoBehaviour {
-        
+
+    public class FullscreenPuzzle : MonoBehaviour
+    {
+
         protected bool isEnabled = false;
 
         public bool hideSprites = true;
 
         protected Player elroy;
 
-        public Renderer [] visibleElements;
+        public Renderer[] visibleElements;
 
-        public Collider [] colliders;
+        public Collider[] colliders;
 
-        public Collider2D [] colliders2D;
+        public Collider2D[] colliders2D;
 
         protected SpriteRenderer closeSpriter;
 
@@ -30,8 +31,6 @@ namespace Motiviti.Enkidu
 
         public int hasBackgroundCollider = -1;
 
-        //public AC.Interaction finalInteraction;
-        
         public virtual void ToggleShow(bool enabled)
         {
             isEnabled = enabled;
@@ -73,7 +72,6 @@ namespace Motiviti.Enkidu
             {
                 customCursor.SetInPuzzle(enabled, hasBackgroundCollider);
             }
-            //if(enableCloseButton)menus.SetCloseButton(enabled);
         }
 
         public virtual void Initialize()
@@ -81,7 +79,7 @@ namespace Motiviti.Enkidu
             ToggleShow(false);
         }
 
-        void Start () 
+        void Start()
         {
             customCursor = Global.customCursor;
             ToggleShow(false);

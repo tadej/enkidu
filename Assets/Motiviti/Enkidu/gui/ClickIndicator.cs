@@ -5,141 +5,145 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class ClickIndicator : MonoBehaviour {
 
-		Animator animator;
-		State state = State.Idle;
+    public class ClickIndicator : MonoBehaviour
+    {
 
-		int clickNumber = 0;
+        Animator animator;
+        State state = State.Idle;
 
-		int animHashUse, animHashLook, animHashWalk, animHashTalk, animHashExit;
+        int clickNumber = 0;
 
-		Transform myTransform;
+        int animHashUse, animHashLook, animHashWalk, animHashTalk, animHashExit;
 
-		AdvCamera advCamera;
+        Transform myTransform;
 
-		float originalCameraSize = 5;
+        AdvCamera advCamera;
 
-		float lastCameraSize = 0;
+        float originalCameraSize = 5;
 
-		public bool isFlipped = false;
+        float lastCameraSize = 0;
 
-		bool lastIsFlipped = false;
+        public bool isFlipped = false;
 
-		public bool showClickIndicator = false;
+        bool lastIsFlipped = false;
 
-		public enum State
-		{
-			Idle = 0,
-			Walk = 1,
-			Look = 2,
-			Use = 3,
-			Talk = 4,
-			Exit = 5
-		}
+        public bool showClickIndicator = false;
 
-		public void ChangeState (State newState)
-		{
-			if (showClickIndicator)
-			{
-				clickNumber++;
-				if (animator.GetComponent<Animation>()) animator.GetComponent<Animation>().Rewind();
-				StartCoroutine(ChangeStateProcess(newState, clickNumber));
-			}
-		}
+        public enum State
+        {
+            Idle = 0,
+            Walk = 1,
+            Look = 2,
+            Use = 3,
+            Talk = 4,
+            Exit = 5
+        }
 
-		IEnumerator ChangeStateProcess(State newState, int clicknum)
-		{
-			state = newState;
+        public void ChangeState(State newState)
+        {
+            if (showClickIndicator)
+            {
+                clickNumber++;
+                if (animator.GetComponent<Animation>()) animator.GetComponent<Animation>().Rewind();
+                StartCoroutine(ChangeStateProcess(newState, clickNumber));
+            }
+        }
 
-			switch (state) 
-			{
-			case State.Look:
-				if( animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashLook) animator.SetTrigger("reset"); 
-				else
-				animator.SetInteger ("state", (int)state);
-				yield return new WaitForSeconds (1.8f);
+        IEnumerator ChangeStateProcess(State newState, int clicknum)
+        {
+            state = newState;
 
-				break;
+            switch (state)
+            {
+                case State.Look:
+                    if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashLook) animator.SetTrigger("reset");
+                    else
+                        animator.SetInteger("state", (int)state);
+                    yield return new WaitForSeconds(1.8f);
 
-			case State.Use:
-				if( animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashUse) animator.SetTrigger("reset"); 
-				else
-				animator.SetInteger ("state", (int)state);
-				yield return new WaitForSeconds (1.8f);
+                    break;
 
-				break;
+                case State.Use:
+                    if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashUse) animator.SetTrigger("reset");
+                    else
+                        animator.SetInteger("state", (int)state);
+                    yield return new WaitForSeconds(1.8f);
 
-			case State.Walk:
-				if( animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashWalk) animator.SetTrigger("reset"); 
-				else
-				animator.SetInteger ("state", (int)state);
-				yield return new WaitForSeconds (1.8f);
+                    break;
 
-				break;
+                case State.Walk:
+                    if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashWalk) animator.SetTrigger("reset");
+                    else
+                        animator.SetInteger("state", (int)state);
+                    yield return new WaitForSeconds(1.8f);
 
-			case State.Talk:
-				if( animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashTalk) animator.SetTrigger("reset"); 
-				else
-					animator.SetInteger ("state", (int)state);
-				yield return new WaitForSeconds (1.8f);
-				
-				break;
+                    break;
 
-			case State.Exit:
-				if( animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashExit) animator.SetTrigger("reset"); 
-				else
-					animator.SetInteger ("state", (int)state);
-				yield return new WaitForSeconds (1.8f);
-				
-				break;
-			}
+                case State.Talk:
+                    if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashTalk) animator.SetTrigger("reset");
+                    else
+                        animator.SetInteger("state", (int)state);
+                    yield return new WaitForSeconds(1.8f);
+
+                    break;
+
+                case State.Exit:
+                    if (animator.GetCurrentAnimatorStateInfo(0).fullPathHash == animHashExit) animator.SetTrigger("reset");
+                    else
+                        animator.SetInteger("state", (int)state);
+                    yield return new WaitForSeconds(1.8f);
+
+                    break;
+            }
 
 
-			if (clickNumber == clicknum) 
-			{
-				state = State.Idle;
-				//animator.SetInteger ("state", (int)state);
-			}
-		}
+            if (clickNumber == clicknum)
+            {
+                state = State.Idle;
+                //animator.SetInteger ("state", (int)state);
+            }
+        }
 
-		// Use this for initialization
-		void Start () {
-			animator = GetComponent<Animator> ();
+        // Use this for initialization
+        void Start()
+        {
+            animator = GetComponent<Animator>();
 
-			animHashWalk = Animator.StringToHash("Base Layer.gui-steps");
-			animHashLook = Animator.StringToHash("Base Layer.gui-look");
-			animHashUse = Animator.StringToHash("Base Layer.gui-use");
-			animHashTalk = Animator.StringToHash("Base Layer.gui-talk");
-			animHashExit = Animator.StringToHash("Base Layer.gui-exit");
+            animHashWalk = Animator.StringToHash("Base Layer.gui-steps");
+            animHashLook = Animator.StringToHash("Base Layer.gui-look");
+            animHashUse = Animator.StringToHash("Base Layer.gui-use");
+            animHashTalk = Animator.StringToHash("Base Layer.gui-talk");
+            animHashExit = Animator.StringToHash("Base Layer.gui-exit");
 
-			myTransform = transform;
-			advCamera = Global.advCamera;
-		}
-		
-		// Update is called once per frame
-		void Update () {
-			if(advCamera){
-				if (lastCameraSize != advCamera.cameraSize)
-				{
-					if(Global.IsSmallScreen())
-						myTransform.localScale = Vector3.one * 0.6f * (advCamera.cameraSize / originalCameraSize);
-					else
-						myTransform.localScale = Vector3.one * 0.5f * (advCamera.cameraSize / originalCameraSize);// + Vector3.one * 0.1f;
-					lastCameraSize = advCamera.cameraSize;
-				}
-				if (isFlipped && lastIsFlipped != isFlipped)
-				{
-					myTransform.localScale = new Vector3(-myTransform.localScale.x, myTransform.localScale.y, myTransform.localScale.z);
-					lastIsFlipped = isFlipped;
-				}
-				else if (lastIsFlipped != isFlipped)
-				{
-					myTransform.localScale = new Vector3(-myTransform.localScale.x, myTransform.localScale.y, myTransform.localScale.z);
-					lastIsFlipped = isFlipped;
-				}
-			}
-		}
-	}
+            myTransform = transform;
+            advCamera = Global.advCamera;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (advCamera)
+            {
+                if (lastCameraSize != advCamera.cameraSize)
+                {
+                    if (Global.IsSmallScreen())
+                        myTransform.localScale = Vector3.one * 0.6f * (advCamera.cameraSize / originalCameraSize);
+                    else
+                        myTransform.localScale = Vector3.one * 0.5f * (advCamera.cameraSize / originalCameraSize);// + Vector3.one * 0.1f;
+                    lastCameraSize = advCamera.cameraSize;
+                }
+                if (isFlipped && lastIsFlipped != isFlipped)
+                {
+                    myTransform.localScale = new Vector3(-myTransform.localScale.x, myTransform.localScale.y, myTransform.localScale.z);
+                    lastIsFlipped = isFlipped;
+                }
+                else if (lastIsFlipped != isFlipped)
+                {
+                    myTransform.localScale = new Vector3(-myTransform.localScale.x, myTransform.localScale.y, myTransform.localScale.z);
+                    lastIsFlipped = isFlipped;
+                }
+            }
+        }
+    }
 }

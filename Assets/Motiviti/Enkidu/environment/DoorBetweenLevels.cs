@@ -6,180 +6,177 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class DoorBetweenLevels : InteractiveItemAction {
 
-		public string levelPath = "";
+    public class DoorBetweenLevels : InteractiveItemAction
+    {
+        public string levelPath = "";
 
-		InteractiveItemSwitch connectedSwitch;
-		public InteractiveItemSwitch.State enableOnlyForSwitchState = InteractiveItemSwitch.State.ON;
+        InteractiveItemSwitch connectedSwitch;
+        public InteractiveItemSwitch.State enableOnlyForSwitchState = InteractiveItemSwitch.State.ON;
 
-		public Vector3 insideOffset = Vector3.zero, outsideOffset = Vector3.zero;
+        public Vector3 insideOffset = Vector3.zero, outsideOffset = Vector3.zero;
 
-		public Vector3 zoomoutCircleOffset = Vector3.zero;
+        public Vector3 zoomoutCircleOffset = Vector3.zero;
 
-		public Transform zoomoutCircleTransformPosition;
+        public Transform zoomoutCircleTransformPosition;
 
-		public bool allowDirectAccess = false;
+        public bool allowDirectAccess = false;
 
-		int index = 0;
+        int index = 0;
 
-		public AudioSource exitAudio;
+        public AudioSource exitAudio;
 
-		public float pauseAfterGoingThrough = 0;
+        public float pauseAfterGoingThrough = 0;
 
-		public string animationBoolTrueAfterGoingThrough = null;
+        public string animationBoolTrueAfterGoingThrough = null;
 
-		public Player.State animationWalkOut = Player.State.WalkSide;
+        public Player.State animationWalkOut = Player.State.WalkSide;
 
-		public Player.State animationWalkIn = Player.State.WalkSide;
+        public Player.State animationWalkIn = Player.State.WalkSide;
 
-		public Animator openCloseAnimator;
+        public Animator openCloseAnimator;
 
-		public Transform characterParentOnLeaveRoom;
+        public Transform characterParentOnLeaveRoom;
 
-		public bool isGlobal = false;
+        public bool isGlobal = false;
 
-		public float walkInOutSpeed = 1 / 1.5f;
+        public float walkInOutSpeed = 1 / 1.5f;
 
-		// Use this for initialization
-		void Awake () 
-		{
-			
-			if(isGlobal)base.InitialiseGlobal(); else base.Initialise();
-			
-			connectedSwitch = gameObject.GetComponent<InteractiveItemSwitch>();
-			if(connectedSwitch != null)
-				connectedSwitch.ProcessOnlyOnce(true);
-		}
+        // Use this for initialization
+        void Awake()
+        {
 
-		public void SetTargetPath(string p)
-		{
-			if(!Application.isEditor) return;
+            if (isGlobal) base.InitialiseGlobal(); else base.Initialise();
 
-			Debug.Log("Setting target path to [" + p + "]");
+            connectedSwitch = gameObject.GetComponent<InteractiveItemSwitch>();
+            if (connectedSwitch != null)
+                connectedSwitch.ProcessOnlyOnce(true);
+        }
 
-			if(!string.IsNullOrEmpty(p))
-			{		
-				levelPath = p;
-				Debug.Log("Saved " + p);
-			}
-		}
+        public void SetTargetPath(string p)
+        {
+            if (!Application.isEditor) return;
+
+            if (!string.IsNullOrEmpty(p))
+            {
+                levelPath = p;
+                Debug.Log("Saved " + p);
+            }
+        }
 
 
-		public InteractiveItem GetInteractiveItem()
-		{
-			return interactiveItem;
-		}
+        public InteractiveItem GetInteractiveItem()
+        {
+            return interactiveItem;
+        }
 
-		// Update is called once per frame
-		new void Update () {
-			
-		}
+        // Update is called once per frame
+        new void Update()
+        {
 
-		public override bool SupportsDoubleClick()
-		{
-			return true;
-		}
+        }
 
-		public override void DoubleClicked()
-		{
-			bool advance = connectedSwitch == null || connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState);
+        public override bool SupportsDoubleClick()
+        {
+            return true;
+        }
 
-			if(advance)
-			StartCoroutine(Global.player.LeaveRoomImmediate(this));
-		}
+        public override void DoubleClicked()
+        {
+            bool advance = connectedSwitch == null || connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState);
 
-		void OnDrawGizmosSelected() {
-			if(!interactiveItem) interactiveItem = GetComponent<InteractiveItem>();
-			Gizmos.DrawIcon(interactiveItem.gameObject.transform.position + outsideOffset, "gizmo-caveoutside.psd", true);
-			Gizmos.DrawIcon(interactiveItem.gameObject.transform.position + insideOffset, "gizmo-caveinside.psd", true);
-		}
+            if (advance)
+                StartCoroutine(Global.player.LeaveRoomImmediate(this));
+        }
 
-		public int GetLevelIndex(){
+        void OnDrawGizmosSelected()
+        {
+            if (!interactiveItem) interactiveItem = GetComponent<InteractiveItem>();
+            Gizmos.DrawIcon(interactiveItem.gameObject.transform.position + outsideOffset, "gizmo-caveoutside.psd", true);
+            Gizmos.DrawIcon(interactiveItem.gameObject.transform.position + insideOffset, "gizmo-caveinside.psd", true);
+        }
 
-			if(!string.IsNullOrEmpty(levelPath))
-			{
-				int j = levelPath.LastIndexOf('/');
+        public int GetLevelIndex()
+        {
 
-				string str = levelPath;
+            if (!string.IsNullOrEmpty(levelPath))
+            {
+                int j = levelPath.LastIndexOf('/');
 
-				if(j != -1) str = str.Substring(j+1);
+                string str = levelPath;
 
-				str = str.Replace(".unity", "");
+                if (j != -1) str = str.Substring(j + 1);
 
-	//			Debug.LogWarning("Level name:" + levelPath);
+                str = str.Replace(".unity", "");
 
-				int i = SceneUtility.GetBuildIndexByScenePath(levelPath);
+                int i = SceneUtility.GetBuildIndexByScenePath(levelPath);
+                return i;
+            }
 
-	//			Debug.LogWarning("Level build index: " + i);
-				return i;
-			}
+            return -1;
+        }
 
-			return -1;
-		}
-		
-		public override IEnumerator ProcessArrivedAt()
-		{
-			bool advance = connectedSwitch == null || connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState);
+        public override IEnumerator ProcessArrivedAt()
+        {
+            bool advance = connectedSwitch == null || connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState);
 
-			Debug.Log("ProcessArrivedAt " + gameObject.name + " " + advance + " " + index + " " + allowDirectAccess);
+            Debug.Log("ProcessArrivedAt " + gameObject.name + " " + advance + " " + index + " " + allowDirectAccess);
 
-			if(!advance)
-			{
-				yield return null;
-			}
-			else
-			{
-				if(index >= 1 || allowDirectAccess) // make sure we've been at the open door and are clicking it again (we don't want the hero to exit immediately upon opening the door)
-				{
-					Debug.Log ("Leaving room ");
+            if (!advance)
+            {
+                yield return null;
+            }
+            else
+            {
+                if (index >= 1 || allowDirectAccess) // make sure we've been at the open door and are clicking it again (we don't want the hero to exit immediately upon opening the door)
+                {
+                    Debug.Log("Leaving room ");
 
-					if(exitAudio) exitAudio.Play ();
+                    if (exitAudio) exitAudio.Play();
 
-					StartCoroutine(ExitProcess());
-				}
+                    StartCoroutine(ExitProcess());
+                }
 
-				index++;
-			}
-		}
+                index++;
+            }
+        }
 
-		IEnumerator ExitProcess()
-		{
-			if(openCloseAnimator != null)
-			{
-				if(!openCloseAnimator.GetBool("open"))
-				{
-					openCloseAnimator.SetBool("open", true);
-					yield return new WaitForSeconds(0.55f);
+        IEnumerator ExitProcess()
+        {
+            if (openCloseAnimator != null)
+            {
+                if (!openCloseAnimator.GetBool("open"))
+                {
+                    openCloseAnimator.SetBool("open", true);
+                    yield return new WaitForSeconds(0.55f);
 
-					
-				}
-				
-			}
-			StartCoroutine(Global.player.LeaveRoom(this, animationWalkOut));
 
-			yield return null;
-		}
+                }
 
-		public IEnumerator ExitTranslationAnimation()
-		{
-			if(openCloseAnimator)openCloseAnimator.SetBool("open", false);
-			
-			if(openCloseAnimator)
-			if(!string.IsNullOrEmpty(animationBoolTrueAfterGoingThrough))
-			{
-				openCloseAnimator.SetBool(animationBoolTrueAfterGoingThrough, true);
-				if(characterParentOnLeaveRoom)
-				{
-					Global.player.transform.parent = characterParentOnLeaveRoom;
+            }
+            StartCoroutine(Global.player.LeaveRoom(this, animationWalkOut));
 
-					Global.player.transform.localPosition = Vector3.zero;
+            yield return null;
+        }
 
-					Global.player.staticCharacter = true;
-				}
-			}
-			yield return new WaitForSeconds(pauseAfterGoingThrough);
-		}
-	}
+        public IEnumerator ExitTranslationAnimation()
+        {
+            if (openCloseAnimator) openCloseAnimator.SetBool("open", false);
+
+            if (openCloseAnimator)
+                if (!string.IsNullOrEmpty(animationBoolTrueAfterGoingThrough))
+                {
+                    openCloseAnimator.SetBool(animationBoolTrueAfterGoingThrough, true);
+                    if (characterParentOnLeaveRoom)
+                    {
+                        Global.player.transform.parent = characterParentOnLeaveRoom;
+
+                        Global.player.transform.localPosition = Vector3.zero;
+
+                        Global.player.staticCharacter = true;
+                    }
+                }
+            yield return new WaitForSeconds(pauseAfterGoingThrough);
+        }
+    }
 }

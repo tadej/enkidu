@@ -8,8 +8,8 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class InteractiveItemAction : StatefulItem 
+
+    public class InteractiveItemAction : StatefulItem
     {
         public bool overrideStoppingDistance = false;
         public Vector3 stoppingDistance = Vector3.zero;
@@ -19,7 +19,7 @@ namespace Motiviti.Enkidu
         public int sequenceNumber = 0;
 
         public Player.State actionAnimation = Player.State.PickUpSide;
-        
+
         protected AudioManager audioManager;
 
         public InteractiveItem interactiveItem;
@@ -43,7 +43,8 @@ namespace Motiviti.Enkidu
         }
 
         // Use this for initialization
-        void Start () {
+        void Start()
+        {
             Initialise();
         }
 
@@ -72,21 +73,21 @@ namespace Motiviti.Enkidu
             base.Initialise();
 
             interactiveItem = GetComponent<InteractiveItem>();
-            
+
             audioManager = Global.audioManager;
         }
 
         protected override void InitialiseGlobal()
         {
             base.InitialiseGlobal();
-            
+
             interactiveItem = GetComponent<InteractiveItem>();
-            
+
             audioManager = Global.audioManager;
         }
-        
+
         // Update is called once per frame
-        protected virtual void Update () 
+        protected virtual void Update()
         {
             HightlightFrameUpdate();
         }
@@ -129,7 +130,7 @@ namespace Motiviti.Enkidu
         {
             highlighting = false;
         }
-        
+
         public virtual IEnumerator ProcessArrivedAt()
         {
             yield return null;
@@ -137,14 +138,14 @@ namespace Motiviti.Enkidu
 
         public virtual void AnimationActionPoint(string animationName)
         {
-            
-        }
-        
-        public virtual void AnimationFinished(string animationName)
-        {
-            
+
         }
 
-        
+        public virtual void AnimationFinished(string animationName)
+        {
+
+        }
+
+
     }
 }

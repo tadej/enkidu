@@ -5,25 +5,16 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class SendMessageWhenPickedUp : MonoBehaviour {
 
-		public GameObject target;
-		public string message;
+    public class SendMessageWhenPickedUp : MonoBehaviour
+    {
 
-		public void PickedUp()
-		{
-			if(target != null) target.SendMessage(message, SendMessageOptions.DontRequireReceiver);
-		}
+        public GameObject target;
+        public string message;
 
-		// Use this for initialization
-		void Start () {
-		
-		}
-		
-		// Update is called once per frame
-		void Update () {
-		
-		}
-	}
+        public void PickedUp()
+        {
+            if (target != null) target.SendMessage(message, SendMessageOptions.DontRequireReceiver);
+        }
+    }
 }

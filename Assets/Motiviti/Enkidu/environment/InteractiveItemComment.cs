@@ -5,149 +5,145 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class InteractiveItemComment : InteractiveItemAction {
 
-		public string comment = "COMMENT MISSING";
+    public class InteractiveItemComment : InteractiveItemAction
+    {
 
-		public string commentWhenCombine = "";
+        public string comment = "COMMENT MISSING";
 
-		public InventoryItem combiningItem;
+        public string commentWhenCombine = "";
 
-		InteractiveItemSwitch connectedSwitch;
-		public InteractiveItemSwitch.State enableOnlyForSwitchState = InteractiveItemSwitch.State.ANY;
+        public InventoryItem combiningItem;
 
-		bool isInventoryItem = false;
+        InteractiveItemSwitch connectedSwitch;
+        public InteractiveItemSwitch.State enableOnlyForSwitchState = InteractiveItemSwitch.State.ANY;
 
-		public string [] multipleComments;
+        bool isInventoryItem = false;
 
-		[SaveState]
-		protected bool usedFlag = false;
+        public string[] multipleComments;
 
-		[SaveState]
-		public bool onlyOnce = false;
+        [SaveState]
+        protected bool usedFlag = false;
 
-		int currentComment = 0;
+        [SaveState]
+        public bool onlyOnce = false;
 
-		public string overrideAction = "";
-		public GameObject overrideActionObject;
+        int currentComment = 0;
 
-	public enum TalkDirection{
-			None = 0,
-			TalkDiagonalFrontLeft = 1,
-			TalkDiagonalFrontRight = 2,
-			TalkDiagonalBackLeft = 3,
-			TalkDiagonalBackRight = 4,
-			TalkFront = 5
-		}
+        public string overrideAction = "";
+        public GameObject overrideActionObject;
 
-		public TalkDirection talkDirection = TalkDirection.None;
+        public enum TalkDirection
+        {
+            None = 0,
+            TalkDiagonalFrontLeft = 1,
+            TalkDiagonalFrontRight = 2,
+            TalkDiagonalBackLeft = 3,
+            TalkDiagonalBackRight = 4,
+            TalkFront = 5
+        }
 
-		// Use this for initialization
-		void Start () 
-		{
-			base.Initialise();
+        public TalkDirection talkDirection = TalkDirection.None;
 
-			connectedSwitch = gameObject.GetComponent<InteractiveItemSwitch>();
+        void Start()
+        {
+            base.Initialise();
 
-			isInventoryItem = gameObject.GetComponent<InventoryItem> () != null;
-		}
-		
-		// Update is called once per frame
-		new void Update () {
-			base.Update();
-		}
+            connectedSwitch = gameObject.GetComponent<InteractiveItemSwitch>();
 
-		public override IEnumerator ProcessArrivedAt()
-		{
-			if(connectedSwitch != null && !connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState))
-			{
-				yield return null;
-			}
-			else
-			if((interactiveItem.heldItem == null || combiningItem != null || interactiveItem.heldItem != combiningItem) && string.IsNullOrEmpty(comment))
-			{
-				yield return null;
-			}
-			else
-			if(interactiveItem.heldItem != null)
-			{
-				yield return null;
+            isInventoryItem = gameObject.GetComponent<InventoryItem>() != null;
+        }
 
-			}
-			else
-			{
-				if(onlyOnce && usedFlag)
-				{
-					
-				}
-				else
-				{
-					
-					usedFlag = true;
-					SaveState();
+        new void Update()
+        {
+            base.Update();
+        }
 
-					if(!isInventoryItem || (isInventoryItem && !Global.player.IsWalking()))
-					{
-						if(overrideActionObject != null && !string.IsNullOrEmpty(overrideAction))
-						{
-							overrideActionObject.SendMessage(overrideAction, SendMessageOptions.DontRequireReceiver);
-						}
-						else
-						{
-							switch(talkDirection){
-							case TalkDirection.TalkDiagonalFrontLeft:
-								Global.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
-								Global.player.ChangeDirection(-1);
-								break;
-							
-							case TalkDirection.TalkDiagonalFrontRight:
-								Global.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
-								Global.player.ChangeDirection(1);
-								break;
-							
-							case TalkDirection.TalkDiagonalBackLeft:
-								Global.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
-								Global.player.ChangeDirection(-1);
-								break;
-							
-							case TalkDirection.TalkDiagonalBackRight:
-								Global.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
-								Global.player.ChangeDirection(1);
-								break;
-							case TalkDirection.TalkFront:
-								Global.player.ChangeTalkDirection(Player.TalkDirection.Front);
-								break;
-							case TalkDirection.None:
-								/*
-								if(Global.elroy.talkDirection == ElroyAdv.TalkDirection.DiagonalBack && (transform.position.y-2 > Global.elroy.transform.position.y))
-									Global.elroy.ChangeTalkDirection(ElroyAdv.TalkDirection.Diagonal);
-								*/
+        public override IEnumerator ProcessArrivedAt()
+        {
+            if (connectedSwitch != null && !connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState))
+            {
+                yield return null;
+            }
+            else
+            if ((interactiveItem.heldItem == null || combiningItem != null || interactiveItem.heldItem != combiningItem) && string.IsNullOrEmpty(comment))
+            {
+                yield return null;
+            }
+            else
+            if (interactiveItem.heldItem != null)
+            {
+                yield return null;
 
+            }
+            else
+            {
+                if (onlyOnce && usedFlag)
+                {
 
-								break;
-								}
-					//     Debug.Log("interactiveItem.heldItem: " + interactiveItem.heldItem + " combiningItem: " + combiningItem);
-							if (interactiveItem.heldItem != null && combiningItem != null && interactiveItem.heldItem == combiningItem)
-							{
-								if (commentWhenCombine.Length > 1)
-									yield return StartCoroutine(Global.player.SpeakProcedure(commentWhenCombine));
-							}
-							else
-							{
-								yield return StartCoroutine(Global.player.SpeakProcedure(comment));
-								if (multipleComments.Length > 0)
-								{
-									comment = multipleComments[currentComment];
-									yield return null;
-									currentComment++;       
-									currentComment = currentComment % multipleComments.Length;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                }
+                else
+                {
+
+                    usedFlag = true;
+                    SaveState();
+
+                    if (!isInventoryItem || (isInventoryItem && !Global.player.IsWalking()))
+                    {
+                        if (overrideActionObject != null && !string.IsNullOrEmpty(overrideAction))
+                        {
+                            overrideActionObject.SendMessage(overrideAction, SendMessageOptions.DontRequireReceiver);
+                        }
+                        else
+                        {
+                            switch (talkDirection)
+                            {
+                                case TalkDirection.TalkDiagonalFrontLeft:
+                                    Global.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
+                                    Global.player.ChangeDirection(-1);
+                                    break;
+
+                                case TalkDirection.TalkDiagonalFrontRight:
+                                    Global.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
+                                    Global.player.ChangeDirection(1);
+                                    break;
+
+                                case TalkDirection.TalkDiagonalBackLeft:
+                                    Global.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
+                                    Global.player.ChangeDirection(-1);
+                                    break;
+
+                                case TalkDirection.TalkDiagonalBackRight:
+                                    Global.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
+                                    Global.player.ChangeDirection(1);
+                                    break;
+                                case TalkDirection.TalkFront:
+                                    Global.player.ChangeTalkDirection(Player.TalkDirection.Front);
+                                    break;
+                                case TalkDirection.None:
+                                    break;
+                            }
+
+                            if (interactiveItem.heldItem != null && combiningItem != null && interactiveItem.heldItem == combiningItem)
+                            {
+                                if (commentWhenCombine.Length > 1)
+                                    yield return StartCoroutine(Global.player.SpeakProcedure(commentWhenCombine));
+                            }
+                            else
+                            {
+                                yield return StartCoroutine(Global.player.SpeakProcedure(comment));
+                                if (multipleComments.Length > 0)
+                                {
+                                    comment = multipleComments[currentComment];
+                                    yield return null;
+                                    currentComment++;
+                                    currentComment = currentComment % multipleComments.Length;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

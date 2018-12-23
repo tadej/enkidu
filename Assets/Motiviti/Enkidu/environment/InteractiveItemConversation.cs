@@ -5,7 +5,7 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-	
+
     public class InteractiveItemConversation : InteractiveItemAction
     {
 
@@ -31,20 +31,15 @@ namespace Motiviti.Enkidu
 
         protected DialogControl dialogControl;
 
-        //OBSOLETE-TOMIpublic Conversation conversationProcess;
-
         public int[] conversationEntries;
 
-        // Use this for initialization
         public void Start()
         {
             base.Initialise();
-            //OBSOLETE-TOMIif(conversationProcess!=null)conversationProcess.sendMessage = gameObject;
             connectedSwitch = gameObject.GetComponent<InteractiveItemSwitch>();
             dialogControl = GameObject.Find("DialogControl") ? GameObject.Find("DialogControl").GetComponent<DialogControl>() : null;
         }
 
-        // Update is called once per frame
         new void Update()
         {
             base.Update();
@@ -80,10 +75,9 @@ namespace Motiviti.Enkidu
         {
             Global.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
             if (conversationEntries != null && conversationEntries.Length > (int)conversationState) { }
-            //OBSOLETE-TOMIconversationProcess.startingEntry = conversationEntries[(int)conversationState];
             else
-                //OBSOLETE-TOMIconversationProcess.startingEntry = conversationEntries[0];
-                //OBSOLETE-TOMIconversationProcess.StartConversation();
+                //OBSOLETE-TOMI conversationProcess.startingEntry = conversationEntries[0];
+                //OBSOLETE-TOMI conversationProcess.StartConversation();
                 yield return null;
         }
 

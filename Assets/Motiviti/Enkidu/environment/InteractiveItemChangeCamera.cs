@@ -5,15 +5,16 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-        
-    public class InteractiveItemChangeCamera : InteractiveItemAction{
+
+    public class InteractiveItemChangeCamera : InteractiveItemAction
+    {
 
         public bool doFollow = true;
         Player elroy;
         public Animator animator;
         InteractiveItem interactiveItemMain;
 
-        CameraAnimator_eventReceiverCam eventReceiver;
+        CameraAnimator_EventReceiverCam eventReceiver;
 
         public InventoryItem useOnCombineWith;
 
@@ -24,24 +25,23 @@ namespace Motiviti.Enkidu
         [SaveState]
         int used = 0;
 
-        // Use this for initialization
-        void Start () {
+        void Start()
+        {
             base.Initialise();
             elroy = Global.player;
             interactiveItemMain = gameObject.GetComponent<InteractiveItem>();
             if (animator == null)
                 animator = gameObject.GetComponent<Animator>();
-            eventReceiver = animator.transform.GetComponent<CameraAnimator_eventReceiverCam>();
+            eventReceiver = animator.transform.GetComponent<CameraAnimator_EventReceiverCam>();
             eventReceiver.setChangeCam(this);
-            
+
         }
 
         public int GetUsed()
         {
             return used;
         }
-        
-        // Update is called once per frame
+
         new void Update()
         {
             base.Update();
@@ -49,7 +49,6 @@ namespace Motiviti.Enkidu
 
         public override IEnumerator ProcessArrivedAt()
         {
-        Debug.Log("control camera arrved at");
             if (doFollow && (useHowManyTimes == 0 || used < useHowManyTimes) && ((useOnCombineWith != null && useOnCombineWith == interactiveItemMain.heldItem) || useOnCombineWith == null))
             {
                 stayInCutsceneBefore = interactiveItemMain.stayInCutscene;
@@ -69,8 +68,8 @@ namespace Motiviti.Enkidu
             interactiveItemMain.stayInCutscene = stayInCutsceneBefore;
             interactiveItemMain.realyStayInCutscene = realyStayInCutsceneBefore;
             animator.enabled = false;
-            if(interactiveItemMain.realyStayInCutscene == false)
-            elroy.SetInCutScene(false);
+            if (interactiveItemMain.realyStayInCutscene == false)
+                elroy.SetInCutScene(false);
         }
     }
 }
