@@ -7,7 +7,7 @@ namespace Motiviti.Enkidu
 {
     public class PlayerHead : CharacterHead
     {
-        public string actorName = "Elroy";
+        public string actorName = "Player";
         public PlayerMouth[] mouths;
         public SpriteRenderer[] eyebrows;
         public GameObject[] eyes;
@@ -84,8 +84,6 @@ namespace Motiviti.Enkidu
 
             }
 
-            // obsolete StartCoroutine(AnimatePupils());
-
             StartCoroutine(InitialiseMood());
         }
 
@@ -129,13 +127,7 @@ namespace Motiviti.Enkidu
                 if (eyes != null && eyes.Length > currentMood && eyes[currentMood]) RecursivelySetRenderers(eyes[currentMood].transform, true);
                 if (mouths != null && mouths.Length > currentMood && mouths[currentMood]) mouths[currentMood].ShowPhoneme("MBP", true);
             }
-            else
-            {
-
-            }
-
-            //pupilTargetPosition = new Vector3( 0, 0, 0);
-
+       
             ProcessPupilRelativePosition();
         }
 
