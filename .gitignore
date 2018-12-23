@@ -40,27 +40,6 @@ sysinfo.txt
 *.app
 
 .DS_Store
-/Assets/art/characters/Elroy/Front/Head/Materials/Elroy_Adv_Talk_Front_ANIM_Head_001.mat.meta
-/Assets/scripts/rendering/New Folder.meta
-/Assets/animations/Animations v2/City/01 Intro/Intro Cut Pick up card.meta
-/Assets/art/characters/Elroy/Front/Head/OLD.meta
-/Assets/art/characters/Elroy/Front/Head/Materials.meta
-/Assets/art/.DS_Store
-/Assets/Elroy/Managers.meta
-/Assets/Inventory Items Interactions/Hotspot Inventory Item Use.meta
-/Assets/Inventory Items Interactions/Inventory Items Use.meta
-/Assets/Resources/RememberTransform Prefabs/Desert_DigSite_Terraces.meta
-/Assets/scripts/AC/CITY_2_Basketball Court_Diego.meta
-/Assets/I2/Localization.meta
-/Assets/I2/Localization.meta~b61921f86fded93522d23947142ded752785b38a
-/Assets/I2/Localization.meta~HEAD
-/Assets/I2/Localization.meta~b61921f86fded93522d23947142ded752785b38a.meta
-/Assets/I2/Localization.meta~HEAD.meta
-/Assets/Plugins/Pixel Crushers/Common.meta
-/Assets/Plugins/Pixel Crushers.meta~fb2af02559e761ba093a233b2dd20946d6a9ac05
-/Assets/Plugins/Pixel Crushers.meta~fb2af02559e761ba093a233b2dd20946d6a9ac05.meta
-/Assets/Plugins/Pixel Crushers.meta~HEAD
-/Assets/Plugins/Pixel Crushers.meta~HEAD.meta
 
 /Assets/3rdParty.meta
 /Assets/Gizmos.meta
@@ -68,3 +47,8 @@ sysinfo.txt
 /Assets/Plugins.meta
 /Assets/Scenes.meta
 /Assets/Motiviti/Enkidu.meta
+/Assets/Motiviti/Enkidu/character.meta
+/Assets/Motiviti/Enkidu/conversation.meta
+/Assets/Motiviti/Enkidu/environment.meta
+/Assets/Motiviti/Enkidu/gui.meta
+/Assets/Motiviti/Enkidu/system.meta
