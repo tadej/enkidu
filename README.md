@@ -1,6 +1,6 @@
 # enkidu: simple adventure game framework for unity
 
-used in: 
+used in: (Elroy and the Aliens)[https://www.elroythegame.com]
 
 todo: refactoring, add a sample scene
 
