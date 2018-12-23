@@ -1,321 +1,277 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
-
 using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-		
-	public class PlayerHead : CharacterHead 
-	{
-		public string actorName = "Elroy";
-		public PlayerMouth [] mouths;
-		public SpriteRenderer [] eyebrows;
-		public GameObject [] eyes;
+    public class PlayerHead : CharacterHead
+    {
+        public string actorName = "Elroy";
+        public PlayerMouth[] mouths;
+        public SpriteRenderer[] eyebrows;
+        public GameObject[] eyes;
+        public Animator anPupils, anBlink;
+        public CharacterBrain elroyBrain;
+        public SpriteRenderer[] pupils;
 
-		public SpriteRenderer [] pupils;
+        Vector3[] eyebrowPositionsOriginal;
+        Vector3[] pupilPositionsOriginal;
 
-		Vector3 [] eyebrowPositionsOriginal;
+        float lastEyebrowFactor = 0;
+        float lastEyebrowHeightChange = 0;
 
-		Vector3 [] pupilPositionsOriginal;
+        public override void Start()
+        {
+            base.Start();
+        }
 
-		float lastEyebrowFactor = 0;
-		float lastEyebrowHeightChange = 0;
+        void OnEnable()
+        {
+            if (elroyBrain)
+            {
+                SetEyeGesture(elroyBrain.eyeGesture);
+                SetMood((int)elroyBrain.mood);
+                if (elroyBrain.interruptFlag) StopTalking();
+            }
+        }
 
-		public Animator anPupils, anBlink;
+        public void Blink()
+        {
+            if (anBlink != null && anBlink.isActiveAndEnabled)
+                anBlink.SetTrigger("blink");
+        }
 
-		public CharacterBrain elroyBrain;
+        void RecursivelySetRenderers(Transform tr, bool isEnabled)
+        {
+            if (tr.GetComponent<Renderer>() != null) tr.GetComponent<Renderer>().enabled = isEnabled;
 
-		public override void Start()
-		{
-			base.Start();
-		}
-		void OnEnable()
-		{
-			if(elroyBrain)
-			{
-				SetEyeGesture(elroyBrain.eyeGesture);
-				SetMood((int)elroyBrain.mood);
-				if(elroyBrain.interruptFlag) StopTalking();
-			}    
-		}
+            foreach (Transform child in tr)
+            {
+                if (child.GetComponent<Renderer>())
+                    child.GetComponent<Renderer>().enabled = isEnabled;
 
-		public void Blink()
-		{
-			if (anBlink != null && anBlink.isActiveAndEnabled)
-				anBlink.SetTrigger ("blink");
-		}
+                RecursivelySetRenderers(child, isEnabled);
+            }
+        }
 
-		void RecursivelySetRenderers( Transform tr, bool isEnabled)
-		{
-			if(tr.GetComponent<Renderer>() != null) tr.GetComponent<Renderer>().enabled = isEnabled;
+        public override void Initialise()
+        {
+            if (eyebrows != null && eyebrows.Length > 0)
+            {
+                eyebrowPositionsOriginal = new Vector3[eyebrows.Length];
 
-			foreach(Transform child in tr)
-			{
-				if(child.GetComponent<Renderer>())
-					child.GetComponent<Renderer>().enabled = isEnabled;
+                for (int i = 0; i < eyebrows.Length; i++)
+                {
+                    if (eyebrows[i] == null)
+                        eyebrowPositionsOriginal[i] = Vector3.zero;
+                    else
+                        eyebrowPositionsOriginal[i] = eyebrows[i].transform.localPosition;
+                }
+            }
 
-				RecursivelySetRenderers(child, isEnabled);
-			}
-		}
+            if (pupils != null && pupils.Length > 0)
+            {
+                pupilPositionsOriginal = new Vector3[pupils.Length];
 
-		public override void Initialise()
-		{
-			if(eyebrows != null && eyebrows.Length>0)
-			{
-				eyebrowPositionsOriginal = new Vector3[eyebrows.Length];
+                for (int i = 0; i < pupils.Length; i++)
+                {
+                    if (pupils[i] == null)
+                        pupilPositionsOriginal[i] = Vector3.zero;
+                    else
+                        pupilPositionsOriginal[i] = pupils[i].transform.localPosition;
+                }
 
-				for(int i = 0; i<eyebrows.Length; i++)
-				{
-					if(eyebrows[i] == null)
-						eyebrowPositionsOriginal[i] = Vector3.zero;
-					else
-						eyebrowPositionsOriginal[i] = eyebrows[i].transform.localPosition;
-				}
-			}
+            }
 
-			if(pupils != null && pupils.Length > 0)
-			{
-				pupilPositionsOriginal = new Vector3[pupils.Length];
+            // obsolete StartCoroutine(AnimatePupils());
 
-				for(int i = 0; i<pupils.Length; i++)
-				{
-					if(pupils[i] == null)
-						pupilPositionsOriginal[i] = Vector3.zero;
-					else
-						pupilPositionsOriginal[i] = pupils[i].transform.localPosition;
-				}
+            StartCoroutine(InitialiseMood());
+        }
 
-			}
+        IEnumerator InitialiseMood()
+        {
+            SetMood(0);
+            yield return null;
+        }
 
-			// obsolete StartCoroutine(AnimatePupils());
+        public override void SetMood(int moodIndex)
+        {
+            if (moodIndex == currentMood) return;
 
-			StartCoroutine (InitialiseMood ());
-		}
+            currentMood = moodIndex;
 
-		IEnumerator InitialiseMood()
-		{
-			SetMood (0);
-			yield return null;
-		}
+            PlayerMouth activeMouth = null;
 
-		public override void SetMood(int moodIndex)
-		{
-			if(moodIndex == currentMood) return;
+            if (mouths != null && mouths.Length > currentMood) activeMouth = mouths[currentMood];
 
-			currentMood = moodIndex;
+            for (int i = 0; i < moodCount; i++)
+            {
+                if (mouths != null && mouths.Length > i && mouths[i])
+                    mouths[i].SetMouthEnabled(mouths[i] == activeMouth);
 
-			PlayerMouth activeMouth = null;
+                if (eyebrows != null && eyebrows.Length > i && eyebrows[i])
+                    eyebrows[i].enabled = currentMood == i;
 
-			if(mouths != null && mouths.Length > currentMood) activeMouth = mouths[ currentMood ];
+                if (eyes != null && eyes.Length > i && eyes[i])
+                {
+                    if (currentMood == i)
+                    {
+                        RecursivelySetRenderers(eyes[i].transform, true);
+                    }
+                    else RecursivelySetRenderers(eyes[i].transform, false);
+                }
 
-			for(int i=0; i<moodCount; i++) 
-			{
-				if (mouths != null && mouths.Length > i && mouths[i])
-					mouths[i].SetMouthEnabled( mouths[i] == activeMouth );
+            }
+            if (currentMood != -1)
+            {
+                if (eyebrows != null && eyebrows.Length > currentMood && eyebrows[currentMood]) eyebrows[currentMood].enabled = true;
+                if (eyes != null && eyes.Length > currentMood && eyes[currentMood]) RecursivelySetRenderers(eyes[currentMood].transform, true);
+                if (mouths != null && mouths.Length > currentMood && mouths[currentMood]) mouths[currentMood].ShowPhoneme("MBP", true);
+            }
+            else
+            {
 
-				if(eyebrows != null && eyebrows.Length > i && eyebrows[i])
-					eyebrows[i].enabled = currentMood == i;
+            }
 
-				if(eyes != null && eyes.Length > i && eyes[i])
-				{
-					if(currentMood == i) 
-					{
-						RecursivelySetRenderers(eyes[i].transform, true);
-					}
-					else RecursivelySetRenderers(eyes[i].transform, false);
-				}
+            //pupilTargetPosition = new Vector3( 0, 0, 0);
 
-			}
-			if(currentMood != -1)
-			{
-				if (eyebrows != null && eyebrows.Length > currentMood && eyebrows[currentMood]) eyebrows[currentMood].enabled = true;
-				if (eyes != null && eyes.Length > currentMood && eyes[currentMood]) RecursivelySetRenderers(eyes[currentMood].transform, true);
-				if (mouths != null && mouths.Length > currentMood && mouths[currentMood]) mouths[currentMood].ShowPhoneme("MBP", true);
-			}
-			else
-			{
+            ProcessPupilRelativePosition();
+        }
 
-			}
+        public override void ChangeMood(CharacterHead.Moods mood)
+        {
+            SetMood((int)mood);
+        }
 
-			//pupilTargetPosition = new Vector3( 0, 0, 0);
+        public override void ChangeMode(string mode)
+        {
+        }
 
-			ProcessPupilRelativePosition();
-		}
+        public override void SetEnabled(bool b)
+        {
+        }
 
-		public override void ChangeMood(CharacterHead.Moods mood)
-		{
-			#if UNITY_EDITOR
-	//		Debug.Log("ChangeMood: " + mood);
-			#endif
-			SetMood ((int)mood);
-		}
-		
-		public override void ChangeMode(string mode)
-		{
-			//if(Global.player) Global.player.ChangeTalkMode (mode);
+        void SetEyebrowRelativePosition(float diffy)
+        {
+            if (Mathf.Abs(lastEyebrowFactor - diffy) > 0.001f && (Time.time - lastEyebrowHeightChange) > 1.4f)
+            {
+                lastEyebrowHeightChange = Time.time;
+                lastEyebrowFactor = diffy;
+                try
+                {
+                    if (eyebrows != null && eyebrows.Length > 0 && eyebrows[currentMood] != null) eyebrows[currentMood].transform.localPosition = eyebrowPositionsOriginal[currentMood] + Vector3.up * diffy;
+                }
+                catch
+                {
+                    Debug.LogWarning("References missing: eyebrows");
+                }
+            }
+        }
 
-		}
+        void ProcessPupilRelativePosition()
+        {
+        }
 
-	//	int lastMood = 0;
-		
-		public override void SetEnabled(bool b)
-		{
-			return;
+        IEnumerator AnimatePupils()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1 + Random.value * 2.5f);
 
-	/*		Debug.Log ("head enabled " + b + " " + currentMood);
-			
-			isEnabled = b;
-			
-			if(b)
-			{
-				if(currentMood == -1) currentMood = 0;
-				//if(lastMood != -1)currentMood = lastMood;
-				SetMood (currentMood);
-			}
-			else
-			{
-			//	lastMood = currentMood;
-				currentMood = -1;
-				SetMood (currentMood);
-			}
-			
-			renderer.enabled = b;*/
-		}
+                CharacterBrain.EyeGestures eyeGesture = CharacterBrain.EyeGestures.idle;
 
-		void SetEyebrowRelativePosition(float diffy)
-		{
-			if(Mathf.Abs(lastEyebrowFactor - diffy) > 0.001f && (Time.time - lastEyebrowHeightChange) > 1.4f)
-			{
-				lastEyebrowHeightChange = Time.time;
-				lastEyebrowFactor = diffy;
-				try
-				{
-					if(eyebrows != null && eyebrows.Length>0 && eyebrows[currentMood] != null)eyebrows[currentMood].transform.localPosition = eyebrowPositionsOriginal[currentMood] + Vector3.up * diffy;
-				}
-				catch
-				{
-					// TODO: this is shiet
-				}
-			}
-		}
+                if (elroyBrain != null) eyeGesture = elroyBrain.GetCurrentEyeGesture();
 
-		void ProcessPupilRelativePosition()
-		{
-			return; //OBSOLETE
-		}
+                SetEyeGesture(eyeGesture);
+            }
+        }
 
-		IEnumerator AnimatePupils()
-		{
-			while(true)
-			{
-				yield return new WaitForSeconds(1 + Random.value * 2.5f);
-				
-				CharacterBrain.EyeGestures eyeGesture = CharacterBrain.EyeGestures.idle;
+        public void SetEyeGesture(CharacterBrain.EyeGestures eyeGesture)
+        {
+            if (anPupils != null && anPupils.isActiveAndEnabled)
+            {
+                anPupils.SetInteger("state", (int)eyeGesture);
+            }
 
-				if(elroyBrain != null) eyeGesture = elroyBrain.GetCurrentEyeGesture();
-				
-				SetEyeGesture(eyeGesture);
-			}
-		}  
+            if (elroyBrain != null && anPupils != null)
+            {
+                CharacterHead partner = elroyBrain.conversationPartner;
+                if (partner != null)
+                {
+                    float dy = partner.transform.position.y - anPupils.transform.position.y;
 
-		public void SetEyeGesture(CharacterBrain.EyeGestures eyeGesture)
-		{
-			if(anPupils != null && anPupils.isActiveAndEnabled)
-			{
-				anPupils.SetInteger("state", (int)eyeGesture);
-			}
-			// float pupilsFollow = 0;
+                    if (partner is PlayerHead)
+                    {
+                        if ((partner as PlayerHead).anPupils != null)
+                        {
+                            dy = (partner as PlayerHead).anPupils.transform.position.y - anPupils.transform.position.y;
+                        }
+                    }
 
-			if(elroyBrain != null && anPupils != null)
-			{
-				CharacterHead partner = elroyBrain.conversationPartner;
-				if(partner != null)
-				{
-					float dy = partner.transform.position.y - anPupils.transform.position.y;
+                    dy /= 1.5f;
 
-					if(partner is PlayerHead)
-					{
-						if((partner as PlayerHead).anPupils != null)
-						{
-							dy = (partner as PlayerHead).anPupils.transform.position.y - anPupils.transform.position.y;
-						}
-					}
+                    if (dy > 1) dy = 1; if (dy < -1) dy = -1;
+                }
+            }
+        }
 
-					dy /= 1.5f;
+        public override void ShowPhoneme(string phoneme)
+        {
+            if (currentMood != -1 && mouths != null && mouths.Length > currentMood)
+            {
+                var h = mouths[currentMood];
+                if (h != null) h.ShowPhoneme(phoneme);
+            }
 
-					if(dy > 1) dy = 1; if(dy < -1) dy = -1;
+            switch (phoneme.Trim())
+            {
+                case "AI":
+                    SetEyebrowRelativePosition(0.01f);
+                    break;
 
-					// pupilsFollow = dy;
-				}
+                case "E":
+                    SetEyebrowRelativePosition(0.018f);
+                    break;
 
-				// if(anPupils != null && anPupils.isActiveAndEnabled)
-				// {
-				// 	//anPupils.SetFloat("pupilsFollow", pupilsFollow);      //Mitja comment out because of persistent warnings 
-				// }
-			}
-		}
+                case "U":
+                    SetEyebrowRelativePosition(-0.01f);
+                    break;
 
-		public override void ShowPhoneme(string phoneme)
-		{ 
-			if(currentMood != -1 && mouths != null && mouths.Length > currentMood) 
-			{
-				var h = mouths[currentMood];
-				if(h != null)h.ShowPhoneme(phoneme);
-			}
+                case "O":
+                    SetEyebrowRelativePosition(-0.01f);
+                    break;
 
-			switch(phoneme.Trim ())
-			{
-			case "AI":
-				SetEyebrowRelativePosition(0.01f);
-				break;
-				
-			case "E":
-				SetEyebrowRelativePosition(0.018f);
-				break;
-				
-			case "U":
-				SetEyebrowRelativePosition(-0.01f);
-				break;
-				
-			case "O":
-				SetEyebrowRelativePosition(-0.01f);
-				break;
-				
-			case "WQ":
-				SetEyebrowRelativePosition(0.00f);
-				break;
-				
-			case "etc":
-			case "CDGKNRSThYZ":
-				SetEyebrowRelativePosition(0.00f);
-				break;
-			
-			case "Rest":
-			case "rest":
-				SetEyebrowRelativePosition(0.00f);
-				break;
-				
-			case "MBP":
-				SetEyebrowRelativePosition(0.007f);
-				break;
-				
-			case "L":
-				SetEyebrowRelativePosition(0.01f);
-				break;
-				
-			case "FV":
-				SetEyebrowRelativePosition(0.01f);
-				break;
-				
-			default:
-				SetEyebrowRelativePosition(0.00f);
-				break;
-			}
+                case "WQ":
+                    SetEyebrowRelativePosition(0.00f);
+                    break;
 
-		}
+                case "etc":
+                case "CDGKNRSThYZ":
+                    SetEyebrowRelativePosition(0.00f);
+                    break;
 
+                case "Rest":
+                case "rest":
+                    SetEyebrowRelativePosition(0.00f);
+                    break;
 
-	}
+                case "MBP":
+                    SetEyebrowRelativePosition(0.007f);
+                    break;
+
+                case "L":
+                    SetEyebrowRelativePosition(0.01f);
+                    break;
+
+                case "FV":
+                    SetEyebrowRelativePosition(0.01f);
+                    break;
+
+                default:
+                    SetEyebrowRelativePosition(0.00f);
+                    break;
+            }
+        }
+    }
 }

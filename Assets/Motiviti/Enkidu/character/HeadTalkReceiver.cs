@@ -7,7 +7,7 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-    public class HeadTalkReceiver : MonoBehaviour 
+    public class HeadTalkReceiver : MonoBehaviour
     {
         public PlayerHead head;
         public PlayerMouth mouth;

@@ -35,14 +35,14 @@ namespace Motiviti.Enkidu
         protected bool lastFrameIsTalking = false;
         protected bool holdingRemote = false;
 
-        string [] phonemes = {"AI", "E", "U", "O", "CDGKNRSThYZ", "FV", "L", "MBP", "WQ", "Rest"};
+        string[] phonemes = { "AI", "E", "U", "O", "CDGKNRSThYZ", "FV", "L", "MBP", "WQ", "Rest" };
 
         public enum AnimationWaitingMethod
         {
-            UntilActionPoint=0,
-            UntilAnimationFinish=1
+            UntilActionPoint = 0,
+            UntilAnimationFinish = 1
         }
-        
+
         public class VoiceClip
         {
             public string name;
@@ -61,7 +61,7 @@ namespace Motiviti.Enkidu
         {
             public float position = 0;
             public string phoneme;
-            
+
             public PhonemePosition(float pos, string pho)
             {
                 position = pos;
@@ -79,7 +79,7 @@ namespace Motiviti.Enkidu
         {
             public float position = 0;
             public CharacterHead.Moods mood;
-            
+
             public MoodPosition(float pos, CharacterHead.Moods m)
             {
                 position = pos;
@@ -91,7 +91,7 @@ namespace Motiviti.Enkidu
         {
             public float position = 0;
             public string mode;
-            
+
             public ModePosition(float pos, string m)
             {
                 position = pos;
@@ -107,65 +107,65 @@ namespace Motiviti.Enkidu
             ArrayList moodPositions = new ArrayList();
 
             ArrayList modePositions = new ArrayList();
-            
-            public void Add( PhonemePosition pos ) // must be ordered
+
+            public void Add(PhonemePosition pos) // must be ordered
             {
-                positions.Add ( pos );
+                positions.Add(pos);
             }
 
-            public void AddMood( MoodPosition pos ) // must be ordered
+            public void AddMood(MoodPosition pos) // must be ordered
             {
-                moodPositions.Add ( pos );
+                moodPositions.Add(pos);
             }
 
-            public void AddMode( ModePosition pos ) // must be ordered
+            public void AddMode(ModePosition pos) // must be ordered
             {
-                modePositions.Add ( pos );
+                modePositions.Add(pos);
             }
-            
-            public string GetPhoneme( float position )
+
+            public string GetPhoneme(float position)
             {
                 float currentPosition = -1;
                 string currentPhoneme = "MBP";
-                
-                for(int i=0; i<positions.Count; i++)
+
+                for (int i = 0; i < positions.Count; i++)
                 {
                     currentPhoneme = ((PhonemePosition)positions[i]).phoneme;
 
-                    if(i < positions.Count-1)
+                    if (i < positions.Count - 1)
                     {
-                        currentPosition = ((PhonemePosition)positions[i+1]).position;
+                        currentPosition = ((PhonemePosition)positions[i + 1]).position;
                     }
                     else
                         break;
 
-                    if(currentPosition >= position) break;
+                    if (currentPosition >= position) break;
                 }
-                
-                int maxI = positions.Count-1;
-                
-                var cp = ((PhonemePosition)positions[ maxI ]).position;
-                
-                if(position > cp)
+
+                int maxI = positions.Count - 1;
+
+                var cp = ((PhonemePosition)positions[maxI]).position;
+
+                if (position > cp)
                 {
-                    if(position - cp > 0.1f) currentPhoneme = "MBP";
+                    if (position - cp > 0.1f) currentPhoneme = "MBP";
                 }
 
                 return currentPhoneme;
             }
 
-            public void GetMood( float position, ref CharacterHead.Moods currentMood, ref bool change  )
+            public void GetMood(float position, ref CharacterHead.Moods currentMood, ref bool change)
             {
                 change = false;
                 float currentPosition = -1;
 
-                for(int i=0; i<moodPositions.Count; i++)
+                for (int i = 0; i < moodPositions.Count; i++)
                 {
                     currentPosition = ((MoodPosition)moodPositions[i]).position;
-                    
-                    if(position >= currentPosition && (i >= moodPositions.Count-1 || position < ((MoodPosition)moodPositions[i+1]).position)) 
+
+                    if (position >= currentPosition && (i >= moodPositions.Count - 1 || position < ((MoodPosition)moodPositions[i + 1]).position))
                     {
-                        if(currentMood != ((MoodPosition)moodPositions[i]).mood)
+                        if (currentMood != ((MoodPosition)moodPositions[i]).mood)
                         {
                             currentMood = ((MoodPosition)moodPositions[i]).mood;
                             change = true;
@@ -177,18 +177,18 @@ namespace Motiviti.Enkidu
                 currentMood = CharacterHead.Moods.Neutral; // will not get picked up unless change==true
             }
 
-            public void GetMode( float position, ref string currentMode, ref bool change )
+            public void GetMode(float position, ref string currentMode, ref bool change)
             {
                 change = false;
                 float currentPosition = -1;
 
-                for(int i=0; i<modePositions.Count; i++)
+                for (int i = 0; i < modePositions.Count; i++)
                 {
                     currentPosition = ((ModePosition)modePositions[i]).position;
-                    
-                    if(position >= currentPosition && (i >= modePositions.Count-1 || position < ((ModePosition)modePositions[i+1]).position)) 
+
+                    if (position >= currentPosition && (i >= modePositions.Count - 1 || position < ((ModePosition)modePositions[i + 1]).position))
                     {
-                        if(currentMode != ((ModePosition)modePositions[i]).mode)
+                        if (currentMode != ((ModePosition)modePositions[i]).mode)
                         {
                             currentMode = ((ModePosition)modePositions[i]).mode;
                             change = true;
@@ -200,55 +200,55 @@ namespace Motiviti.Enkidu
                 currentMode = "idle"; // will not get picked up unless change==true
             }
         }
-    
+
         public enum GestureConfigurations
         {
-            idle=0,
-            explaining=1,
-            explainingExactly=2,
-            extremelyExcited=3,
-            proud=4,
-            embarrassed=5
+            idle = 0,
+            explaining = 1,
+            explainingExactly = 2,
+            extremelyExcited = 3,
+            proud = 4,
+            embarrassed = 5
         }
 
         public enum BodyGestures
         {
-            idle=0,
-            frontLeanSlight=1,
-            frontLean=2,
-            backLeanSlight=3,
-            backLean=4
+            idle = 0,
+            frontLeanSlight = 1,
+            frontLean = 2,
+            backLeanSlight = 3,
+            backLean = 4
         }
 
         public enum HeadGestures
         {
-            idle=0,
-            talk1=1,
-            talk2=2,
-            slowTalk=3,
-            lookAtCamera=4,
-            embarrassed=5
+            idle = 0,
+            talk1 = 1,
+            talk2 = 2,
+            slowTalk = 3,
+            lookAtCamera = 4,
+            embarrassed = 5
         }
 
         public enum NeckGestures
         {
-            idle=0,
-            leanFront=1,
-            leanBack=2,
-            lookBack=3
+            idle = 0,
+            leanFront = 1,
+            leanBack = 2,
+            lookBack = 3
         }
 
         public enum EyeGestures
         {
-            idle=0,
-            talk=1,
-            up=2,
-            down=3,
-            left=4,
-            right=5,
-            back=6,
-            side=7,
-            follow=8
+            idle = 0,
+            talk = 1,
+            up = 2,
+            down = 3,
+            left = 4,
+            right = 5,
+            back = 6,
+            side = 7,
+            follow = 8
         }
 
         public enum ArmGestures
@@ -259,27 +259,27 @@ namespace Motiviti.Enkidu
             me3 = 3,
             you1 = 5,
             you2 = 6,
-            you3=7,
-            excitedFists=8,
-            stop=9,
-            explain1=10,
-            explain2=11,
-            explain3=12,
-            explain4=13,
-            explain5=14,
-            explain6=15,
-            explain7=16,
-            idea=17,
-            why1=20,
-            why2=21,
-            oops1=25,
-            oops2=26,
-            thinking1=30,
-            thinking2=31,
-            proud=35,
-            crossedArms=36,
-            armsUp=40,
-            holdingRemote=50
+            you3 = 7,
+            excitedFists = 8,
+            stop = 9,
+            explain1 = 10,
+            explain2 = 11,
+            explain3 = 12,
+            explain4 = 13,
+            explain5 = 14,
+            explain6 = 15,
+            explain7 = 16,
+            idea = 17,
+            why1 = 20,
+            why2 = 21,
+            oops1 = 25,
+            oops2 = 26,
+            thinking1 = 30,
+            thinking2 = 31,
+            proud = 35,
+            crossedArms = 36,
+            armsUp = 40,
+            holdingRemote = 50
         }
 
         public virtual void ChangeState(int newState)
@@ -289,7 +289,7 @@ namespace Motiviti.Enkidu
 
         public virtual void ChangeTalkMode(string mode)
         {
-            Debug.LogWarning("TODO: Implement ChangeTalkMode.");   
+            Debug.LogWarning("TODO: Implement ChangeTalkMode.");
         }
 
         public bool IsTalking
@@ -304,7 +304,7 @@ namespace Motiviti.Enkidu
                 isTalking = value;
             }
         }
-        
+
         public virtual bool PlayCustomAnimation(string name, AnimationWaitingMethod method)
         {
             this.animationWaitingMethod = method;
@@ -320,16 +320,16 @@ namespace Motiviti.Enkidu
         {
             foreach (PlayerHead h in heads)
             {
-                if(h!=null)
-                h.elroyBrain = this;
+                if (h != null)
+                    h.elroyBrain = this;
             }
 
-            if(mainTransform==null)
+            if (mainTransform == null)
             {
-                if(animator != null)
-                mainTransform = animator.transform.parent;
-                else 
-                mainTransform = transform;
+                if (animator != null)
+                    mainTransform = animator.transform.parent;
+                else
+                    mainTransform = transform;
             }
         }
 
@@ -340,7 +340,7 @@ namespace Motiviti.Enkidu
 
         void OnEnable()
         {
-            StartCoroutine (BlinkProc ());
+            StartCoroutine(BlinkProc());
         }
 
         public EyeGestures GetCurrentEyeGesture()
@@ -349,20 +349,20 @@ namespace Motiviti.Enkidu
         }
         protected virtual IEnumerator BlinkProc()
         {
-            while (true) 
+            while (true)
             {
-                if(IsTalking)
+                if (IsTalking)
                 {
-                    yield return new WaitForSeconds (0.5f + UnityEngine.Random.value * 1); 
+                    yield return new WaitForSeconds(0.5f + UnityEngine.Random.value * 1);
                 }
                 else
                 {
-                    yield return new WaitForSeconds (1.5f + UnityEngine.Random.value * 3); 
+                    yield return new WaitForSeconds(1.5f + UnityEngine.Random.value * 3);
                 }
 
-                foreach(PlayerHead h in heads)
+                foreach (PlayerHead h in heads)
                 {
-                    if(h != null) h.Blink ();
+                    if (h != null) h.Blink();
                 }
             }
         }
@@ -373,7 +373,7 @@ namespace Motiviti.Enkidu
 
             foreach (PlayerHead head in heads)
             {
-                if(head && head.isActiveAndEnabled)head.SetMood(moodIndex);
+                if (head && head.isActiveAndEnabled) head.SetMood(moodIndex);
             }
         }
 
@@ -405,7 +405,7 @@ namespace Motiviti.Enkidu
 
         public override void ShowPhoneme(string phoneme)
         {
-            foreach(PlayerHead head in heads)
+            foreach (PlayerHead head in heads)
             {
                 if (head && head.isActiveAndEnabled) head.ShowPhoneme(phoneme);
             }
@@ -413,12 +413,12 @@ namespace Motiviti.Enkidu
 
         public virtual void RunLipSync(string charName, AudioSource src, AudioClip audioClip, int lineID, string message)
         {
-            StartCoroutine( RunLipSyncProc(charName, src, audioClip, lineID, message));
+            StartCoroutine(RunLipSyncProc(charName, src, audioClip, lineID, message));
         }
 
         CharacterHead.Moods GetMoodFromString(string name, out string restOfText)
         {
-            if(string.IsNullOrEmpty(name)) 
+            if (string.IsNullOrEmpty(name))
             {
                 restOfText = name;
                 return CharacterHead.Moods.Neutral;
@@ -426,15 +426,15 @@ namespace Motiviti.Enkidu
 
             restOfText = name;
 
-            int moodPos = name.IndexOf (">");
-            
+            int moodPos = name.IndexOf(">");
+
             int moodId = 0;
-            
-            if(moodPos != -1)
+
+            if (moodPos != -1)
             {
                 string moodStr = name.Substring(0, moodPos);
                 moodId = int.Parse(moodStr);
-                name = name.Substring(moodPos+1);
+                name = name.Substring(moodPos + 1);
                 restOfText = name;
             }
 
@@ -445,31 +445,31 @@ namespace Motiviti.Enkidu
         {
             CharacterHead.Moods mood = CharacterHead.Moods.Neutral;
 
-            switch(moodString)
+            switch (moodString)
             {
                 case "Neutral":
-                mood = CharacterHead.Moods.Neutral;
-                break;
+                    mood = CharacterHead.Moods.Neutral;
+                    break;
 
                 case "Angry":
-                mood = CharacterHead.Moods.Angry;
-                break;
+                    mood = CharacterHead.Moods.Angry;
+                    break;
 
                 case "Sad":
-                mood = CharacterHead.Moods.Sad;
-                break;
+                    mood = CharacterHead.Moods.Sad;
+                    break;
 
                 case "Happy":
-                mood = CharacterHead.Moods.Happy;
-                break;
+                    mood = CharacterHead.Moods.Happy;
+                    break;
 
                 case "Scared":
-                mood = CharacterHead.Moods.Scared;
-                break;
+                    mood = CharacterHead.Moods.Scared;
+                    break;
 
                 case "Determined":
-                mood = CharacterHead.Moods.Determined;
-                break;
+                    mood = CharacterHead.Moods.Determined;
+                    break;
             }
 
             return mood;
@@ -480,12 +480,12 @@ namespace Motiviti.Enkidu
             // TODO
             Debug.LogWarning("TODO: Implement SwitchToIdleIfNotAlready");
         }
-            
+
         public void SetTalkMode(bool tm)
         {
-            if(tm) SwitchToIdleIfNotAlready();
+            if (tm) SwitchToIdleIfNotAlready();
             animator.SetBool("talking", tm);
-            
+
             IsTalking = tm;
 
             ResetArmAnimationStatus();
@@ -494,30 +494,30 @@ namespace Motiviti.Enkidu
         protected virtual void ResetToIdle()
         {
         }
-        
+
         protected virtual IEnumerator RunLipSyncProc(string charName, AudioSource src, AudioClip audioClip, int lineID, string message)
         {
             this.interruptFlag = false;
             IsTalking = true;
-            
+
             string currentMode = "idle";
             LipSyncData lipSyncData = Resources.Load<LipSyncData>("Lipsync/" + charName + "/" + charName + lineID.ToString());
 
-            if(audioClip == null || lipSyncData == null)
+            if (audioClip == null || lipSyncData == null)
             {
                 float fakeClipLength = 3f;
                 float startTime = Time.time;
 
                 fakeClipLength = message.Length * 0.1f;
-                
+
                 // Simulate a talk cycle
-                string [] talkCycle = {"AI","AI","O","AI","E", "AI", "O", "U"};
+                string[] talkCycle = { "AI", "AI", "O", "AI", "E", "AI", "O", "U" };
                 int i = 0;
-                while(Time.time - startTime < fakeClipLength && !interruptFlag)
+                while (Time.time - startTime < fakeClipLength && !interruptFlag)
                 {
                     //if(character != null && !character.isTalking) interruptFlag = true;
                     string ph = talkCycle[i % talkCycle.Length];
-                    i++;    
+                    i++;
                     ShowPhoneme(ph);
                     yield return new WaitForSeconds(.09f);
                 }
@@ -533,42 +533,42 @@ namespace Motiviti.Enkidu
 
                 SetArmAnimationEnabled(true);
 
-                if(lipSyncData != null)
+                if (lipSyncData != null)
                 {
                     voiceClip.phonemes = GetPhonemesFromLipSyncData(lipSyncData, audioClip.length);
                     voiceClip.audioClip = audioClip;
                     voiceClip.mood = mood;
 
                     CharacterHead.Moods currentMood = CharacterHead.Moods.Neutral;
-                
-                    while(src.isPlaying && !interruptFlag)
+
+                    while (src.isPlaying && !interruptFlag)
                     {
                         //if(character != null && !character.isTalking) interruptFlag = true;
-                        float time = src.time ;
-                    
+                        float time = src.time;
+
                         bool change = false;
 
-                        voiceClip.phonemes.GetMode( time /*+ pause*/, ref currentMode, ref change);
+                        voiceClip.phonemes.GetMode(time /*+ pause*/, ref currentMode, ref change);
 
-                        if(change)
+                        if (change)
                         {
                             ChangeTalkMode(currentMode);
                         }
 
                         change = false;
 
-                        voiceClip.phonemes.GetMood( time /*+ pause*/, ref currentMood, ref change);
-                        
-                        if(change)
+                        voiceClip.phonemes.GetMood(time /*+ pause*/, ref currentMood, ref change);
+
+                        if (change)
                         {
-                            ChangeMood( currentMood );
+                            ChangeMood(currentMood);
                         }
 
-                        string ph = voiceClip.phonemes.GetPhoneme( time /*+ pause*/ ).Trim ();
+                        string ph = voiceClip.phonemes.GetPhoneme(time /*+ pause*/ ).Trim();
 
-                        ShowPhoneme( ph );
+                        ShowPhoneme(ph);
 
-                        yield return new WaitForSeconds(1/60f);
+                        yield return new WaitForSeconds(1 / 60f);
 
                     }
                 }
@@ -578,14 +578,14 @@ namespace Motiviti.Enkidu
 
             ShowPhoneme("MBP");
 
-            ChangeMood( CharacterHead.Moods.Neutral );
+            ChangeMood(CharacterHead.Moods.Neutral);
 
             IsTalking = false;
 
             animator.SetBool("talking", false);
 
             ResetArmAnimationStatus();
-           
+
             yield return null;
         }
 
@@ -598,27 +598,27 @@ namespace Motiviti.Enkidu
         {
             Debug.LogWarning("not implemented");
         }
-        
-        protected PhonemePositions GetPhonemesFromLipSyncData( LipSyncData data, float audioClipLength )
+
+        protected PhonemePositions GetPhonemesFromLipSyncData(LipSyncData data, float audioClipLength)
         {
             PhonemePositions pos = new PhonemePositions();
-            
-            foreach(var phonemeMarker in data.phonemeData)
+
+            foreach (var phonemeMarker in data.phonemeData)
             {
-                pos.Add( new PhonemePosition( phonemeMarker.time * audioClipLength, phonemes[phonemeMarker.phonemeNumber] ));
+                pos.Add(new PhonemePosition(phonemeMarker.time * audioClipLength, phonemes[phonemeMarker.phonemeNumber]));
             }
 
-            foreach(var emotionMarker in data.emotionData)
+            foreach (var emotionMarker in data.emotionData)
             {
-                pos.AddMood( new MoodPosition( emotionMarker.startTime * audioClipLength, GetMoodFromString(emotionMarker.emotion) ) );
-                pos.AddMood( new MoodPosition( emotionMarker.endTime * audioClipLength, CharacterHead.Moods.Neutral ) );
+                pos.AddMood(new MoodPosition(emotionMarker.startTime * audioClipLength, GetMoodFromString(emotionMarker.emotion)));
+                pos.AddMood(new MoodPosition(emotionMarker.endTime * audioClipLength, CharacterHead.Moods.Neutral));
             }
 
-            foreach(var gestureMarker in data.gestureData)
+            foreach (var gestureMarker in data.gestureData)
             {
-                pos.AddMode( new ModePosition( gestureMarker.time * audioClipLength, gestureMarker.gesture ) );
+                pos.AddMode(new ModePosition(gestureMarker.time * audioClipLength, gestureMarker.gesture));
             }
-        
+
             return pos;
         }
 

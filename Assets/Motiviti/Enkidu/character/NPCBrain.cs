@@ -24,9 +24,9 @@ namespace Motiviti.Enkidu
             CustomAction2 = 7,
             CustomAction3 = 8,
         }
-    
+
         public State state;
-        
+
         public override void ChangeState(int newState)
         {
             State s = State.Idle;
@@ -38,126 +38,126 @@ namespace Motiviti.Enkidu
             }
             catch
             {
-                Debug.LogWarning("Unsupported state integer " + newState.ToString() );
+                Debug.LogWarning("Unsupported state integer " + newState.ToString());
             }
         }
 
         // Adventure Creator State support. Static NPC's can't move (hence commented out code below). Movable NPC's use PlayerBrain
         public override void PlayStandardAnimation(string clip, string dir)
         {
-            if(!isPlayingCustomAnimation)
+            if (!isPlayingCustomAnimation)
             {
-                switch(clip)
+                switch (clip)
                 {
                     case "idle":
-                    {
-                        ChangeState(State.Idle);
-
-                        switch(dir)
                         {
-                            case "U":
-                                //ChangeState(PlayerBrain.State.IdleBack);
-                                break;
-                            case "D":
-                                //ChangeState(PlayerBrain.State.IdleFront);
-                                break;
-                            case "L":
-                                //ChangeState(PlayerBrain.State.IdleDiagonalFront);
-                                break;
-                            case "R":
-                                //ChangeState(PlayerBrain.State.IdleDiagonalFront);
-                                break;
+                            ChangeState(State.Idle);
+
+                            switch (dir)
+                            {
+                                case "U":
+                                    //ChangeState(PlayerBrain.State.IdleBack);
+                                    break;
+                                case "D":
+                                    //ChangeState(PlayerBrain.State.IdleFront);
+                                    break;
+                                case "L":
+                                    //ChangeState(PlayerBrain.State.IdleDiagonalFront);
+                                    break;
+                                case "R":
+                                    //ChangeState(PlayerBrain.State.IdleDiagonalFront);
+                                    break;
+                            }
                         }
-                    }
-                    break;
+                        break;
 
                     case "walk":
-                    {
-                        switch(dir)
                         {
-                            case "U":
-                                //ChangeState(PlayerBrain.State.WalkBack);
-                                break;
-                            case "D":
-                                //.ChangeState(PlayerBrain.State.WalkFront);
-                                break;
-                            case "L":
-                                //ChangeState(PlayerBrain.State.WalkSide);
-                                break;
-                            case "R":
-                                //ChangeState(PlayerBrain.State.WalkSide);
-                                break;
+                            switch (dir)
+                            {
+                                case "U":
+                                    //ChangeState(PlayerBrain.State.WalkBack);
+                                    break;
+                                case "D":
+                                    //.ChangeState(PlayerBrain.State.WalkFront);
+                                    break;
+                                case "L":
+                                    //ChangeState(PlayerBrain.State.WalkSide);
+                                    break;
+                                case "R":
+                                    //ChangeState(PlayerBrain.State.WalkSide);
+                                    break;
+                            }
                         }
-                    }
-                    break; 
+                        break;
                 }
-                
+
                 //PlayCharAnim (clip, 0);
             }
         }
         public override bool PlayCustomAnimation(string name, AnimationWaitingMethod waitingMethod)
         {
             base.PlayCustomAnimation(name, waitingMethod);
-            
+
             Type type = typeof(State);
             State st;
-            
+
             try
             {
-                st = (State)Enum.Parse( type, name );
+                st = (State)Enum.Parse(type, name);
             }
             catch
             {
                 return false;
             }
             ChangeState(st);
-            
+
             isPlayingCustomAnimation = true;
             return true;
         }
 
         public void ChangeState(State newState)
         {
-            if(newState == state) return;
+            if (newState == state) return;
 
             Debug.Log("Changing state to " + newState);
 
-            if(animator) 
-            {	
+            if (animator)
+            {
                 animator.SetInteger("idleMode", 0);//.RoundToInt(6 * UnityEngine.Random.value));
-                animator.SetInteger( "state", (int)newState );
-                animator.SetBool( "disable", true );
+                animator.SetInteger("state", (int)newState);
+                animator.SetBool("disable", true);
 
                 isAnimationPlaying = true;
-                
+
             }
             state = newState;
-            
+
         }
 
         public override void ChangeTalkMode(string mode)
         {
             //state == State.TalkDiagonal
-            if(true && !string.IsNullOrEmpty(mode))
+            if (true && !string.IsNullOrEmpty(mode))
             {
-                string [] parts = mode.Split('/');
+                string[] parts = mode.Split('/');
                 GestureConfigurations conf = GestureConfigurations.idle;
-                if(parts.Length == 1)
+                if (parts.Length == 1)
                 {
                     try
                     {
                         conf = (GestureConfigurations)Enum.Parse(typeof(GestureConfigurations), parts[0]);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Debug.LogWarning("Couldn't parse gesture configuration " + mode + " " + e.Message);
                     }
 
                     ChangeGestureConfiguration(conf);
                 }
-                else if(parts.Length >= 2)
+                else if (parts.Length >= 2)
                 {
-                    switch(parts[0])
+                    switch (parts[0])
                     {
                         case "arms":
                             try
@@ -170,7 +170,7 @@ namespace Motiviti.Enkidu
                                 Debug.LogWarning("Couldn't parse gesture arms " + mode + " " + parts[1]);
                             }
                             break;
-                        
+
                         case "eyes":
                             try
                             {
@@ -217,7 +217,7 @@ namespace Motiviti.Enkidu
                             {
                                 Debug.LogWarning("Couldn't parse gesture body " + mode + " " + parts[1]);
                             }
-                            break;	
+                            break;
 
                         default:
                             Debug.LogWarning("Unknown gesture type, " + mode);
@@ -232,7 +232,7 @@ namespace Motiviti.Enkidu
             animator.SetInteger("arms", (int)ag);
             currentArmGesture = ag;
         }
-    
+
         void ChangeGestureEyes(EyeGestures eg)
         {
             currentEyeGesture = eg;
@@ -241,25 +241,25 @@ namespace Motiviti.Enkidu
 
         void ChangeGestureHead(HeadGestures hg)
         {
-            animator.SetInteger("head", (int)hg);	
-            currentHeadGesture = hg;	
+            animator.SetInteger("head", (int)hg);
+            currentHeadGesture = hg;
         }
 
         void ChangeGestureNeck(NeckGestures ng)
         {
-            animator.SetInteger("neck", (int)ng);	
-            currentNeckGesture = ng;	
+            animator.SetInteger("neck", (int)ng);
+            currentNeckGesture = ng;
         }
 
         void ChangeGestureBody(BodyGestures bg)
         {
-            animator.SetInteger("body_lean", (int)bg);	
-            currentBodyGesture = bg;	
+            animator.SetInteger("body_lean", (int)bg);
+            currentBodyGesture = bg;
         }
 
         void ChangeGestureConfiguration(GestureConfigurations conf)
         {
-            switch(conf)
+            switch (conf)
             {
                 case GestureConfigurations.idle:
                     ChangeGestureArms(ArmGestures.idle);
@@ -278,7 +278,7 @@ namespace Motiviti.Enkidu
                     break;
 
                 case GestureConfigurations.explainingExactly:
-                    ChangeGestureArms(ArmGestures.explain4); 
+                    ChangeGestureArms(ArmGestures.explain4);
                     ChangeGestureBody(BodyGestures.frontLeanSlight);
                     ChangeGestureNeck(NeckGestures.idle);
                     ChangeGestureHead(HeadGestures.talk1);
@@ -286,7 +286,7 @@ namespace Motiviti.Enkidu
                     break;
 
                 case GestureConfigurations.extremelyExcited:
-                    ChangeGestureArms(ArmGestures.armsUp); 
+                    ChangeGestureArms(ArmGestures.armsUp);
                     ChangeGestureBody(BodyGestures.backLean);
                     ChangeGestureNeck(NeckGestures.idle);
                     ChangeGestureHead(HeadGestures.talk1);
@@ -294,7 +294,7 @@ namespace Motiviti.Enkidu
                     break;
 
                 case GestureConfigurations.proud:
-                    ChangeGestureArms(ArmGestures.proud); 
+                    ChangeGestureArms(ArmGestures.proud);
                     ChangeGestureBody(BodyGestures.backLeanSlight);
                     ChangeGestureNeck(NeckGestures.idle);
                     ChangeGestureHead(HeadGestures.talk1);
@@ -302,7 +302,7 @@ namespace Motiviti.Enkidu
                     break;
 
                 case GestureConfigurations.embarrassed:
-                    ChangeGestureArms(ArmGestures.crossedArms); 
+                    ChangeGestureArms(ArmGestures.crossedArms);
                     ChangeGestureBody(BodyGestures.frontLeanSlight);
                     ChangeGestureNeck(NeckGestures.idle);
                     ChangeGestureHead(HeadGestures.embarrassed);
@@ -313,12 +313,12 @@ namespace Motiviti.Enkidu
 
         public void SetEyeGesture(CharacterBrain.EyeGestures eyeGesture)
         {
-            foreach(PlayerHead h in heads)
+            foreach (PlayerHead h in heads)
             {
-                if(h!=null)
-                h.SetEyeGesture(eyeGesture);
+                if (h != null)
+                    h.SetEyeGesture(eyeGesture);
             }
-            
+
             this.eyeGesture = eyeGesture;
         }
 
@@ -345,7 +345,7 @@ namespace Motiviti.Enkidu
 
         public override void AnimationActionPoint(string animationName)
         {
-            if(animationWaitingMethod == AnimationWaitingMethod.UntilActionPoint)
+            if (animationWaitingMethod == AnimationWaitingMethod.UntilActionPoint)
                 isAnimationPlaying = false;
         }
 
