@@ -1,8 +1,21 @@
 # enkidu: simple adventure game framework for unity
 
+This is a simple Unity-based framework for 2D point and click adventure games. 
+
+Features:
+- fully animated 2d characters (body, head, face, mouth, eyebrows, eyes, emotions, ...)
+- lip sync (Preston-Blair phoneme/viseme set, Rogo Lipsync Pro)
+- navmesh control
+- multi-point character scaling
+- dynamic camera (with drag character follow)
+- save games
+- cutscene tools
+- inventory
+- broad interactive item support (hotspots, doors, switches, full screen puzzles, item combines, popups, custom actions, ...)
+
 used in: [Elroy and the Aliens](https://elroythegame.com)
 
-todo: refactoring, add a sample scene
+todo: refactoring, add a sample scene, documentation
 
 ## main classes
 
