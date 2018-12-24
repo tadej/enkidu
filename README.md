@@ -25,4 +25,4 @@ Environment: [InteractiveItem](Assets/Motiviti/Enkidu/environment/InteractiveIte
 
 GUI: [Inventory](Assets/Motiviti/Enkidu/gui/Inventory.cs)
 
-System: [StatefulItem](Assets/Motiviti/Enkidu/system/StatefulItem.cs), [Global:Deprecate](Assets/Motiviti/Enkidu/system/Global.cs)
+System: [StatefulItem](Assets/Motiviti/Enkidu/system/StatefulItem.cs), [PersistentEngine/Deprecate](Assets/Motiviti/Enkidu/system/PersistentEngine.cs)
