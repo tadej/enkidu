@@ -46,13 +46,11 @@ namespace Motiviti.Enkidu
             inventory = PersistentEngine.inventory;
             audioManager = PersistentEngine.audioManager;
             advCamera = PersistentEngine.advCamera;
+            doors = new Hashtable();
 
             if (!this.isOnlyAVoice)
             {
                 navmeshWalker = GetComponent<NavmeshWalker>();
-
-                doors = new Hashtable();
-
                 yield return StartCoroutine(InitialisePlayerArrival());
             }
 
@@ -80,7 +78,7 @@ namespace Motiviti.Enkidu
             }
             else if (isInAutopilot)
             {
-                transform.position += autoPilotDelta * Time.deltaTime * autoPilotSpeed;//Vector3.Lerp (transform.position, autoPilotTarget, Time.deltaTime);
+                transform.position += autoPilotDelta * Time.deltaTime * autoPilotSpeed;
                 ProcessScale();
             }
         }
@@ -124,8 +122,7 @@ namespace Motiviti.Enkidu
 
             ret += 0.47f;
 
-            if (ret > 1) ret = 1;
-
+            if (ret > 1) ret = 1; // clamp
             if (ret < 0.7f) ret = 0.7f;
 
             return ret;
@@ -163,7 +160,7 @@ namespace Motiviti.Enkidu
 
                 SetInCutScene(true);
 
-                yield return null;//yield return new WaitForSeconds(0.5f);
+                yield return null;
                 yield return StartCoroutine(SpeakProcedure(scene.sentenceAfterInitialState));
 
                 ChangeState(State.IdleDiagonalFront);
