@@ -19,9 +19,13 @@ todo: refactoring, add a sample scene, documentation
 
 ## main classes
 
-Player: [PlayerBrain](Assets/Motiviti/Enkidu/character/Player.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead.cs), [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs)
+Player: [PlayerBrain](Assets/Motiviti/Enkidu/character/PlayerBrain.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead.cs), [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs), [CharacterBrain](Assets/Motiviti/Enkidu/character/CharacterBrain.cs), [CharacterHead](Assets/Motiviti/Enkidu/character/CharacterHead.cs), [CharacterMouth](Assets/Motiviti/Enkidu/character/CharacterMouth.cs), [Player](Assets/Motiviti/Enkidu/character/Player.cs)
 
-Environment: [InteractiveItem](Assets/Motiviti/Enkidu/environment/InteractiveItem.cs), [InteractiveItem*](Assets/Motiviti/Enkidu/environment)
+Inheritance: PlayerBrain<-CharacterBrain, PlayerHead<-CharacterHead, PlayerMouth<-CharacterMouth
+
+Environment: [InteractiveItem](Assets/Motiviti/Enkidu/environment/InteractiveItem.cs), [InteractiveItemAction](Assets/Motiviti/Enkidu/environment/InteractiveItemAction.cs), [InteractiveItem***](Assets/Motiviti/Enkidu/environment)
+
+Inheritance: InteractiveItem***<-InteractiveItemAction
 
 GUI: [Inventory](Assets/Motiviti/Enkidu/gui/Inventory.cs)
 
