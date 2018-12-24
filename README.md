@@ -17,7 +17,10 @@ This is a simple Unity-based framework for 2D point and click adventure games.
 - [Elroy and the Aliens](https://elroythegame.com)
 
 ### TODO
-refactoring, add a sample scene, documentation, testing
+- refactoring
+- add a sample scene
+- documentation
+- testing
 
 ## Main Classes
 
