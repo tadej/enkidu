@@ -4,7 +4,7 @@ This is a simple Unity-based framework for 2D point and click adventure games.
 
 Features:
 - fully animated 2d characters (body, head, face, mouth, eyebrows, eyes, emotions, ...)
-- lip synching (Preston-Blair phoneme/viseme set)
+- lip sync (Preston-Blair phoneme/viseme set, Rogo Lipsync Pro)
 - navmesh control
 - multi-point character scaling
 - dynamic camera (with drag character follow)
