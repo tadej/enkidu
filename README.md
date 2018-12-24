@@ -15,7 +15,7 @@ Features:
 
 used in: [Elroy and the Aliens](https://elroythegame.com)
 
-todo: refactoring, add a sample scene
+todo: refactoring, add a sample scene, documentation
 
 ## main classes
 
