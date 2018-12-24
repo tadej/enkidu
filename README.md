@@ -29,8 +29,8 @@ Inheritance: PlayerBrain<-CharacterBrain, PlayerHead<-CharacterHead, PlayerMouth
 
 Inheritance: InteractiveItem***<-InteractiveItemAction
 
-###GUI
+### GUI
 [Inventory](Assets/Motiviti/Enkidu/gui/Inventory.cs)
 
-###System 
+### System 
 [StatefulItem](Assets/Motiviti/Enkidu/system/StatefulItem.cs), [PersistentEngine/Deprecate](Assets/Motiviti/Enkidu/system/PersistentEngine.cs)
