@@ -1,4 +1,4 @@
-# enkidu: simple adventure game framework for unity
+# Enkidu: simple adventure game framework for unity
 
 This is a simple Unity-based framework for 2D point and click adventure games. 
 
@@ -14,12 +14,12 @@ This is a simple Unity-based framework for 2D point and click adventure games.
 - broad interactive item support (hotspots, doors, switches, full screen puzzles, item combines, popups, custom actions, ...)
 
 ### Used In 
-[Elroy and the Aliens](https://elroythegame.com)
+- [Elroy and the Aliens](https://elroythegame.com)
 
 ### TODO
 refactoring, add a sample scene, documentation, testing
 
-## main classes
+## Main Classes
 
 ### Player
 [PlayerBrain](Assets/Motiviti/Enkidu/character/PlayerBrain.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead.cs), [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs), [CharacterBrain](Assets/Motiviti/Enkidu/character/CharacterBrain.cs), [CharacterHead](Assets/Motiviti/Enkidu/character/CharacterHead.cs), [CharacterMouth](Assets/Motiviti/Enkidu/character/CharacterMouth.cs), [Player](Assets/Motiviti/Enkidu/character/Player.cs)
