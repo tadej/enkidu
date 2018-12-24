@@ -200,7 +200,7 @@ namespace Motiviti.Enkidu
                 string id = null;//Global.GetItemsData().GetID(heldItem.name);
                 if (id.Length == 0)
                     id = "Hm.";
-                Global.player.Speak(id);
+                PersistentEngine.player.Speak(id);
             }
         }
 
@@ -416,7 +416,7 @@ namespace Motiviti.Enkidu
 
             canvas = GetComponent<Canvas>();
             items = new ArrayList();
-            advCamera = Global.advCamera;
+            advCamera = PersistentEngine.advCamera;
             transform.position = Camera.main.ScreenToWorldPoint(new Vector3(0, 0));
             originalPosition = parentObject.localPosition;
 
@@ -494,12 +494,12 @@ namespace Motiviti.Enkidu
                 }
             }
 
-            worldPosition = Global.activeCamera.ScreenToWorldPoint(holdPosition);
+            worldPosition = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition);
             worldPosition.z = 0;
 
             if (holding)
             {
-                Vector2 v = Global.activeCamera.ScreenToWorldPoint(holdPosition);
+                Vector2 v = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition);
 
                 Collider2D[] col = Physics2D.OverlapPointAll(v);
 
@@ -521,7 +521,7 @@ namespace Motiviti.Enkidu
             else if (isHit)
             {
 
-                Vector2 v = Global.activeCamera.ScreenToWorldPoint(holdPosition);
+                Vector2 v = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition);
 
                 Collider2D[] col = Physics2D.OverlapPointAll(v);
 
@@ -574,7 +574,7 @@ namespace Motiviti.Enkidu
                     {
                         i.ChangeState(InventoryItem.State.INVENTORY_HOLDING);
                         heldItem = i;
-                        Global.player.HoldItem(heldItem);
+                        PersistentEngine.player.HoldItem(heldItem);
                     }
                 }
                 else
@@ -591,7 +591,7 @@ namespace Motiviti.Enkidu
             {
 
                 hiddenOffset = 0.35f * advCamera.cameraSize / advCamera.transform.localScale.x;
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                 {
                     hiddenOffset = hiddenOffset * 1.5f;
                 }

@@ -124,7 +124,7 @@ namespace Motiviti.Enkidu
 
         public float GetCharacterScale()
         {
-            Vector3 charPos = Global.player.transform.position;
+            Vector3 charPos = PersistentEngine.player.transform.position;
 
             if (characterSizePoints != null && characterSizePoints.Length >= 3)
             {
@@ -220,7 +220,7 @@ namespace Motiviti.Enkidu
 
             int len = characterSizePoints.Length;
 
-            Vector3 pos = Global.player.transform.position;
+            Vector3 pos = PersistentEngine.player.transform.position;
 
         }
 
@@ -249,8 +249,8 @@ namespace Motiviti.Enkidu
 
             player.transform.parent = transform;
 
-            Global.player = player.GetComponent<Player>();
-            Global.player.staticCharacter = startWithStaticCharacter;
+            PersistentEngine.player = player.GetComponent<Player>();
+            PersistentEngine.player.staticCharacter = startWithStaticCharacter;
 
 
             var inventory = GameObject.Find("UI-Inventory") ? GameObject.Find("UI-Inventory").GetComponent<Inventory>() : null;
@@ -261,11 +261,11 @@ namespace Motiviti.Enkidu
                 var minv = Resources.Load("prefabs/UI-Inventory") as GameObject;
 
                 var inv = Instantiate(minv);
-                Global.inventory = inv.GetComponent<Inventory>();
+                PersistentEngine.inventory = inv.GetComponent<Inventory>();
             }
             else
             {
-                Global.inventory = inventory;
+                PersistentEngine.inventory = inventory;
             }
 
             InitialiseCharSizePoints();
@@ -305,7 +305,7 @@ namespace Motiviti.Enkidu
 
             if (startInCutscene)
             {
-                Global.player.SetInCutScene(true, CutsceneTools.Type.None);
+                PersistentEngine.player.SetInCutScene(true, CutsceneTools.Type.None);
             }
         }
 
@@ -326,7 +326,7 @@ namespace Motiviti.Enkidu
 
             if (Input.GetKeyUp(KeyCode.C))
             {
-                Global.player.SetInCutScene(false);
+                PersistentEngine.player.SetInCutScene(false);
             }
         }
 

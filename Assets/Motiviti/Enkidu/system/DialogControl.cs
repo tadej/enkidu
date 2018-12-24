@@ -66,12 +66,12 @@ namespace Motiviti.Enkidu
         // Use this for initialization
         void Start()
         {
-            advCamera = Global.advCamera;
+            advCamera = PersistentEngine.advCamera;
             float cameraSize = 4;
             if (advCamera)
                 cameraSize = advCamera.cameraSize;
             else
-                cameraSize = Global.activeCamera.fieldOfView;
+                cameraSize = PersistentEngine.activeCamera.fieldOfView;
 
             textStrings = new string[5];
             colorSelected = new Color32(255, 168, 48, 255);
@@ -82,7 +82,7 @@ namespace Motiviti.Enkidu
             defBgPos = bg.transform.localPosition;
             if (calcFunctions)
             {
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                     defBgPos.y = (-cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-cameraSize + defCamSizeForCalc) * multiplierLarge;
@@ -107,7 +107,7 @@ namespace Motiviti.Enkidu
 
             if (calcFunctions)
             {
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierLarge;
@@ -131,7 +131,7 @@ namespace Motiviti.Enkidu
         {
             if (calcFunctions)
             {
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierLarge;
@@ -144,7 +144,7 @@ namespace Motiviti.Enkidu
         {
             if (calcFunctions)
             {
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierLarge;
@@ -157,7 +157,7 @@ namespace Motiviti.Enkidu
         {
             if (calcFunctions)
             {
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierLarge;
@@ -170,7 +170,7 @@ namespace Motiviti.Enkidu
         {
             if (calcFunctions)
             {
-                if (Global.IsSmallScreen())
+                if (PersistentEngine.IsMobileScreen())
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierSmall;
                 else
                     defBgPos.y = (-advCamera.cameraSize + defCamSizeForCalc) * multiplierLarge;
@@ -279,7 +279,7 @@ namespace Motiviti.Enkidu
         {
             for (int i = 0; i < numberOfOptions; i++)
             {
-                Vector3 poss = Global.activeCamera.ScreenToWorldPoint(new Vector3(20, textPosPlus + textPosKrat * (numberOfOptions - 1 - i), 0.02f));
+                Vector3 poss = PersistentEngine.activeCamera.ScreenToWorldPoint(new Vector3(20, textPosPlus + textPosKrat * (numberOfOptions - 1 - i), 0.02f));
                 Vector3 defPos = poss;
                 textLines[i].transform.position = poss;
 
@@ -319,7 +319,7 @@ namespace Motiviti.Enkidu
 
                 textPosPlus = defTextPosPlus * k;
                 Position3DLines();
-                if (!Global.inPause)
+                if (!PersistentEngine.inPause)
                 {
                     bool isHit = false;
                     bool holding = false;
@@ -328,7 +328,7 @@ namespace Motiviti.Enkidu
 
                     ProcessInput(ref isHit, ref holding, ref holdPosition, ref worldPosition);
 
-                    Vector3 screenPos = Global.activeCamera.WorldToScreenPoint(worldPosition);
+                    Vector3 screenPos = PersistentEngine.activeCamera.WorldToScreenPoint(worldPosition);
                     screenPos.z = 0;
                     //	Debug.Log("position: " + screenPos);
                     if (holding)
@@ -422,7 +422,7 @@ namespace Motiviti.Enkidu
                 holdPosition = Input.mousePosition;
             }
 
-            worldPosition = Global.activeCamera.ScreenToWorldPoint(holdPosition);
+            worldPosition = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition);
 
         }
     }

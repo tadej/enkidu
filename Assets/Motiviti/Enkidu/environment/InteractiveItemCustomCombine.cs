@@ -31,7 +31,7 @@ namespace Motiviti.Enkidu
             {
                 if (sw.state != allowOnlyForSwitchState)
                 {
-                    StartCoroutine(Global.player.SpeakProcedure(commentIfNotAllowed));
+                    StartCoroutine(PersistentEngine.player.SpeakProcedure(commentIfNotAllowed));
                     return;
                 }
             }

@@ -49,9 +49,9 @@ namespace Motiviti.Enkidu
         {
             progressCounter = 0;
 
-            Global.player.TurnTowards(interactiveItem);
+            PersistentEngine.player.TurnTowards(interactiveItem);
 
-            Global.player.ChangeState(actionAnimation);
+            PersistentEngine.player.ChangeState(actionAnimation);
 
             while (progressCounter == 0)
             {
@@ -66,7 +66,7 @@ namespace Motiviti.Enkidu
                 yield return new WaitForSeconds(0.05f);
             }
 
-            Global.player.ChangeState(endState);
+            PersistentEngine.player.ChangeState(endState);
         }
 
         public void AnimatorActionPoint()

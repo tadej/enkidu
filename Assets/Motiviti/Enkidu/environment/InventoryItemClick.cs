@@ -30,9 +30,9 @@ namespace Motiviti.Enkidu
 
         void Start()
         {
-            inventory = Global.inventory;
+            inventory = PersistentEngine.inventory;
 
-            advCam = Global.advCamera;
+            advCam = PersistentEngine.advCamera;
             advCamCanMove = advCam.canMove;
         }
 
@@ -40,7 +40,7 @@ namespace Motiviti.Enkidu
         {
             if (isEnabled)
             {
-                Global.player.ProcessInventoryInteraction();
+                PersistentEngine.player.ProcessInventoryInteraction();
                 foreach (Touch touch in Input.touches) //start sliding
                 {
                     if (touch.phase == TouchPhase.Began)
@@ -134,9 +134,9 @@ namespace Motiviti.Enkidu
         {
             if (spriteInInventory)
                 spriteInInventory.enabled = false;
-            Global.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
-            Global.player.ChangeState(actionAnimation);
-            Global.player.SetDestination(Global.player.transform.position);
+            PersistentEngine.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
+            PersistentEngine.player.ChangeState(actionAnimation);
+            PersistentEngine.player.SetDestination(PersistentEngine.player.transform.position);
             if (showInventory)
                 inventory.SetVisible(true);
             isEnabled = true;

@@ -12,7 +12,7 @@ namespace Motiviti.Enkidu
         {
             Application.backgroundLoadingPriority = ThreadPriority.High;
 
-            int? level = Global.GetState("Global loadingLevel");
+            int? level = PersistentEngine.GetState("Global loadingLevel");
 
             Debug.Log("LoadingScene: level " + level.ToString());
 

@@ -39,13 +39,13 @@ namespace Motiviti.Enkidu
         {
             base.Initialise();
 
-            scene = Global.scene;
+            scene = PersistentEngine.scene;
             flipYCoordinate = scene.flipYCoordinate;
             if (scene && scene.startWithStaticCharacter) staticCharacter = true;
             animator = transformAdv.GetComponent<Animator>();
-            inventory = Global.inventory;
-            audioManager = Global.audioManager;
-            advCamera = Global.advCamera;
+            inventory = PersistentEngine.inventory;
+            audioManager = PersistentEngine.audioManager;
+            advCamera = PersistentEngine.advCamera;
 
             if (!this.isOnlyAVoice)
             {
@@ -68,7 +68,7 @@ namespace Motiviti.Enkidu
                 navmeshWalker.Stop();
             }
 
-            if (!inCutScene && !Global.inPause)
+            if (!inCutScene && !PersistentEngine.inPause)
             {
                 if (state != lastState)
                 {
@@ -87,7 +87,7 @@ namespace Motiviti.Enkidu
 
         IEnumerator InitialisePlayerArrival()
         {
-            string arrivalDoor = Global.GetArrivalDoor();
+            string arrivalDoor = PersistentEngine.GetArrivalDoor();
 
             foreach (DoorBetweenLevels door in GameObject.FindObjectsOfType<DoorBetweenLevels>())
             {
@@ -115,8 +115,8 @@ namespace Motiviti.Enkidu
 
         float GetSpeedModifierBasedOnYPosition()
         {
-            float smax = Global.scene.scaleMax;
-            float smin = Global.scene.scaleMin;
+            float smax = PersistentEngine.scene.scaleMax;
+            float smin = PersistentEngine.scene.scaleMin;
 
             float scale = transform.localScale.y;
 
@@ -236,7 +236,7 @@ namespace Motiviti.Enkidu
 
         public void SetInCutScene(bool cs, CutsceneTools.Type type = CutsceneTools.Type.BlackBands, Vector3 pos = default(Vector3), bool startOn = false, float minimumuCircleSize = 0.01f, bool hideInventory = true)
         {
-            if (Global.inventory && (!cs || hideInventory)) Global.inventory.SetEnabled(!cs);
+            if (PersistentEngine.inventory && (!cs || hideInventory)) PersistentEngine.inventory.SetEnabled(!cs);
 
             inCutScene = cs;
             if (animator != null)
@@ -415,11 +415,11 @@ namespace Motiviti.Enkidu
                 holdPosition = Input.mousePosition;
             }
 
-            worldPosition = Global.activeCamera.ScreenToWorldPoint(holdPosition);
+            worldPosition = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition);
 
             if (isHit)
             {
-                Vector2 v = Global.activeCamera.ScreenToWorldPoint(holdPosition);
+                Vector2 v = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition);
 
                 Collider2D[] col = Physics2D.OverlapPointAll(v);
 
@@ -528,7 +528,7 @@ namespace Motiviti.Enkidu
                         }
                         else if (Input.touches.Length < 2)//added because of two finger jumping screen
                         {
-                            Vector3 delta = Global.activeCamera.ScreenToWorldPoint(holdPosition) - Global.activeCamera.ScreenToWorldPoint(startHoldPosition);
+                            Vector3 delta = PersistentEngine.activeCamera.ScreenToWorldPoint(holdPosition) - PersistentEngine.activeCamera.ScreenToWorldPoint(startHoldPosition);
 
                             advCamera.AdjustPeekPanning(-delta);
 
@@ -541,7 +541,7 @@ namespace Motiviti.Enkidu
                 ReturnItemToInventory();
             }
 
-            if (clicked && !inCutScene && !Global.inPause)
+            if (clicked && !inCutScene && !PersistentEngine.inPause)
             {
                 if (!advCamera.WasPeekingLongEnough())
                 {
@@ -575,7 +575,7 @@ namespace Motiviti.Enkidu
                     {
                         if (!justLooking) targetItem = interactiveItem;
 
-                        var iho = Global.inventory.ItemHoveringOver();
+                        var iho = PersistentEngine.inventory.ItemHoveringOver();
                         if (iho != null /* TG && targetItem == null */)
                         {
                             targetItem = iho.GetComponent<InteractiveItem>();
@@ -929,7 +929,7 @@ namespace Motiviti.Enkidu
                 ProcessDirectionAndScale(false);
             }
 
-            Global.SetArrivalDoor(SceneManager.GetActiveScene().path);
+            PersistentEngine.SetArrivalDoor(SceneManager.GetActiveScene().path);
 
             audioManager.Fadeout();
 
@@ -971,7 +971,7 @@ namespace Motiviti.Enkidu
             else
                 SetInCutScene(true, CutsceneTools.Type.ZoomOut, transform.position + door.zoomoutCircleOffset, false, 0.0001f);
 
-            Global.SetArrivalDoor(SceneManager.GetActiveScene().path);
+            PersistentEngine.SetArrivalDoor(SceneManager.GetActiveScene().path);
 
             audioManager.Fadeout();
 
@@ -991,8 +991,8 @@ namespace Motiviti.Enkidu
 
         private void LoadLevelInternal(int level)
         {
-            Global.SetState("Global level", level);
-            Global.SetState("Global loadingLevel", level, true);
+            PersistentEngine.SetState("Global level", level);
+            PersistentEngine.SetState("Global loadingLevel", level, true);
 
             SceneManager.LoadScene(level);
         }
@@ -1090,7 +1090,7 @@ namespace Motiviti.Enkidu
                             }
                         }
 
-                        navmeshWalker.speed = walkSpeedMultiplier * Global.scene.speedHorizontal * GetSpeedModifierBasedOnYPosition();
+                        navmeshWalker.speed = walkSpeedMultiplier * PersistentEngine.scene.speedHorizontal * GetSpeedModifierBasedOnYPosition();
 
                         if (vel.sqrMagnitude > 0)
                         {
@@ -1114,7 +1114,7 @@ namespace Motiviti.Enkidu
                     }
                     else
                     {
-                        navmeshWalker.speed = walkSpeedMultiplier * Global.scene.speedVertical * GetSpeedModifierBasedOnYPosition();
+                        navmeshWalker.speed = walkSpeedMultiplier * PersistentEngine.scene.speedVertical * GetSpeedModifierBasedOnYPosition();
 
                         if ((vel.y <= 0 && !flipYCoordinate) || (vel.y > 0 && flipYCoordinate))
                         {

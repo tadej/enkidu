@@ -59,11 +59,11 @@ namespace Motiviti.Enkidu
                 }
                 else
                 {
-                    Global.player.StopWalking();
-                    Global.player.StopTalking();
-                    Global.player.ChangeState(Player.State.IdleDiagonalFront);
-                    Global.player.TurnTowards(interactiveItem);
-                    Global.player.conversationPartner = GetComponent<CharacterHead>();
+                    PersistentEngine.player.StopWalking();
+                    PersistentEngine.player.StopTalking();
+                    PersistentEngine.player.ChangeState(Player.State.IdleDiagonalFront);
+                    PersistentEngine.player.TurnTowards(interactiveItem);
+                    PersistentEngine.player.conversationPartner = GetComponent<CharacterHead>();
                     usedFlag = true;
                     SaveState();
                     yield return StartCoroutine(RunConversation());
@@ -73,7 +73,7 @@ namespace Motiviti.Enkidu
 
         public virtual IEnumerator RunConversation()
         {
-            Global.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
+            PersistentEngine.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
             if (conversationEntries != null && conversationEntries.Length > (int)conversationState) { }
             else
                 //OBSOLETE-TOMI conversationProcess.startingEntry = conversationEntries[0];
@@ -83,9 +83,9 @@ namespace Motiviti.Enkidu
 
         public virtual void finish()
         {
-            Global.player.SetTargetItem(null, true);
+            PersistentEngine.player.SetTargetItem(null, true);
 
-            Global.player.SetInCutScene(false);
+            PersistentEngine.player.SetInCutScene(false);
         }
 
         public virtual void JumpToConversationEntry(string entry)

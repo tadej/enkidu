@@ -43,7 +43,7 @@ namespace Motiviti.Enkidu
             back_shade.GetComponent<Renderer>().sortingLayerName = "Puzzle";
             if (customCursor == null)
             {
-                customCursor = Global.customCursor;
+                customCursor = PersistentEngine.customCursor;
                 if (customCursor)
                     customCursor.AddToPuzzleList(this.gameObject);
             }
@@ -57,7 +57,7 @@ namespace Motiviti.Enkidu
             {
                 if (inCutSceneMode)
                 {
-                    Global.player.inCutScene = true;
+                    PersistentEngine.player.inCutScene = true;
                 }
             }
         }
@@ -77,16 +77,16 @@ namespace Motiviti.Enkidu
 
         public void ShowPopup()
         {
-            cameraCanMove = Global.advCamera.canMove;
-            Global.advCamera.canMove = false;
+            cameraCanMove = PersistentEngine.advCamera.canMove;
+            PersistentEngine.advCamera.canMove = false;
 
             if (inCutSceneMode)
             {
-                Global.player.SetInCutScene(true);
+                PersistentEngine.player.SetInCutScene(true);
             }
             else
             {
-                Global.player.staticCharacter = true;
+                PersistentEngine.player.staticCharacter = true;
             }
 
             to_show.SetActive(true);
@@ -104,7 +104,7 @@ namespace Motiviti.Enkidu
         public IEnumerator removePopup()
         {
 
-            if (showing) Global.advCamera.canMove = cameraCanMove;
+            if (showing) PersistentEngine.advCamera.canMove = cameraCanMove;
 
             showing = false;
             to_show.SetActive(false);
@@ -116,11 +116,11 @@ namespace Motiviti.Enkidu
 
             if (inCutSceneMode)
             {
-                Global.player.SetInCutScene(false);
+                PersistentEngine.player.SetInCutScene(false);
             }
             else
             {
-                Global.player.staticCharacter = false;
+                PersistentEngine.player.staticCharacter = false;
             }
 
             SaveState();
@@ -134,10 +134,10 @@ namespace Motiviti.Enkidu
         IEnumerator CloseClickedProc(bool allowExitCutscene = true)
         {
             yield return new WaitForSeconds(0.1f);
-            Global.player.SetInCutScene(true);
-            Global.player.SetTargetItem(null, true);
+            PersistentEngine.player.SetInCutScene(true);
+            PersistentEngine.player.SetTargetItem(null, true);
             yield return StartCoroutine(removePopup());
-            if (allowExitCutscene) Global.player.SetInCutScene(false);
+            if (allowExitCutscene) PersistentEngine.player.SetInCutScene(false);
         }
 
         public void CloseClickedGUI()

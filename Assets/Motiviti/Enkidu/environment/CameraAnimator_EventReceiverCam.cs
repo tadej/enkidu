@@ -28,10 +28,10 @@ namespace Motiviti.Enkidu
 
         void Start()
         {
-            advCamera = Global.advCamera;
+            advCamera = PersistentEngine.advCamera;
             if (!cam)
                 cam = GetComponentInChildren<Camera>();
-            elroy = Global.player;
+            elroy = PersistentEngine.player;
 
             animator = GetComponent<Animator>();
             if (disableAnimatorOnStart)
@@ -51,7 +51,7 @@ namespace Motiviti.Enkidu
                 if (elroy && elroy.IsWalking())
                 {
                     animating = false;
-                    Global.activeCamera = advCamera.GetComponent<Camera>();
+                    PersistentEngine.activeCamera = advCamera.GetComponent<Camera>();
                     advCamera.transform.position = cam.transform.position;
                     advCamera.GetComponent<Camera>().enabled = true;
                     advCamera.forcedCameraBoundaries = true;
@@ -81,7 +81,7 @@ namespace Motiviti.Enkidu
             {
                 if (advCamera)
                 {
-                    Global.activeCamera = advCamera.GetComponent<Camera>();
+                    PersistentEngine.activeCamera = advCamera.GetComponent<Camera>();
                     if (animateAdvCam)
                         advCamera.transform.position = cam.transform.position;
                     advCamera.GetComponent<Camera>().enabled = true;
@@ -102,7 +102,7 @@ namespace Motiviti.Enkidu
 
         public void AnimationStarted()
         {
-            Global.activeCamera = cam;
+            PersistentEngine.activeCamera = cam;
             if (advCamera)
             {
                 advCamStartSize = advCamera.cameraSize;

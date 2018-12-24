@@ -7,8 +7,7 @@ using UnityEngine.SceneManagement;
 
 namespace Motiviti.Enkidu
 {
-
-    public class Global : MonoBehaviour
+    public class PersistentEngine : MonoBehaviour
     {
         public static bool takingVideo = false;
 
@@ -48,7 +47,7 @@ namespace Motiviti.Enkidu
 
         public static bool inPause = false;
 
-        public static bool isSmallScreen = false;
+        public static bool isMobileScreen = false;
 
         public bool isSmallScreenL = false;
 
@@ -75,9 +74,6 @@ namespace Motiviti.Enkidu
       
         void Start()
         {
-            // TODO: remove
-            devStatus_show = false;
-
             if (audioManager == null && GameObject.Find("AudioManager"))
                 audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
@@ -146,33 +142,33 @@ namespace Motiviti.Enkidu
             return GetStateStr("Global ArrivalDoor");
         }
 
-        public static void setPause(bool pause)
+        public static void SetPause(bool pause)
         {
-            Global.inPause = pause;
+            PersistentEngine.inPause = pause;
             if (audioManager)
                 audioManager.PauseResume(pause);
             if (pause)
             {
                 SetState("Global pause", 1);
-                Vector3 newPos = Global.activeCamera.transform.position;
+                Vector3 newPos = PersistentEngine.activeCamera.transform.position;
                 newPos.z += 5;
-                if (Global.inventory)
+                if (PersistentEngine.inventory)
                 {
-                    if (Global.inventory.heldItem != null)
+                    if (PersistentEngine.inventory.heldItem != null)
                     {
-                        Global.inventory.ReturnItem(Global.inventory.heldItem);
-                        Global.inventory.HoldItem(null);
-                        Global.inventory.heldItem = null;
+                        PersistentEngine.inventory.ReturnItem(PersistentEngine.inventory.heldItem);
+                        PersistentEngine.inventory.HoldItem(null);
+                        PersistentEngine.inventory.heldItem = null;
                     }
-                    Global.inventory.FadeOut();
+                    PersistentEngine.inventory.FadeOut();
                 }
             }
             else
             {
                 SetState("Global pause", 0);
-                if (Global.inventory)
+                if (PersistentEngine.inventory)
                 {
-                    Global.inventory.FadeIn();
+                    PersistentEngine.inventory.FadeIn();
                 }
             }
         }
@@ -204,31 +200,31 @@ namespace Motiviti.Enkidu
             Time.timeScale = 1;
             fading = true;
             Vector3 newPos = Camera.main.transform.position;
-            newPos.z += 5;
+            newPos.z += 5; // TODO: fix
             blackFade.transform.position = newPos;
 
-            Global.setPause(false);
+            PersistentEngine.SetPause(false);
 
             yield return new WaitForSeconds(1.5f);
-            if (Global.GetDemo())
+            if (PersistentEngine.GetDemo())
             {
-                Global.SetState("Global level", 1);
-                Global.SetState("Global loadingLevel", 1, true);
+                PersistentEngine.SetState("Global level", 1);
+                PersistentEngine.SetState("Global loadingLevel", 1, true);
             }
             else
             {
-                Global.SetState("Global level", 1);
-                Global.SetState("Global loadingLevel", 1, true);
+                PersistentEngine.SetState("Global level", 1);
+                PersistentEngine.SetState("Global loadingLevel", 1, true);
             }
             SceneManager.LoadScene("loadingScreen");
         }
 
-        void startSelectedLevelFunction()
+        void StartSelectedLevel()
         {
-            StartCoroutine(startSelectedLevel());
+            StartCoroutine(StartSelectedLevelProc());
         }
 
-        IEnumerator startSelectedLevel()
+        IEnumerator StartSelectedLevelProc()
         {
             audioManager.Fadeout();
 
@@ -237,52 +233,25 @@ namespace Motiviti.Enkidu
             Vector3 newPos = Camera.main.transform.position;
             newPos.z += 5;
             blackFade.transform.position = newPos;
-            Global.setPause(false);
+            PersistentEngine.SetPause(false);
             yield return new WaitForSeconds(1.5f);
-
-            //Application.LoadLevel("loadingScreen");
             SceneManager.LoadScene("loadingScreen");
         }
 
         public static void StartLevel(int levelNumber)
         {
             audioManager.Fadeout();
-            Global g = GameObject.Find("Global").GetComponent<Global>();
+            PersistentEngine g = GameObject.Find("Global").GetComponent<PersistentEngine>();
             RemoveAllSavedData();
-            Global.SetState("Global level", levelNumber);
-            Global.SetState("Global loadingLevel", levelNumber, true);
-            Global.setPause(false);
-            g.startSelectedLevelFunction();
+            PersistentEngine.SetState("Global level", levelNumber);
+            PersistentEngine.SetState("Global loadingLevel", levelNumber, true);
+            PersistentEngine.SetPause(false);
+            g.StartSelectedLevel();
         }
 
-        public static void StartCaveColorLevel(int levelNumber)
+        public static bool IsMobileScreen()
         {
-            audioManager.Fadeout();
-            Global g = GameObject.Find("Global").GetComponent<Global>();
-            RemoveAllSavedData();
-            Global.SetState("Global level", levelNumber);
-            Global.SetState("Global loadingLevel", levelNumber, true);
-            Global.SetState("18-hookmt-caves_Scene[Scene] arrivalCave", 12, true);
-            Global.setPause(false);
-            g.startSelectedLevelFunction();
-        }
-
-        public static void StartCaveVentilatorLevel(int levelNumber)
-        {
-            audioManager.Fadeout();
-            Global g = GameObject.Find("Global").GetComponent<Global>();
-            RemoveAllSavedData();
-            Global.SetState("Global level", levelNumber);
-            Global.SetState("Global loadingLevel", levelNumber, true);
-            Global.SetState("18-hookmt-caves_Scene[Scene] arrivalCave", 15, true);
-            Global.SetState("18-hookmt-caves_BucketFinal[InventoryItem] state", 2, true);
-            Global.setPause(false);
-            g.startSelectedLevelFunction();
-        }
-
-        public static bool IsSmallScreen()
-        {
-            if (Global.isSmallScreen)
+            if (PersistentEngine.isMobileScreen)
                 return true;
             else
                 return false;
@@ -296,32 +265,17 @@ namespace Motiviti.Enkidu
         IEnumerator ContinueGameProcedure()
         {
             Time.timeScale = 1;
-            fading = true;
-            Vector3 newPos = Camera.main.transform.position;
-            newPos.z += 5;
-            blackFade.transform.position = newPos;
             state.Clear();
 
             Initialize();
 
-            yield return new WaitForSeconds(1.5f);
+            PersistentEngine.SetState("Global level", (int)lvl);
+            PersistentEngine.SetState("Global loadingLevel", (int)lvl, true);
 
-            int? lvl = GetState("Global level");
-
-            if (lvl < 1)
-                lvl = 1;
-
-            if (lvl == 24)  //wormhole psychadelic
-                lvl--;
-
-            Global.SetState("Global level", (int)lvl);
-            Global.SetState("Global loadingLevel", (int)lvl, true);
-
-            Global.setPause(false);
+            PersistentEngine.SetPause(false);
 
             Time.timeScale = 1;
 
-            //Application.LoadLevel("loadingScreen");
             SceneManager.LoadScene("loadingScreen");
 
         }
@@ -334,7 +288,7 @@ namespace Motiviti.Enkidu
         public static void StartNewGame(int slot)
         {
             audioManager.Fadeout();
-            Global g = GameObject.Find("Global").GetComponent<Global>();
+            PersistentEngine g = GameObject.Find("Global").GetComponent<PersistentEngine>();
 
             savePath = defaultSavePath.Remove(defaultSavePath.Length - 4);
 
@@ -342,7 +296,7 @@ namespace Motiviti.Enkidu
 
             currentSlot = slot;
 
-            Global.SetState("Global Savegame", slot, true);
+            PersistentEngine.SetState("Global Savegame", slot, true);
 
             RemoveAllSavedData();
             g.RestartGame();
@@ -352,9 +306,9 @@ namespace Motiviti.Enkidu
         {
             audioManager.Fadeout();
 
-            Global.SetState("Global Savegame", slot, true);
+            PersistentEngine.SetState("Global Savegame", slot, true);
 
-            Global g = GameObject.Find("Global").GetComponent<Global>();
+            PersistentEngine g = GameObject.Find("Global").GetComponent<PersistentEngine>();
             g.ContinueGame();
         }
 
@@ -390,7 +344,7 @@ namespace Motiviti.Enkidu
                 state = new Hashtable();
                 Initialize();
             }
-            isSmallScreen = isSmallScreenL;
+            isMobileScreen = isSmallScreenL;
 
             var men = Resources.Load("prefabs/Menus") as GameObject;
 
@@ -405,7 +359,7 @@ namespace Motiviti.Enkidu
             var dci = Instantiate(dc);
             dci.name = "DialogControl";
 
-            Global.characterDialogText = dti.GetComponent<CharacterDialogText>();
+            PersistentEngine.characterDialogText = dti.GetComponent<CharacterDialogText>();
 
             player = GameObject.FindObjectOfType<Player>() ? GameObject.FindObjectOfType<Player>().GetComponent<Player>() : null;
 
@@ -419,14 +373,14 @@ namespace Motiviti.Enkidu
 
             customCursor = GameObject.Find("CustomCursor") ? GameObject.Find("CustomCursor").GetComponent<CustomCursor>() : null;
             customCursor.gameObject.SetActive(true);
-            if (advCamera && Global.activeCamera == null)
+            if (advCamera && PersistentEngine.activeCamera == null)
             {
-                Global.activeCamera = advCamera.GetComponent<Camera>();
+                PersistentEngine.activeCamera = advCamera.GetComponent<Camera>();
             }
 
-            if (Global.activeCamera == null && Camera.main)
+            if (PersistentEngine.activeCamera == null && Camera.main)
             {
-                Global.activeCamera = Camera.main;
+                PersistentEngine.activeCamera = Camera.main;
             }
 
             bool inBuildSettings = true;
@@ -486,21 +440,6 @@ namespace Motiviti.Enkidu
             {
                 System.GC.Collect();
             }
-
-
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-
-
-            }
-
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
-
-
-            }
         }
 
         void SwitchCharacter(int i)
@@ -521,7 +460,7 @@ namespace Motiviti.Enkidu
         {
             if (paused && SceneManager.GetActiveScene().buildIndex != 0)
             {
-                Global.SaveState();
+                PersistentEngine.SaveState();
             }
             else
             {
@@ -734,8 +673,6 @@ namespace Motiviti.Enkidu
         public static void RemoveAllSavedData()
         {
             if (!initialized) Initialize();
-
-            Debug.Log("removing all saved data ");
 
             int? music = GetState("Global music");
             int? sound = GetState("Global sound");

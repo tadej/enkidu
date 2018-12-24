@@ -156,10 +156,10 @@ namespace Motiviti.Enkidu
             {
                 cameraSize = smallCameraSize;
             }
-            scene = Global.scene.transform;
-            inventory = Global.inventory;
-            elroyAdv = Global.player;
-            Global.activeCamera = this.camera;
+            scene = PersistentEngine.scene.transform;
+            inventory = PersistentEngine.inventory;
+            elroyAdv = PersistentEngine.player;
+            PersistentEngine.activeCamera = this.camera;
             aspectRatio = camera.aspect;
             originalCameraSize = cameraSize;
             GetTransformBounds(scene, ref minx, ref maxx, ref miny, ref maxy);
@@ -230,7 +230,7 @@ namespace Motiviti.Enkidu
         IEnumerator Start()
         {
             yield return null;
-            inventory = Global.inventory;
+            inventory = PersistentEngine.inventory;
 
             if (followElroy)
                 cameraObject.transform.position = transform.position = GetCameraPosFromElroy();
@@ -321,7 +321,7 @@ namespace Motiviti.Enkidu
             }
             if (Application.isEditor)
             {
-                if (Global.isSmallScreen)
+                if (PersistentEngine.isMobileScreen)
                 {
                     return true;
                 }
@@ -508,24 +508,24 @@ namespace Motiviti.Enkidu
         {
             if (closeFollow)
             {
-                return new Vector3(Global.player.transform.position.x, closeFollowXOnly ? originalPosition.y : Global.player.transform.position.y, -5) + closeFollowOffset;
+                return new Vector3(PersistentEngine.player.transform.position.x, closeFollowXOnly ? originalPosition.y : PersistentEngine.player.transform.position.y, -5) + closeFollowOffset;
             }
 
             if (elroyAdv)
             {
                 Vector3 cameraPos = cameraObject.transform.position;
 
-                if (Global.player.inCutScene)
+                if (PersistentEngine.player.inCutScene)
                 {
-                    cameraPos.x = Global.player.transform.position.x + Global.player.direction * 1f;
-                    cameraPos.y = Global.player.transform.position.y + yFollowOffset;
+                    cameraPos.x = PersistentEngine.player.transform.position.x + PersistentEngine.player.direction * 1f;
+                    cameraPos.y = PersistentEngine.player.transform.position.y + yFollowOffset;
 
                     return cameraPos;
                 }
 
-                cameraPos.x = Global.player.transform.position.x;// + Global.elroy.direction * 0.6f;
+                cameraPos.x = PersistentEngine.player.transform.position.x;// + Global.elroy.direction * 0.6f;
 
-                cameraPos.y = Global.player.transform.position.y + yFollowOffset;
+                cameraPos.y = PersistentEngine.player.transform.position.y + yFollowOffset;
 
                 float m = floor ? Mathf.Floor(cameraPos.x / dnx) : Mathf.Ceil(cameraPos.x / dnx);
 
@@ -533,7 +533,7 @@ namespace Motiviti.Enkidu
 
                 cameraPos = EnforceCameraBoundaries(cameraPos);
 
-                if ((Global.player.direction > 0 && cameraPos.x < cameraObject.transform.position.x) || (Global.player.direction < 0 && cameraPos.x > cameraObject.transform.position.x))
+                if ((PersistentEngine.player.direction > 0 && cameraPos.x < cameraObject.transform.position.x) || (PersistentEngine.player.direction < 0 && cameraPos.x > cameraObject.transform.position.x))
                 {
                     if (true)
                     {
@@ -554,8 +554,8 @@ namespace Motiviti.Enkidu
         Vector3 GetCameraPosNextSlot(bool floor = true)
         {
             Vector3 cameraPos = cameraObject.transform.position;
-            cameraPos.x = cameraObject.transform.position.x + Global.player.direction * 0.6f;
-            cameraPos.y = Global.player.transform.position.y + yFollowOffset;
+            cameraPos.x = cameraObject.transform.position.x + PersistentEngine.player.direction * 0.6f;
+            cameraPos.y = PersistentEngine.player.transform.position.y + yFollowOffset;
 
             float m = floor ? Mathf.Floor(cameraPos.x / dnx) : Mathf.Ceil(cameraPos.x / dnx);
 
@@ -634,16 +634,16 @@ namespace Motiviti.Enkidu
 
                 }
                 else
-                if (elroyAdv != null && (Time.time < 0.5f || Global.player.TimeSinceSetDestination() > 0.5f))
+                if (elroyAdv != null && (Time.time < 0.5f || PersistentEngine.player.TimeSinceSetDestination() > 0.5f))
                 {
                     {
                         var cameraPos = GetCameraPosFromElroy( /*Global.elroy.direction < 0 */);
 
                         float step = Time.deltaTime * 0.1f;
 
-                        if (cameraObject.transform.position.x > Global.player.transform.position.x)
+                        if (cameraObject.transform.position.x > PersistentEngine.player.transform.position.x)
                         {
-                            if (Global.player.GetXVelocity() > 0)
+                            if (PersistentEngine.player.GetXVelocity() > 0)
                             {
                                 step *= 0.1f;
                             }
@@ -653,9 +653,9 @@ namespace Motiviti.Enkidu
                             }
                         }
 
-                        if (cameraObject.transform.position.x < Global.player.transform.position.x)
+                        if (cameraObject.transform.position.x < PersistentEngine.player.transform.position.x)
                         {
-                            if (Global.player.GetXVelocity() < 0)
+                            if (PersistentEngine.player.GetXVelocity() < 0)
                             {
                                 step *= 0.1f;
                             }
@@ -673,7 +673,7 @@ namespace Motiviti.Enkidu
                 }
                 else
                 {
-                    elroyAdv = Global.player;
+                    elroyAdv = PersistentEngine.player;
                 }
             }
             else
@@ -688,7 +688,7 @@ namespace Motiviti.Enkidu
                 }
                 else
                 {
-                    elroyAdv = Global.player;
+                    elroyAdv = PersistentEngine.player;
                 }
 
             }
@@ -696,21 +696,21 @@ namespace Motiviti.Enkidu
 
         void MoveElroyToScreenEdge(bool leftEdge)
         {
-            if (Time.time - moveElroyToScreenEdgeTimeStamp > /* 1 MR  2.6. */0.1f && Global.player.IsIdleOrWalking())
+            if (Time.time - moveElroyToScreenEdgeTimeStamp > /* 1 MR  2.6. */0.1f && PersistentEngine.player.IsIdleOrWalking())
             {
-                Vector3 pos = Global.player.transform.position;
+                Vector3 pos = PersistentEngine.player.transform.position;
 
                 float camDelta = 0.2f * cameraSize;
 
                 if (leftEdge)
                 {
                     pos.x = cameraObject.transform.position.x - cameraWidth - camDelta;
-                    if (pos.x > Global.player.transform.position.x) Global.player.TeleportToPosition(pos);
+                    if (pos.x > PersistentEngine.player.transform.position.x) PersistentEngine.player.TeleportToPosition(pos);
                 }
                 else
                 {
                     pos.x = cameraObject.transform.position.x + cameraWidth + camDelta;
-                    if (pos.x < Global.player.transform.position.x) Global.player.TeleportToPosition(pos);
+                    if (pos.x < PersistentEngine.player.transform.position.x) PersistentEngine.player.TeleportToPosition(pos);
                 }
 
                 Vector3 newPos = leftEdge ? (pos + Vector3.right * cameraWidth * 0.5f) + Vector3.right * InventoryMovementAddition() : (pos - Vector3.right * cameraWidth * 0.5f);
@@ -723,11 +723,11 @@ namespace Motiviti.Enkidu
 
         IEnumerator SetDestinationDelayed(Vector3 dest, float delay)
         {
-            Global.player.justReleasedAfterPeekPanning = true;
+            PersistentEngine.player.justReleasedAfterPeekPanning = true;
 
             yield return new WaitForSeconds(delay);
 
-            StartCoroutine(Global.player.SetDestinationInterim(dest));
+            StartCoroutine(PersistentEngine.player.SetDestinationInterim(dest));
 
             yield return null;
         }
@@ -773,12 +773,12 @@ namespace Motiviti.Enkidu
 
         bool IsElroyBeyondLeftScreenEdge()
         {
-            return (Global.player.transform.position.x < cameraObject.transform.position.x - cameraWidth + cameraWidth * 0.1f + InventoryMovementAddition());
+            return (PersistentEngine.player.transform.position.x < cameraObject.transform.position.x - cameraWidth + cameraWidth * 0.1f + InventoryMovementAddition());
         }
 
         bool IsElroyBeyondRightScreenEdge()
         {
-            return (Global.player.transform.position.x > cameraObject.transform.position.x + cameraWidth - cameraWidth * 0.1f);
+            return (PersistentEngine.player.transform.position.x > cameraObject.transform.position.x + cameraWidth - cameraWidth * 0.1f);
         }
 
         public void SetFollowObjectMode(bool b, Transform following, float speed = 1)
@@ -929,7 +929,7 @@ namespace Motiviti.Enkidu
                 return;
             }
 
-            if (IsPeekPanning() && !Global.inPause)
+            if (IsPeekPanning() && !PersistentEngine.inPause)
             {
                 if (canMove)
                     cameraObject.transform.position = EnforceCameraBoundaries(peekPanningTargetPosition);
@@ -937,7 +937,7 @@ namespace Motiviti.Enkidu
 
             if (!inCloseUp)
             {
-                if (!Global.takingVideo)
+                if (!PersistentEngine.takingVideo)
                     FollowCharacter();
 
             }
@@ -1035,7 +1035,7 @@ namespace Motiviti.Enkidu
         public void setCutscene(bool b)
         {
             //Debug.Log("camera cutscene: " + b);
-            if (elroyAdv && !Global.player.inCutScene)
+            if (elroyAdv && !PersistentEngine.player.inCutScene)
                 b = true;
             canZoom = b;
             if (!b)

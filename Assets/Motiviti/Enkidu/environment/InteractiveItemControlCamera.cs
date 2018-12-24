@@ -28,8 +28,8 @@ namespace Motiviti.Enkidu
         void Start()
         {
             base.Initialise();
-            advCamera = Global.advCamera;
-            elroy = Global.player;
+            advCamera = PersistentEngine.advCamera;
+            elroy = PersistentEngine.player;
             interactiveItemMain = gameObject.GetComponent<InteractiveItem>();
             if (animator == null)
                 animator = gameObject.GetComponent<Animator>();

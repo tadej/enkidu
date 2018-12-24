@@ -5,14 +5,15 @@ using Motiviti.Enkidu;
 
 namespace Motiviti.Enkidu
 {
-	public class SendMessageToTarget : MonoBehaviour {
+    public class SendMessageToTarget : MonoBehaviour
+    {
 
-		public GameObject target;
+        public GameObject target;
 
-		public void Send(string message)
-		{
-			if(target) target.SendMessage (message, SendMessageOptions.DontRequireReceiver);
-		}
+        public void Send(string message)
+        {
+            if (target) target.SendMessage(message, SendMessageOptions.DontRequireReceiver);
+        }
 
-	}
+    }
 }

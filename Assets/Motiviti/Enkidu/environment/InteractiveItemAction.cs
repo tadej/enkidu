@@ -74,7 +74,7 @@ namespace Motiviti.Enkidu
 
             interactiveItem = GetComponent<InteractiveItem>();
 
-            audioManager = Global.audioManager;
+            audioManager = PersistentEngine.audioManager;
         }
 
         protected override void InitialiseGlobal()
@@ -83,7 +83,7 @@ namespace Motiviti.Enkidu
 
             interactiveItem = GetComponent<InteractiveItem>();
 
-            audioManager = Global.audioManager;
+            audioManager = PersistentEngine.audioManager;
         }
 
         // Update is called once per frame

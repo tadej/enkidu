@@ -81,17 +81,17 @@ namespace Motiviti.Enkidu
 
                 progressCounter = 0;
 
-                Global.player.TurnTowards(interactiveItem);
+                PersistentEngine.player.TurnTowards(interactiveItem);
 
                 float time0 = Time.time;
 
-                Global.player.ChangeState(actionAnimation);
+                PersistentEngine.player.ChangeState(actionAnimation);
 
                 while (progressCounter == 0)
                 {
                     yield return new WaitForSeconds(0.05f);
 
-                    if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                    if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                     {
                         Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                         break;
@@ -104,14 +104,14 @@ namespace Motiviti.Enkidu
                 {
                     yield return new WaitForSeconds(0.05f);
 
-                    if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                    if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                     {
                         Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                         break;
                     }
                 }
-                if (Global.player && Global.player.gameObject.activeInHierarchy && endState != Player.State.None)
-                    Global.player.ChangeState(endState);
+                if (PersistentEngine.player && PersistentEngine.player.gameObject.activeInHierarchy && endState != Player.State.None)
+                    PersistentEngine.player.ChangeState(endState);
 
                 yield return new WaitForSeconds(0.4f);
             }

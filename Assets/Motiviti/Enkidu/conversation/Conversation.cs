@@ -48,7 +48,7 @@ namespace Motiviti.Enkidu
 
         void Start()
         {
-            player = Global.player;
+            player = PersistentEngine.player;
 
             HandleChatmapperXML();
         }
@@ -195,7 +195,7 @@ namespace Motiviti.Enkidu
 
             if (i1 != -1) i = i1; if (i2 != -1) i = i2; if (i3 != -1) i = i3;
 
-            int? worldval = Global.GetState(expression.Substring(0, i));
+            int? worldval = PersistentEngine.GetState(expression.Substring(0, i));
 
             if (worldval == null) return false;
 
@@ -237,7 +237,7 @@ namespace Motiviti.Enkidu
             if (ifhas != null)
                 foreach (string l in ifhas)
                 {
-                    if (!Global.inventory.HasItem(l)) return false;
+                    if (!PersistentEngine.inventory.HasItem(l)) return false;
                 }
 
             string[] ifis = ExtractContentsOfHTMLTag(actionValue, "ifis");

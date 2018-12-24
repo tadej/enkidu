@@ -28,7 +28,7 @@ namespace Motiviti.Enkidu
         void Start()
         {
             base.Initialise();
-            elroy = Global.player;
+            elroy = PersistentEngine.player;
             interactiveItemMain = gameObject.GetComponent<InteractiveItem>();
             if (animator == null)
                 animator = gameObject.GetComponent<Animator>();

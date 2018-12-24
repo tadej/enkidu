@@ -117,7 +117,7 @@ namespace Motiviti.Enkidu
             animHashExit = Animator.StringToHash("Base Layer.gui-exit");
 
             myTransform = transform;
-            advCamera = Global.advCamera;
+            advCamera = PersistentEngine.advCamera;
         }
 
         // Update is called once per frame
@@ -127,7 +127,7 @@ namespace Motiviti.Enkidu
             {
                 if (lastCameraSize != advCamera.cameraSize)
                 {
-                    if (Global.IsSmallScreen())
+                    if (PersistentEngine.IsMobileScreen())
                         myTransform.localScale = Vector3.one * 0.6f * (advCamera.cameraSize / originalCameraSize);
                     else
                         myTransform.localScale = Vector3.one * 0.5f * (advCamera.cameraSize / originalCameraSize);// + Vector3.one * 0.1f;

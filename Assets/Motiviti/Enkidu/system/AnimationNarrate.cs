@@ -21,7 +21,7 @@ namespace Motiviti.Enkidu
         // Use this for initialization
         void Start()
         {
-            narrator = Global.narrator;
+            narrator = PersistentEngine.narrator;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Motiviti.Enkidu
             if (!Application.isEditor)
                 Cursor.visible = false;
 
-            player = Global.player;
+            player = PersistentEngine.player;
             myTransform = transform;
             animator = GetComponentInChildren<Animator>();
             linesObject.SetActive(true);
@@ -98,7 +98,7 @@ namespace Motiviti.Enkidu
             string text = "";
             cursorRotation = 0;
             CursorState newState = CursorState.IDLE;
-            Camera cam = Global.activeCamera ? Global.activeCamera : Camera.main;
+            Camera cam = PersistentEngine.activeCamera ? PersistentEngine.activeCamera : Camera.main;
             int lastLayer = -10000;
             if (!cam || (player && player.inCutScene && !inPuzzle && !player.inConversation))
             {
@@ -242,9 +242,9 @@ namespace Motiviti.Enkidu
                 }
             }
 
-            if (Global.inventory != null)
+            if (PersistentEngine.inventory != null)
             {
-                var invItem = Global.inventory.ItemHoveringOver();
+                var invItem = PersistentEngine.inventory.ItemHoveringOver();
                 if (invItem != null)
                 {
                     newState = CursorState.PUZZLE_OVER_ITEM;

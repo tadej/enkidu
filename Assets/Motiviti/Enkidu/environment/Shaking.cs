@@ -17,7 +17,7 @@ namespace Motiviti.Enkidu
         void Update()
         {
 
-            if (!Global.inPause)
+            if (!PersistentEngine.inPause)
             {
                 Vector3 newPos = originalPosition + Vector3.one * (Random.value - 0.5f) * amplitude;
                 newPos.z = 0;

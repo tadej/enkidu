@@ -309,7 +309,6 @@ namespace Motiviti.Enkidu
 
         public override void ChangeTalkMode(string mode)
         {
-            //state == State.TalkDiagonal
             if (true && !string.IsNullOrEmpty(mode))
             {
                 string[] parts = mode.Split('/');

@@ -66,7 +66,7 @@ namespace Motiviti.Enkidu
         {
             base.Initialise();
      
-            advCam = Global.advCamera;
+            advCam = PersistentEngine.advCamera;
             advCamCanMove = advCam.canMove;
 
             connectedSwitch = GetComponent<InteractiveItemSwitch>();
@@ -81,7 +81,7 @@ namespace Motiviti.Enkidu
 
         public IEnumerator AnnounceFinished(string msg)
         {
-            yield return StartCoroutine(Global.player.SpeakProcedure(msg, Player.TalkMode.Default, false));
+            yield return StartCoroutine(PersistentEngine.player.SpeakProcedure(msg, Player.TalkMode.Default, false));
         }
 
         public override IEnumerator ProcessArrivedAt()
@@ -98,14 +98,14 @@ namespace Motiviti.Enkidu
             {
                 if (setProgresToZero)
                     progressCounter = 0;
-                Global.player.TurnTowards(base.interactiveItem);
-                Global.player.ChangeState(actionAnimation);
+                PersistentEngine.player.TurnTowards(base.interactiveItem);
+                PersistentEngine.player.ChangeState(actionAnimation);
 
                 while (progressCounter == 0)
                 {
                     yield return new WaitForSeconds(0.05f);
 
-                    if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                    if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                     {
                         Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                         break;
@@ -116,13 +116,13 @@ namespace Motiviti.Enkidu
                 {
                     yield return new WaitForSeconds(0.05f);
 
-                    if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                    if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                     {
                         Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                         break;
                     }
                 }
-                Global.player.ChangeState(endState);
+                PersistentEngine.player.ChangeState(endState);
 
             }
             yield return null;
@@ -133,15 +133,15 @@ namespace Motiviti.Enkidu
             foreach (string comment in comments)
             {
                 if (commenting)
-                    yield return StartCoroutine(Global.player.SpeakProcedure(comment));
+                    yield return StartCoroutine(PersistentEngine.player.SpeakProcedure(comment));
             }
         }
 
         public void ShowPuzzle()
         {
-            Global.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
-            Global.player.ChangeState(actionAnimation);
-            Global.player.SetDestination(Global.player.transform.position);
+            PersistentEngine.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
+            PersistentEngine.player.ChangeState(actionAnimation);
+            PersistentEngine.player.SetDestination(PersistentEngine.player.transform.position);
 
             if (doCloseup)
                 advCam.CloseUpBegin(closeUpSize, closeUpOffset);
@@ -158,7 +158,7 @@ namespace Motiviti.Enkidu
             puzzle.puzzle = this;
             puzzle.ToggleShow(true);
             if (!advCam)
-                advCam = Global.advCamera;
+                advCam = PersistentEngine.advCamera;
 
             advCam.CanCamMove(false);
             StartCoroutine(ShowComments());
@@ -169,22 +169,22 @@ namespace Motiviti.Enkidu
         {
             puzzle.ToggleShow(false);
             if (!advCam)
-                advCam = Global.advCamera;
+                advCam = PersistentEngine.advCamera;
             advCam.CanCamMove(advCamCanMove);
 
             if (disableOnClose)
                 puzzle.gameObject.SetActive(false);
-            Global.player.SetInCutScene(false);
+            PersistentEngine.player.SetInCutScene(false);
             StartCoroutine(CloseProcedure());
 
-            Global.player.StopTalking();
+            PersistentEngine.player.StopTalking();
         }
 
         public void PuzzleFinished()
         {
 
             if (!advCam)
-                advCam = Global.advCamera;
+                advCam = PersistentEngine.advCamera;
             advCam.CanCamMove(advCamCanMove);
             puzzle.ToggleShow(false);
             if (disableOnFinish)
@@ -220,12 +220,12 @@ namespace Motiviti.Enkidu
         {
             progressCounter = 0;
 
-            Global.player.ChangeState(actionAnimationOpen);
+            PersistentEngine.player.ChangeState(actionAnimationOpen);
 
             if (doCloseup)
                 advCam.CloseUpEnd();
 
-            Global.player.SetTargetItem(base.interactiveItem);
+            PersistentEngine.player.SetTargetItem(base.interactiveItem);
             commenting = false;
 
             int i = 0;
@@ -239,7 +239,7 @@ namespace Motiviti.Enkidu
 
                 i++;
 
-                if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                 {
                     Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                     break;
@@ -259,7 +259,7 @@ namespace Motiviti.Enkidu
             {
                 yield return new WaitForSeconds(0.05f);
 
-                if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                 {
                     Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                     break;
@@ -268,12 +268,12 @@ namespace Motiviti.Enkidu
 
             if (doDelay)
                 yield return new WaitForSeconds(0.2f);
-            Global.player.ChangeState(endState);
+            PersistentEngine.player.ChangeState(endState);
             yield return new WaitForSeconds(0.2f);
 
             if (!string.IsNullOrEmpty(commentOnFinish))
             {
-                yield return StartCoroutine(Global.player.SpeakProcedure(commentOnFinish));
+                yield return StartCoroutine(PersistentEngine.player.SpeakProcedure(commentOnFinish));
             }
 
             StartCoroutine(CharacterSmileSuccess());
@@ -281,18 +281,18 @@ namespace Motiviti.Enkidu
             yield return new WaitForSeconds(0.3f);
 
             if (!stayInCutscene)
-                Global.player.SetInCutScene(false);
+                PersistentEngine.player.SetInCutScene(false);
         }
 
         IEnumerator CharacterSmileSuccess()
         {
-            if (Global.player.state == Player.State.IdleDiagonalFront)
+            if (PersistentEngine.player.state == Player.State.IdleDiagonalFront)
             {
-                Global.player.ChangeState(Player.State.IdleDiagonalFrontSmile);
+                PersistentEngine.player.ChangeState(Player.State.IdleDiagonalFrontSmile);
                 yield return new WaitForSeconds(1.5f);
-                if (Global.player.state == Player.State.IdleDiagonalFrontSmile)
+                if (PersistentEngine.player.state == Player.State.IdleDiagonalFrontSmile)
                 {
-                    Global.player.ChangeState(Player.State.IdleDiagonalFront);
+                    PersistentEngine.player.ChangeState(Player.State.IdleDiagonalFront);
                 }
             }
         }
@@ -303,12 +303,12 @@ namespace Motiviti.Enkidu
             commenting = false;
 
             if (doActionAnimationOpenAtTheEnd)
-                Global.player.ChangeState(actionAnimationOpen);
+                PersistentEngine.player.ChangeState(actionAnimationOpen);
 
             if (doCloseup)
                 advCam.CloseUpEnd();
 
-            Global.player.SetTargetItem(base.interactiveItem);
+            PersistentEngine.player.SetTargetItem(base.interactiveItem);
             float currentTime = Time.time;
 
 
@@ -328,8 +328,8 @@ namespace Motiviti.Enkidu
 
             if (doActionAnimationOpenAtTheEnd) yield return new WaitForSeconds(0.1f);
 
-            Global.player.ChangeState(endState);
-            Global.player.SetTargetItem(null, true);
+            PersistentEngine.player.ChangeState(endState);
+            PersistentEngine.player.SetTargetItem(null, true);
             yield return new WaitForSeconds(0.3f);
 
         }

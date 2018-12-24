@@ -18,7 +18,7 @@ namespace Motiviti.Enkidu
 
         void Start()
         {
-            elroy = Global.player.transform;
+            elroy = PersistentEngine.player.transform;
             sprite = GetComponent<SpriteRenderer>();
 
             originalSortingLayerName = sprite.sortingLayerName;

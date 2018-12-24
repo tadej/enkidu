@@ -86,7 +86,7 @@ namespace Motiviti.Enkidu
             bool advance = connectedSwitch == null || connectedSwitch.ValidateSwitchState(enableOnlyForSwitchState);
 
             if (advance)
-                StartCoroutine(Global.player.LeaveRoomImmediate(this));
+                StartCoroutine(PersistentEngine.player.LeaveRoomImmediate(this));
         }
 
         void OnDrawGizmosSelected()
@@ -154,7 +154,7 @@ namespace Motiviti.Enkidu
                 }
 
             }
-            StartCoroutine(Global.player.LeaveRoom(this, animationWalkOut));
+            StartCoroutine(PersistentEngine.player.LeaveRoom(this, animationWalkOut));
 
             yield return null;
         }
@@ -169,11 +169,11 @@ namespace Motiviti.Enkidu
                     openCloseAnimator.SetBool(animationBoolTrueAfterGoingThrough, true);
                     if (characterParentOnLeaveRoom)
                     {
-                        Global.player.transform.parent = characterParentOnLeaveRoom;
+                        PersistentEngine.player.transform.parent = characterParentOnLeaveRoom;
 
-                        Global.player.transform.localPosition = Vector3.zero;
+                        PersistentEngine.player.transform.localPosition = Vector3.zero;
 
-                        Global.player.staticCharacter = true;
+                        PersistentEngine.player.staticCharacter = true;
                     }
                 }
             yield return new WaitForSeconds(pauseAfterGoingThrough);

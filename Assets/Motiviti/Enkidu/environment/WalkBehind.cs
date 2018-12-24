@@ -31,7 +31,7 @@ namespace Motiviti.Enkidu
         IEnumerator Start()
         {
             yield return null;
-            flipYCoordinate = Global.scene.flipYCoordinate;
+            flipYCoordinate = PersistentEngine.scene.flipYCoordinate;
             sprite = GetComponent<SpriteRenderer>();
 
             originalSortingLayerName = sprite.sortingLayerName;
@@ -44,8 +44,8 @@ namespace Motiviti.Enkidu
         {
 
 
-            if (Global.player && ((!flipYCoordinate && Global.player.transform.position.y > walkBehindY)
-                                || (flipYCoordinate && Global.player.transform.position.y < walkBehindY)))
+            if (PersistentEngine.player && ((!flipYCoordinate && PersistentEngine.player.transform.position.y > walkBehindY)
+                                || (flipYCoordinate && PersistentEngine.player.transform.position.y < walkBehindY)))
 
 
             {

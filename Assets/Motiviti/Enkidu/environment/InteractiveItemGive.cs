@@ -32,7 +32,7 @@ namespace Motiviti.Enkidu
             {
                 if (sw.state != allowOnlyForSwitchState)
                 {
-                    StartCoroutine(Global.player.SpeakProcedure(commentIfNotAllowed));
+                    StartCoroutine(PersistentEngine.player.SpeakProcedure(commentIfNotAllowed));
                     return;
                 }
             }
@@ -63,17 +63,17 @@ namespace Motiviti.Enkidu
 
                 progressCounter = 0;
 
-                Global.player.TurnTowards(interactiveItem);
+                PersistentEngine.player.TurnTowards(interactiveItem);
 
                 float time0 = Time.time;
 
-                Global.player.ChangeState(actionAnimation);
+                PersistentEngine.player.ChangeState(actionAnimation);
 
                 while (progressCounter == 0)
                 {
                     yield return new WaitForSeconds(0.05f);
 
-                    if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                    if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                     {
                         Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                         break;
@@ -86,7 +86,7 @@ namespace Motiviti.Enkidu
                 {
                     yield return new WaitForSeconds(0.05f);
 
-                    if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                    if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                     {
                         Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                         break;
@@ -95,8 +95,8 @@ namespace Motiviti.Enkidu
 
                 if (returnToEndState)
                 {
-                    if (Global.player && Global.player.gameObject.activeInHierarchy)
-                        Global.player.ChangeState(endState);
+                    if (PersistentEngine.player && PersistentEngine.player.gameObject.activeInHierarchy)
+                        PersistentEngine.player.ChangeState(endState);
 
                     yield return new WaitForSeconds(0.4f);
                 }

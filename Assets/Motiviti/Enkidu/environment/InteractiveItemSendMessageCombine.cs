@@ -31,7 +31,7 @@ namespace Motiviti.Enkidu
 
             progressCounter = 0;
 
-            Global.player.TurnTowards(interactiveItem);
+            PersistentEngine.player.TurnTowards(interactiveItem);
 
             Combine();
 
@@ -59,7 +59,7 @@ namespace Motiviti.Enkidu
             {
                 if (sw.state != allowOnlyForSwitchState)
                 {
-                    StartCoroutine(Global.player.SpeakProcedure(commentIfNotAllowed));
+                    StartCoroutine(PersistentEngine.player.SpeakProcedure(commentIfNotAllowed));
                     return;
                 }
             }

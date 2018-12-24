@@ -84,7 +84,7 @@ namespace Motiviti.Enkidu
         void Start()
         {
 
-            advCamera = Global.advCamera;
+            advCamera = PersistentEngine.advCamera;
 
             highlightObject = Instantiate(Resources.Load("INTERACTIVEOBJECT_HIGHLIGHT") as GameObject) as GameObject;
             highlightObject.transform.position = transform.position + centerOffset;
@@ -268,7 +268,7 @@ namespace Motiviti.Enkidu
                 }
                 StartCoroutine(ProcessArrivedAt());
 
-                Global.player.ReturnItemToInventory();
+                PersistentEngine.player.ReturnItemToInventory();
 
             }
             else
@@ -363,14 +363,14 @@ namespace Motiviti.Enkidu
         IEnumerator ProcessArrivedAt()
         {
             if (desiredDirection == 1)
-                Global.player.TurnTowards(true);
+                PersistentEngine.player.TurnTowards(true);
             else if (desiredDirection == -1)
-                Global.player.TurnTowards(false);
+                PersistentEngine.player.TurnTowards(false);
 
             bool wasInCutScene = false;
-            wasInCutScene = Global.player.inCutScene;
+            wasInCutScene = PersistentEngine.player.inCutScene;
 
-            if (!allowInterruptions) Global.player.SetInCutScene(true, cutsceneTool, Global.player.transform.position);
+            if (!allowInterruptions) PersistentEngine.player.SetInCutScene(true, cutsceneTool, PersistentEngine.player.transform.position);
             if (doCloseup) advCamera.CloseUpBegin(closeUpCameraSize, closeUpOffset);
 
             bool hasSomethingMeaningfulOccurred = false;
@@ -408,7 +408,7 @@ namespace Motiviti.Enkidu
                 {
                     if (!allowInterruptions && !wasInCutScene)
                     {
-                        Global.player.SetInCutScene(false);
+                        PersistentEngine.player.SetInCutScene(false);
                     }
                 }
             }

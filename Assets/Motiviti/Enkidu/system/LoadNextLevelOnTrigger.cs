@@ -15,7 +15,7 @@ namespace Motiviti.Enkidu
 
         void Start()
         {
-            elroy = Global.player;
+            elroy = PersistentEngine.player;
         }
 
         public void Trigger()

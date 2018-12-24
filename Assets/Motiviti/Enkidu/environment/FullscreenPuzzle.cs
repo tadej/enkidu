@@ -81,7 +81,7 @@ namespace Motiviti.Enkidu
 
         void Start()
         {
-            customCursor = Global.customCursor;
+            customCursor = PersistentEngine.customCursor;
             ToggleShow(false);
         }
     }

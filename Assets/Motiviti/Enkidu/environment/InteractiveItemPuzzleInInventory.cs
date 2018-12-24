@@ -36,7 +36,7 @@ namespace Motiviti.Enkidu
             if (!usedFlag)
             {
                 usedFlag = true;
-                Global.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
+                PersistentEngine.player.SetInCutScene(true, CutsceneTools.Type.Puzzle);
                 puzzle.ToggleShow(true);
                 SaveState();
             }
@@ -51,16 +51,16 @@ namespace Motiviti.Enkidu
         {
             puzzle.ToggleShow(false);
 
-            Global.player.SetInCutScene(false);
+            PersistentEngine.player.SetInCutScene(false);
             StartCoroutine(Close());
-            Global.player.StopTalking();
+            PersistentEngine.player.StopTalking();
         }
 
         public void PuzzleFinished()
         {
 
             puzzle.ToggleShow(false);
-            Global.player.SetInCutScene(false, CutsceneTools.Type.None);
+            PersistentEngine.player.SetInCutScene(false, CutsceneTools.Type.None);
 
             SpriteRenderer tmp = inventoryItem.inventorySprite;
 
@@ -101,7 +101,7 @@ namespace Motiviti.Enkidu
         IEnumerator Finish()
         {
             yield return new WaitForSeconds(0.05f);
-            Global.player.ChangeState(Player.State.IdleFront);
+            PersistentEngine.player.ChangeState(Player.State.IdleFront);
 
             SaveState();
         }
@@ -109,8 +109,8 @@ namespace Motiviti.Enkidu
         IEnumerator Close()
         {
             progressCounter = 0;
-            Global.player.ChangeState(actionAnimationOpen);
-            Global.player.SetTargetItem(base.interactiveItem);
+            PersistentEngine.player.ChangeState(actionAnimationOpen);
+            PersistentEngine.player.SetTargetItem(base.interactiveItem);
             float time0 = Time.time;
             float currentTime = Time.time;
             while (progressCounter == 0)
@@ -121,7 +121,7 @@ namespace Motiviti.Enkidu
                     progressCounter = 2;
                 }
 
-                if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                 {
                     Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                     break;
@@ -132,7 +132,7 @@ namespace Motiviti.Enkidu
             {
                 yield return new WaitForSeconds(0.05f);
 
-                if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                 {
                     Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                     break;
@@ -140,7 +140,7 @@ namespace Motiviti.Enkidu
             }
             yield return new WaitForSeconds(0.4f);
             yield return null;
-            Global.player.ChangeState(endState);
+            PersistentEngine.player.ChangeState(endState);
 
         }
     }

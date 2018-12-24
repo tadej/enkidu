@@ -61,7 +61,7 @@ namespace Motiviti.Enkidu
             if (Camera.main && Camera.main.orthographic)
                 offset = offset * 0.7f;
 
-            if (Global.takingVideo) offset += 100000;
+            if (PersistentEngine.takingVideo) offset += 100000;
 
             Reposition();
         }
@@ -110,10 +110,10 @@ namespace Motiviti.Enkidu
         {
             screenPos = new Vector3(0.5f, 0 + offset, 0.02f);
 
-            if (Global.activeCamera == null)
+            if (PersistentEngine.activeCamera == null)
                 return;
 
-            Vector3 poss = Global.activeCamera.ViewportToWorldPoint(screenPos);
+            Vector3 poss = PersistentEngine.activeCamera.ViewportToWorldPoint(screenPos);
 
             float x = poss.x;
             float y = poss.y;
@@ -123,7 +123,7 @@ namespace Motiviti.Enkidu
             if (Camera.main.orthographic)
             {
 
-                if (previousCameraSize == Global.activeCamera.orthographicSize)
+                if (previousCameraSize == PersistentEngine.activeCamera.orthographicSize)
                     return;
 
                 float cameraSize = Camera.main.orthographicSize;

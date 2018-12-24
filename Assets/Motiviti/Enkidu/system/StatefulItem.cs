@@ -16,7 +16,7 @@ namespace Motiviti.Enkidu
 
         protected virtual void Initialise()
         {
-            Global.AddStatefulItem(this);
+            PersistentEngine.AddStatefulItem(this);
 
             LoadState();
         }
@@ -24,7 +24,7 @@ namespace Motiviti.Enkidu
         protected virtual void InitialiseGlobal()
         {
             sceneName = "globalScene";
-            Global.AddStatefulItem(this);
+            PersistentEngine.AddStatefulItem(this);
             LoadState();
         }
 
@@ -44,29 +44,29 @@ namespace Motiviti.Enkidu
             {
                 if (field.FieldType.IsEnum)
                 {
-                    if (Global.GetState(GetObjectIdentifier(sceneName) + field.Name) != null)
-                        field.SetValue(this, Global.GetState(GetObjectIdentifier(sceneName) + field.Name));
+                    if (PersistentEngine.GetState(GetObjectIdentifier(sceneName) + field.Name) != null)
+                        field.SetValue(this, PersistentEngine.GetState(GetObjectIdentifier(sceneName) + field.Name));
                 }
                 else
-                if (Global.IsNumericType(field))
+                if (PersistentEngine.IsNumericType(field))
                 {
-                    if (Global.GetState(GetObjectIdentifier(sceneName) + field.Name) != null)
-                        field.SetValue(this, Global.GetState(GetObjectIdentifier(sceneName) + field.Name));
+                    if (PersistentEngine.GetState(GetObjectIdentifier(sceneName) + field.Name) != null)
+                        field.SetValue(this, PersistentEngine.GetState(GetObjectIdentifier(sceneName) + field.Name));
                 }
                 else
-                if (Global.IsBooleanType(field))
+                if (PersistentEngine.IsBooleanType(field))
                 {
-                    if (Global.GetState(GetObjectIdentifier(sceneName) + field.Name) != null)
+                    if (PersistentEngine.GetState(GetObjectIdentifier(sceneName) + field.Name) != null)
                     {
-                        var val = Global.GetState(GetObjectIdentifier(sceneName) + field.Name);
+                        var val = PersistentEngine.GetState(GetObjectIdentifier(sceneName) + field.Name);
                         GetObjectIdentifier(sceneName);
                         field.SetValue(this, val == 1 ? true : false);
                     }
                 }
                 else
-                if (Global.IsStringType(field))
+                if (PersistentEngine.IsStringType(field))
                 {
-                    var val = Global.GetStateStr(GetObjectIdentifier(sceneName) + field.Name);
+                    var val = PersistentEngine.GetStateStr(GetObjectIdentifier(sceneName) + field.Name);
                     GetObjectIdentifier(sceneName);
                     field.SetValue(this, val);
                 }
@@ -83,31 +83,31 @@ namespace Motiviti.Enkidu
             {
                 if (field.FieldType.IsEnum)
                 {
-                    Global.SetState(GetObjectIdentifier(sceneName) + field.Name, (int)field.GetValue(this), saveFile);
+                    PersistentEngine.SetState(GetObjectIdentifier(sceneName) + field.Name, (int)field.GetValue(this), saveFile);
                 }
                 else
-                if (Global.IsNumericType(field))
+                if (PersistentEngine.IsNumericType(field))
                 {
-                    Global.SetState(GetObjectIdentifier(sceneName) + field.Name, (int)field.GetValue(this), saveFile);
+                    PersistentEngine.SetState(GetObjectIdentifier(sceneName) + field.Name, (int)field.GetValue(this), saveFile);
                 }
                 else
-                if (Global.IsBooleanType(field))
+                if (PersistentEngine.IsBooleanType(field))
                 {
                     var val = (bool)field.GetValue(this) == true ? 1 : 0;
                     GetObjectIdentifier(sceneName);
-                    Global.SetState(GetObjectIdentifier(sceneName) + field.Name, val, saveFile);
+                    PersistentEngine.SetState(GetObjectIdentifier(sceneName) + field.Name, val, saveFile);
                 }
-                else if (Global.IsStringType(field))
+                else if (PersistentEngine.IsStringType(field))
                 {
                     var val = field.GetValue(this);
                     GetObjectIdentifier(sceneName);
                     try
                     {
-                        Global.SetStateStr(GetObjectIdentifier(sceneName) + field.Name, (string)val, saveFile);
+                        PersistentEngine.SetStateStr(GetObjectIdentifier(sceneName) + field.Name, (string)val, saveFile);
                     }
                     catch
                     {
-                        Global.SetState(GetObjectIdentifier(sceneName) + field.Name, null, saveFile);
+                        PersistentEngine.SetState(GetObjectIdentifier(sceneName) + field.Name, null, saveFile);
                     }
                 }
             }

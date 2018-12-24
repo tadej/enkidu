@@ -42,7 +42,7 @@ namespace Motiviti.Enkidu
         // Use this for initialization
         void Start()
         {
-            elroy = Global.player.transform;
+            elroy = PersistentEngine.player.transform;
 
             AddSprite(transform);
 

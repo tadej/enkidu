@@ -8,17 +8,17 @@ namespace Motiviti.Enkidu
     {
         public void AnimationEventEndCutScene()
         {
-            if (Global.player) Global.player.AnimationEventEndCutScene();
+            if (PersistentEngine.player) PersistentEngine.player.AnimationEventEndCutScene();
         }
 
         public void AnimationActionPoint(string animationName)
         {
-            if (Global.player) Global.player.AnimationActionPoint(animationName);
+            if (PersistentEngine.player) PersistentEngine.player.AnimationActionPoint(animationName);
         }
 
         public void AnimationFinished(string animationName)
         {
-            if (Global.player) Global.player.AnimationFinished(animationName);
+            if (PersistentEngine.player) PersistentEngine.player.AnimationFinished(animationName);
         }
     }
 }

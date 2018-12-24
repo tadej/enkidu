@@ -88,7 +88,7 @@ namespace Motiviti.Enkidu
                     usedFlag = true;
                     SaveState();
 
-                    if (!isInventoryItem || (isInventoryItem && !Global.player.IsWalking()))
+                    if (!isInventoryItem || (isInventoryItem && !PersistentEngine.player.IsWalking()))
                     {
                         if (overrideActionObject != null && !string.IsNullOrEmpty(overrideAction))
                         {
@@ -99,26 +99,26 @@ namespace Motiviti.Enkidu
                             switch (talkDirection)
                             {
                                 case TalkDirection.TalkDiagonalFrontLeft:
-                                    Global.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
-                                    Global.player.ChangeDirection(-1);
+                                    PersistentEngine.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
+                                    PersistentEngine.player.ChangeDirection(-1);
                                     break;
 
                                 case TalkDirection.TalkDiagonalFrontRight:
-                                    Global.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
-                                    Global.player.ChangeDirection(1);
+                                    PersistentEngine.player.ChangeTalkDirection(Player.TalkDirection.Diagonal);
+                                    PersistentEngine.player.ChangeDirection(1);
                                     break;
 
                                 case TalkDirection.TalkDiagonalBackLeft:
-                                    Global.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
-                                    Global.player.ChangeDirection(-1);
+                                    PersistentEngine.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
+                                    PersistentEngine.player.ChangeDirection(-1);
                                     break;
 
                                 case TalkDirection.TalkDiagonalBackRight:
-                                    Global.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
-                                    Global.player.ChangeDirection(1);
+                                    PersistentEngine.player.ChangeTalkDirection(Player.TalkDirection.DiagonalBack);
+                                    PersistentEngine.player.ChangeDirection(1);
                                     break;
                                 case TalkDirection.TalkFront:
-                                    Global.player.ChangeTalkDirection(Player.TalkDirection.Front);
+                                    PersistentEngine.player.ChangeTalkDirection(Player.TalkDirection.Front);
                                     break;
                                 case TalkDirection.None:
                                     break;
@@ -127,11 +127,11 @@ namespace Motiviti.Enkidu
                             if (interactiveItem.heldItem != null && combiningItem != null && interactiveItem.heldItem == combiningItem)
                             {
                                 if (commentWhenCombine.Length > 1)
-                                    yield return StartCoroutine(Global.player.SpeakProcedure(commentWhenCombine));
+                                    yield return StartCoroutine(PersistentEngine.player.SpeakProcedure(commentWhenCombine));
                             }
                             else
                             {
-                                yield return StartCoroutine(Global.player.SpeakProcedure(comment));
+                                yield return StartCoroutine(PersistentEngine.player.SpeakProcedure(comment));
                                 if (multipleComments.Length > 0)
                                 {
                                     comment = multipleComments[currentComment];

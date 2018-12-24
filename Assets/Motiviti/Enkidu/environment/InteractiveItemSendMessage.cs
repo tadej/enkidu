@@ -70,11 +70,11 @@ namespace Motiviti.Enkidu
                     progressCounter = 0;
 
                     if (interactiveItem.desiredDirection != 0)
-                        Global.player.TurnTowards(interactiveItem.desiredDirection);
+                        PersistentEngine.player.TurnTowards(interactiveItem.desiredDirection);
                     else
-                        Global.player.TurnTowards(interactiveItem);
+                        PersistentEngine.player.TurnTowards(interactiveItem);
 
-                    Global.player.ChangeState(actionAnimation);
+                    PersistentEngine.player.ChangeState(actionAnimation);
 
                     float time0 = Time.time;
 
@@ -82,7 +82,7 @@ namespace Motiviti.Enkidu
                     {
                         yield return new WaitForSeconds(0.05f);
 
-                        if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                        if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                         {
                             Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                             break;
@@ -96,14 +96,14 @@ namespace Motiviti.Enkidu
                     {
                         yield return new WaitForSeconds(0.05f);
 
-                        if (Time.time - time0 > Global.maxCharacterAnimationLength)
+                        if (Time.time - time0 > PersistentEngine.maxCharacterAnimationLength)
                         {
                             Debug.Log("Warning: ProcessArrivedAt interrupted, Time.time-time0 > maxCharacterAnimationLength");
                             break;
                         }
                     }
 
-                    Global.player.ChangeState(endState);
+                    PersistentEngine.player.ChangeState(endState);
 
                     SaveState();
                 }

@@ -68,7 +68,7 @@ namespace Motiviti.Enkidu
 
         void Awake()
         {
-            advCamera = Global.advCamera;
+            advCamera = PersistentEngine.advCamera;
         }
 
         void Start()
@@ -85,8 +85,8 @@ namespace Motiviti.Enkidu
 
             DisableSprites(transform);
 
-            if (!Global.takingVideo) bandTop.enabled = true;
-            if (!Global.takingVideo) bandBottom.enabled = true;
+            if (!PersistentEngine.takingVideo) bandTop.enabled = true;
+            if (!PersistentEngine.takingVideo) bandBottom.enabled = true;
 
             if (DoZoomouts)
             {
@@ -122,7 +122,7 @@ namespace Motiviti.Enkidu
 
         void CalculateBandPositions()
         {
-            topBandPos = Global.activeCamera.ViewportToWorldPoint(new Vector3(0, topBoundMin, 0));
+            topBandPos = PersistentEngine.activeCamera.ViewportToWorldPoint(new Vector3(0, topBoundMin, 0));
             Vector3 toppos = topBandPos - advCamera.transform.position;
             toppos.y = (bandTop.bounds.max.y - bandTop.bounds.min.y) / 2 + toppos.y;
 
@@ -170,8 +170,8 @@ namespace Motiviti.Enkidu
             {
                 case Type.BlackBands:
                     //TODO inventory.SetVisible (false);
-                    if (!Global.takingVideo) bandTop.transform.localPosition = startOn ? bandTopPositionShown : bandTopPositionHidden;
-                    if (!Global.takingVideo) bandBottom.transform.localPosition = startOn ? bandBottomPositionShown : bandBottomPositionHidden;
+                    if (!PersistentEngine.takingVideo) bandTop.transform.localPosition = startOn ? bandTopPositionShown : bandTopPositionHidden;
+                    if (!PersistentEngine.takingVideo) bandBottom.transform.localPosition = startOn ? bandBottomPositionShown : bandBottomPositionHidden;
                     circleState = CircleState.scalingUp;
                     break;
 
@@ -213,9 +213,9 @@ namespace Motiviti.Enkidu
 
             if (type == Type.BlackBands)
             {
-                if (Global.takingVideo == false)
+                if (PersistentEngine.takingVideo == false)
                 {
-                    Vector3 currentpos = Global.activeCamera.WorldToViewportPoint(new Vector3(0, bandTop.GetComponent<Renderer>().bounds.min.y, 0));
+                    Vector3 currentpos = PersistentEngine.activeCamera.WorldToViewportPoint(new Vector3(0, bandTop.GetComponent<Renderer>().bounds.min.y, 0));
                     if (currentpos.y < topBoundMin)
                     {
                         if (bandTop.enabled) bandTop.transform.localPosition = Vector3.Lerp(bandTop.transform.localPosition, bandTopPositionShown, Time.deltaTime * 6);
