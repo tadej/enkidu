@@ -1,8 +1,8 @@
-# enkidu: simple adventure game framework for unity
+# Enkidu: simple adventure game framework for unity
 
 This is a simple Unity-based framework for 2D point and click adventure games. 
 
-Features:
+### Features
 - fully animated 2d characters (body, head, face, mouth, eyebrows, eyes, emotions, ...)
 - lip sync (Preston-Blair phoneme/viseme set, Rogo Lipsync Pro)
 - navmesh control
@@ -13,16 +13,29 @@ Features:
 - inventory
 - broad interactive item support (hotspots, doors, switches, full screen puzzles, item combines, popups, custom actions, ...)
 
-used in: [Elroy and the Aliens](https://elroythegame.com)
+### Used In 
+- [Elroy and the Aliens](https://elroythegame.com)
 
-todo: refactoring, add a sample scene, documentation
+### TODO
+- refactoring
+- add a sample scene
+- documentation
+- testing
 
-## main classes
+## Main Classes
 
-Player: [PlayerBrain](Assets/Motiviti/Enkidu/character/Player.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead.cs), [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs)
+### Player
+[PlayerBrain](Assets/Motiviti/Enkidu/character/PlayerBrain.cs), [PlayerHead](Assets/Motiviti/Enkidu/character/PlayerHead.cs), [PlayerMouth](Assets/Motiviti/Enkidu/character/PlayerMouth.cs), [CharacterBrain](Assets/Motiviti/Enkidu/character/CharacterBrain.cs), [CharacterHead](Assets/Motiviti/Enkidu/character/CharacterHead.cs), [CharacterMouth](Assets/Motiviti/Enkidu/character/CharacterMouth.cs), [Player](Assets/Motiviti/Enkidu/character/Player.cs)
 
-Environment: [InteractiveItem](Assets/Motiviti/Enkidu/environment/InteractiveItem.cs), [InteractiveItem*](Assets/Motiviti/Enkidu/environment)
+Inheritance: PlayerBrain<-CharacterBrain, PlayerHead<-CharacterHead, PlayerMouth<-CharacterMouth
 
-GUI: [Inventory](Assets/Motiviti/Enkidu/gui/Inventory.cs)
+### Environment 
+[InteractiveItem](Assets/Motiviti/Enkidu/environment/InteractiveItem.cs), [InteractiveItemAction](Assets/Motiviti/Enkidu/environment/InteractiveItemAction.cs), [InteractiveItem***](Assets/Motiviti/Enkidu/environment)
 
-System: [StatefulItem](Assets/Motiviti/Enkidu/system/StatefulItem.cs), [Global:Deprecate](Assets/Motiviti/Enkidu/system/Global.cs)
+Inheritance: InteractiveItem***<-InteractiveItemAction
+
+### GUI
+[Inventory](Assets/Motiviti/Enkidu/gui/Inventory.cs)
+
+### System 
+[StatefulItem](Assets/Motiviti/Enkidu/system/StatefulItem.cs), [PersistentEngine/Deprecate](Assets/Motiviti/Enkidu/system/PersistentEngine.cs)
