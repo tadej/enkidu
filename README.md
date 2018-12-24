@@ -2,7 +2,7 @@
 
 This is a simple Unity-based framework for 2D point and click adventure games. 
 
-Features:
+### Features
 - fully animated 2d characters (body, head, face, mouth, eyebrows, eyes, emotions, ...)
 - lip sync (Preston-Blair phoneme/viseme set, Rogo Lipsync Pro)
 - navmesh control
@@ -13,9 +13,11 @@ Features:
 - inventory
 - broad interactive item support (hotspots, doors, switches, full screen puzzles, item combines, popups, custom actions, ...)
 
-used in: [Elroy and the Aliens](https://elroythegame.com)
+### Used In 
+[Elroy and the Aliens](https://elroythegame.com)
 
-todo: refactoring, add a sample scene, documentation
+### TODO
+refactoring, add a sample scene, documentation, testing
 
 ## main classes
 
