@@ -203,6 +203,7 @@ namespace Motiviti.Enkidu
             {
                 if (navmeshWalker.GetVelocity().sqrMagnitude > 0)  //mr if player is already walking we shouldn't change his destination 
                 {
+                    // TODO
                 }
                 else if (IsIdleOrWalking())
                 {
@@ -309,7 +310,6 @@ namespace Motiviti.Enkidu
                 case Direction.DIAGONAL_FRONT:
                     ChangeState(State.IdleDiagonalFront);
                     break;
-
             }
         }
 
@@ -782,7 +782,6 @@ namespace Motiviti.Enkidu
 
         public bool CheckIfCombiningMatchingItems(InteractiveItem targetItem, InventoryItem combiningItem)
         {
-
             if (targetItem == null)
                 return false;
 
@@ -840,7 +839,6 @@ namespace Motiviti.Enkidu
                 heldItem = combiningItem = null;
                 targetItem = null;
 
-
                 Vector3 cameraPos = transform.position + Vector3.up * advCamera.yFollowOffset;
 
                 cameraPos.z = -5;
@@ -852,7 +850,6 @@ namespace Motiviti.Enkidu
                 else
                     SetInCutScene(true, CutsceneTools.Type.ZoomIn, transform.position + Vector3.up * advCamera.yFollowOffset, false, 0.01f, false);
 
-
                 if (door.openCloseAnimator)
                 {
                     transform.position = door.gameObject.transform.position + door.outsideOffset;
@@ -860,7 +857,6 @@ namespace Motiviti.Enkidu
                     ChangeStateToIdleBasedOnWalkAnimation(door.animationWalkIn);
                     yield return new WaitForSeconds(0.7f);
                 }
-
 
                 if (!staticCharacter)
                     ChangeState(door.animationWalkIn);   //mr 18.11.2014 to enable walk in front in 
@@ -949,8 +945,6 @@ namespace Motiviti.Enkidu
                     if (Time.time - startTime > maxTime) break;
                     yield return new WaitForSeconds(0.02f);
                 }
-
-
             }
             StartCoroutine(DisableAutopilot(true));
             yield return StartCoroutine(door.ExitTranslationAnimation());
@@ -1143,8 +1137,6 @@ namespace Motiviti.Enkidu
                             }
                             talkDirection = TalkDirection.DiagonalBack;
                         }
-
-
                     }
                 }
                 else
@@ -1207,7 +1199,5 @@ namespace Motiviti.Enkidu
                 transform.localScale = direction < 1 ? scaleUnitVectorLeft * scale : scaleUnitVectorRight * scale;
             }
         }
-
-
     }
 }
