@@ -269,14 +269,13 @@ namespace Motiviti.Enkidu
 
             Initialize();
 
-            PersistentEngine.SetState("Global level", (int)lvl);
-            PersistentEngine.SetState("Global loadingLevel", (int)lvl, true);
-
             PersistentEngine.SetPause(false);
 
             Time.timeScale = 1;
 
             SceneManager.LoadScene("loadingScreen");
+
+            yield return null;
 
         }
 

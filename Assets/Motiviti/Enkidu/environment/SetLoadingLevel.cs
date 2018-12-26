@@ -12,7 +12,7 @@ namespace Motiviti.Enkidu
 		public DoorBetweenLevels loadingDoor;
 		// Use this for initialization
 		void Start () {
-			int? level = Global.GetState("Global loadingLevel");
+			int? level = PersistentEngine.GetState("Global loadingLevel");
 			if(level<10)
 				level = 15;
 
